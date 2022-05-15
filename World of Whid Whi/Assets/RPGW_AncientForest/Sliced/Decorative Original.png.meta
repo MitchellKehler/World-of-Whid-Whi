@@ -1,0 +1,5235 @@
+fileFormatVersion: 2
+guid: 1cb1a9bb66e83ee4b87a037635ceab20
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6424215645094407054
+    second: AF_DeadTree_Large
+  - first:
+      213: -8166554973306636017
+    second: AF_DeadTree_Medium
+  - first:
+      213: 4379096920553345384
+    second: AF_DeadTree_Small
+  - first:
+      213: 3768139227862760931
+    second: AF_Tree_Medium
+  - first:
+      213: -7138085808530792532
+    second: AF_Tree_Large
+  - first:
+      213: -7643969682133985595
+    second: AF_Tree_Small
+  - first:
+      213: -3812452222654848040
+    second: AF_Log_1
+  - first:
+      213: -8917510113365255233
+    second: AF_Log_2
+  - first:
+      213: -106149364180147493
+    second: AF_Stump_1
+  - first:
+      213: 6569707263767991722
+    second: AF_Stump_2
+  - first:
+      213: 7214300787873212442
+    second: AF_Log_3
+  - first:
+      213: -6582841086841156217
+    second: AF_Log_4
+  - first:
+      213: 6563190595106138554
+    second: AF_Tree_Giant
+  - first:
+      213: 4642053073393126887
+    second: AF_BerryBush_Red_Large
+  - first:
+      213: -545722913844336146
+    second: AF_BerryBush_Red_Medium
+  - first:
+      213: 3624397920268240007
+    second: AF_BerryBush_Red_Double
+  - first:
+      213: -5560271740883268243
+    second: AF_BerryBush_Red_Small
+  - first:
+      213: 8700285466417657060
+    second: AF_BerryBush_Pink_Large
+  - first:
+      213: -7870485846948801004
+    second: AF_BerryBush_Pink_Medium
+  - first:
+      213: -1192022729638709792
+    second: AF_BerryBush_Pink_Double
+  - first:
+      213: 6285015683567735878
+    second: AF_BerryBush_Pink_Small
+  - first:
+      213: -5793239797166635871
+    second: AF_BerryBush_Yellow_Large
+  - first:
+      213: -7880852654328501190
+    second: AF_BerryBush_Yellow_Medium
+  - first:
+      213: -6978394590061924156
+    second: AF_BerryBush_Yellow_Double
+  - first:
+      213: -5369880366478186462
+    second: AF_BerryBush_Yellow_Small
+  - first:
+      213: 6556806384728365959
+    second: AF_Rocks_OrangeBerry_1
+  - first:
+      213: -1995694944297746014
+    second: AF_Rocks_LillyBush_1
+  - first:
+      213: 1036264609618249691
+    second: AF_Lillies_1
+  - first:
+      213: -9132692047142692580
+    second: AF_Rocks_Large_1
+  - first:
+      213: 7923243573633118180
+    second: AF_Ferns_1
+  - first:
+      213: -8053951484072182605
+    second: AF_Lilly_Large_1
+  - first:
+      213: -1610875475966710508
+    second: AF_Lilly_Large_2
+  - first:
+      213: 3781494692132906014
+    second: AF_Lilly_Medium_1
+  - first:
+      213: -4026930733550486551
+    second: AF_Lilly_Medium_2
+  - first:
+      213: 7032488900414881624
+    second: AF_Lilly_Large_3
+  - first:
+      213: 1517039987427538199
+    second: AF_Lilly_Large_4
+  - first:
+      213: 2261781286619700381
+    second: AF_Lilly_Medium_3
+  - first:
+      213: 6060737688212226266
+    second: AF_Lilly_Medium_4
+  - first:
+      213: -6697019995000178327
+    second: AF_Lilly_Large_5
+  - first:
+      213: 2921044507371125655
+    second: AF_Lilly_Large_6
+  - first:
+      213: 2221930507697111952
+    second: AF_Lilly_Medium_5
+  - first:
+      213: -8552098572150136349
+    second: AF_Lilly_Medium_6
+  - first:
+      213: 3683845571033131393
+    second: AF_Rocks_1
+  - first:
+      213: 6713429324071996261
+    second: AF_Rocks_2
+  - first:
+      213: -5680091593337759004
+    second: AF_Rocks_3
+  - first:
+      213: -8641891091099446035
+    second: AF_Rocks_4
+  - first:
+      213: 8773821275861954246
+    second: AF_Lilly_small_1
+  - first:
+      213: 5871898630515040578
+    second: AF_Lilly_small_2
+  - first:
+      213: -7518006617465859987
+    second: AF_Lilly_Tiny_1
+  - first:
+      213: 1679840632106309585
+    second: AF_Fern_Medium_1
+  - first:
+      213: -2087816106547442817
+    second: AF_Fern_Large_1
+  - first:
+      213: 4411061575218073220
+    second: AF_Lilly_small_3
+  - first:
+      213: -4044107057294946685
+    second: AF_Lilly_small_4
+  - first:
+      213: 2762004864837046239
+    second: AF_Lilly_Tiny_3
+  - first:
+      213: -5557512572279686621
+    second: AF_Fern_Medium_2
+  - first:
+      213: -4904966181032483518
+    second: AF_Fern_Large_2
+  - first:
+      213: -1552402452404454062
+    second: AF_Lilly_small_5
+  - first:
+      213: 41335109914587572
+    second: AF_Lilly_small_6
+  - first:
+      213: 1264789904850999188
+    second: AF_Lilly_Tiny_5
+  - first:
+      213: -8379556445915463720
+    second: AF_Fern_Medium_3
+  - first:
+      213: -4476565440147942396
+    second: AF_Fern_Large_3
+  - first:
+      213: 850864052892328806
+    second: AF_Lilly_Tiny_2
+  - first:
+      213: -6449130812888384524
+    second: AF_Fern_Small_1
+  - first:
+      213: 5334936565738904213
+    second: AF_Lilly_Tiny_4
+  - first:
+      213: -6734883222769950149
+    second: AF_Fern_Small_2
+  - first:
+      213: 7157102447590538554
+    second: AF_Lilly_Tiny_6
+  - first:
+      213: -8934740252840852079
+    second: AF_Fern_Small_3
+  - first:
+      213: 8497194115517074419
+    second: AF_Rocks_5
+  - first:
+      213: -430629570938542571
+    second: AF_Rocks_Fern_1
+  - first:
+      213: 3844787597808186525
+    second: AF_Rocks_OrangeBerry_2
+  - first:
+      213: 946589939216719699
+    second: AF_Grass_2
+  - first:
+      213: 2713186658151387792
+    second: AF_Grass_4
+  - first:
+      213: 6070782705701847350
+    second: AF_Grass_5
+  - first:
+      213: -4025197655476494722
+    second: AF_Grass_6
+  - first:
+      213: -7294848229557933125
+    second: AF_Grass_7
+  - first:
+      213: -2912266338139927103
+    second: AF_Grass_9
+  - first:
+      213: -2407489639634657217
+    second: AF_Grass_11
+  - first:
+      213: 1177425149620708791
+    second: AF_Grass_12
+  - first:
+      213: 3521775730575016106
+    second: AF_Grass_13
+  - first:
+      213: -3649187928130207116
+    second: AF_Grass_14
+  - first:
+      213: 3993368360796076950
+    second: AF_Grass_16
+  - first:
+      213: 5075203031224515501
+    second: AF_Grass_18
+  - first:
+      213: 4353292237429905395
+    second: AF_Grass_19
+  - first:
+      213: -4072432995957934947
+    second: AF_Grass_20
+  - first:
+      213: 5991656150576684218
+    second: AF_Grass_21
+  - first:
+      213: 1471534835371680816
+    second: AF_Grass_1
+  - first:
+      213: -966032391741987025
+    second: AF_Grass_3
+  - first:
+      213: -7068768459209877913
+    second: AF_Grass_8
+  - first:
+      213: 4978674415858650835
+    second: AF_Grass_10
+  - first:
+      213: 8909576654355620338
+    second: AF_Grass_15
+  - first:
+      213: -545554432278235169
+    second: AF_Grass_17
+  - first:
+      213: -6872369978750654780
+    second: AF_Ferns_2
+  - first:
+      213: 5392036741105251885
+    second: AF_Rocks_Large_2
+  - first:
+      213: -628110646616036584
+    second: AF_Lillies_2
+  - first:
+      213: 5341952168600319332
+    second: AF_Rocks_LillyBush_2
+  - first:
+      213: 1360051806075566285
+    second: Decorative Original_95
+  - first:
+      213: -7333611869756050765
+    second: Decorative Original_96
+  - first:
+      213: 3781167991779169482
+    second: AF_Rocks_Fern_2
+  - first:
+      213: -3834726957826672185
+    second: AF_Rocks_6
+  - first:
+      213: -5637958424250357457
+    second: AF_Rocks_LillyBush_3
+  - first:
+      213: -7208091534273820648
+    second: AF_Rocks_OrangeBerry_3
+  - first:
+      213: -1812427578240010405
+    second: AF_Rocks_7
+  - first:
+      213: 2236072872199811616
+    second: AF_Rocks_8
+  - first:
+      213: -395952671742097552
+    second: AF_Rocks_9
+  - first:
+      213: -4158775792696585573
+    second: AF_Rocks_10
+  - first:
+      213: 1310119321451286346
+    second: AF_Rocks_11
+  - first:
+      213: -3181138950751775893
+    second: AF_Rocks_12
+  - first:
+      213: -7970673044632705368
+    second: Decorative Original_107
+  - first:
+      213: 5281054254282882161
+    second: AF_Rocks_LillyBush_4
+  - first:
+      213: -4911385031934299318
+    second: Decorative Original_109
+  - first:
+      213: 7729468539655956254
+    second: Decorative Original_110
+  - first:
+      213: 8555430719903024159
+    second: Decorative Original_111
+  - first:
+      213: -614541795691236726
+    second: Decorative Original_112
+  - first:
+      213: -6083371639410663325
+    second: Decorative Original_113
+  - first:
+      213: 2936678255693108647
+    second: Decorative Original_114
+  - first:
+      213: 2685447071073767103
+    second: Decorative Original_115
+  - first:
+      213: 3619330831015640857
+    second: Decorative Original_116
+  - first:
+      213: -3734407750895178243
+    second: Decorative Original_117
+  - first:
+      213: -267455238044934328
+    second: Decorative Original_118
+  - first:
+      213: -6723016105819621093
+    second: Decorative Original_119
+  - first:
+      213: 413850303436344562
+    second: Decorative Original_120
+  - first:
+      213: 6507048662773979847
+    second: Decorative Original_121
+  - first:
+      213: 1977138353047440234
+    second: Decorative Original_122
+  - first:
+      213: -1724671445747700295
+    second: Decorative Original_123
+  - first:
+      213: -3701510575999725493
+    second: Decorative Original_124
+  - first:
+      213: 3209470507754876411
+    second: Decorative Original_125
+  - first:
+      213: 3124352337366667453
+    second: Decorative Original_126
+  - first:
+      213: 7503058656075119645
+    second: Decorative Original_127
+  - first:
+      213: -4069365321193400136
+    second: Decorative Original_128
+  - first:
+      213: -4235701922529673590
+    second: Decorative Original_129
+  - first:
+      213: -1627742069480081979
+    second: Decorative Original_130
+  - first:
+      213: 4554744262168202162
+    second: Decorative Original_131
+  - first:
+      213: 2235910700503121645
+    second: Decorative Original_132
+  - first:
+      213: 3259043610257604528
+    second: Decorative Original_133
+  - first:
+      213: -7283059236884653816
+    second: Decorative Original_134
+  - first:
+      213: -5305104880380398119
+    second: Decorative Original_135
+  - first:
+      213: 8826712414741453841
+    second: Decorative Original_136
+  - first:
+      213: -3091476614467757650
+    second: Decorative Original_137
+  - first:
+      213: -5273963654426072419
+    second: Decorative Original_138
+  - first:
+      213: -3881742008850055393
+    second: Decorative Original_139
+  - first:
+      213: -4527107359008678416
+    second: Decorative Original_140
+  - first:
+      213: -5550304732513693237
+    second: Decorative Original_141
+  - first:
+      213: 3570372769893202629
+    second: Decorative Original_142
+  - first:
+      213: -8398705474090285824
+    second: Decorative Original_143
+  - first:
+      213: -9102234097777655946
+    second: Decorative Original_144
+  - first:
+      213: -3628206745650437793
+    second: Decorative Original_145
+  - first:
+      213: 5413814067184748559
+    second: Decorative Original_146
+  - first:
+      213: -5256729675168796227
+    second: Decorative Original_147
+  - first:
+      213: -629378683924274720
+    second: Decorative Original_148
+  - first:
+      213: -1969451893119956046
+    second: Decorative Original_149
+  - first:
+      213: 9167001056223350836
+    second: Decorative Original_150
+  - first:
+      213: -1154614934436732902
+    second: Decorative Original_151
+  - first:
+      213: 5810163264668891280
+    second: Decorative Original_152
+  - first:
+      213: 9116853876592332909
+    second: Decorative Original_153
+  - first:
+      213: 7360781272544795151
+    second: Decorative Original_154
+  - first:
+      213: -7079875033714811879
+    second: Decorative Original_155
+  - first:
+      213: -1443001164168886906
+    second: Decorative Original_156
+  - first:
+      213: -2357045456698665785
+    second: Decorative Original_157
+  - first:
+      213: -4677915114331802275
+    second: Decorative Original_158
+  - first:
+      213: 4732093493532459031
+    second: Decorative Original_159
+  - first:
+      213: -5415267862909429966
+    second: Decorative Original_160
+  - first:
+      213: 5157091128079225779
+    second: Decorative Original_161
+  - first:
+      213: 4809180260536017872
+    second: Decorative Original_162
+  - first:
+      213: -8666927516001190402
+    second: Decorative Original_163
+  - first:
+      213: -9119287166230780948
+    second: Decorative Original_164
+  - first:
+      213: -3644309769587080853
+    second: Decorative Original_165
+  - first:
+      213: 4201031790535912423
+    second: Decorative Original_166
+  - first:
+      213: -4720303255944396060
+    second: Decorative Original_167
+  - first:
+      213: -3436429454079052125
+    second: Decorative Original_168
+  - first:
+      213: -6160365471711080740
+    second: Decorative Original_169
+  - first:
+      213: -3913745410469089808
+    second: Decorative Original_170
+  - first:
+      213: 7239000957276427288
+    second: Decorative Original_171
+  - first:
+      213: 1436623705804328499
+    second: Decorative Original_172
+  - first:
+      213: -4528476426442976695
+    second: Decorative Original_173
+  - first:
+      213: 3552256456331878392
+    second: Decorative Original_174
+  - first:
+      213: -7418221319446764203
+    second: Decorative Original_175
+  - first:
+      213: -3711297187851377567
+    second: Decorative Original_176
+  - first:
+      213: -3716977818056803644
+    second: Decorative Original_177
+  - first:
+      213: 7825492036457349740
+    second: Decorative Original_178
+  - first:
+      213: -4889547528281200475
+    second: Decorative Original_179
+  - first:
+      213: 5499520609777280264
+    second: Decorative Original_180
+  - first:
+      213: -2919257060346896481
+    second: Decorative Original_181
+  - first:
+      213: 6811797364513659399
+    second: Decorative Original_182
+  - first:
+      213: 965551390514045548
+    second: Decorative Original_183
+  - first:
+      213: -6737301910401339109
+    second: Decorative Original_184
+  - first:
+      213: 2741983204921202864
+    second: Decorative Original_185
+  - first:
+      213: 1183278732796683538
+    second: Decorative Original_186
+  - first:
+      213: 3407527266590914702
+    second: Decorative Original_187
+  - first:
+      213: 7402715454292381276
+    second: Decorative Original_188
+  - first:
+      213: 969500512485115335
+    second: Decorative Original_189
+  - first:
+      213: 4471989085931208609
+    second: Decorative Original_190
+  - first:
+      213: 3222137558394586971
+    second: Decorative Original_191
+  - first:
+      213: 6415680532102425537
+    second: Decorative Original_192
+  - first:
+      213: 4694295233635684399
+    second: Decorative Original_193
+  - first:
+      213: 2681199365203586072
+    second: Decorative Original_194
+  - first:
+      213: 7004054918905743677
+    second: Decorative Original_195
+  - first:
+      213: 8700484326248482905
+    second: Decorative Original_196
+  - first:
+      213: -8341282618169765
+    second: Decorative Original_197
+  - first:
+      213: -674177287915861755
+    second: Decorative Original_198
+  - first:
+      213: 3654440704510862054
+    second: Decorative Original_199
+  - first:
+      213: 393028786759807051
+    second: Decorative Original_200
+  - first:
+      213: 3545080511971235088
+    second: Decorative Original_201
+  - first:
+      213: -3332782326309916925
+    second: Decorative Original_202
+  - first:
+      213: -7189986902938319014
+    second: Decorative Original_203
+  - first:
+      213: -3847691372868703640
+    second: Decorative Original_204
+  - first:
+      213: 7723472269147913208
+    second: Decorative Original_205
+  - first:
+      213: 2908340527950810889
+    second: Decorative Original_206
+  - first:
+      213: 8858967430979658698
+    second: Decorative Original_207
+  - first:
+      213: 444880359690819318
+    second: Decorative Original_208
+  - first:
+      213: -3961753516771097977
+    second: Decorative Original_209
+  - first:
+      213: -9046716329555958631
+    second: Decorative Original_210
+  - first:
+      213: -3244245070344103993
+    second: Decorative Original_211
+  - first:
+      213: -7175919547790781929
+    second: Decorative Original_212
+  - first:
+      213: -669268428835141767
+    second: Decorative Original_213
+  - first:
+      213: -3679451335739621253
+    second: Decorative Original_214
+  - first:
+      213: -1319457784408717903
+    second: Decorative Original_215
+  - first:
+      213: -7803590322846072376
+    second: Decorative Original_216
+  - first:
+      213: 1636124120658249073
+    second: Decorative Original_217
+  - first:
+      213: 5397055956725841437
+    second: Decorative Original_218
+  - first:
+      213: -3382994388141529495
+    second: Decorative Original_219
+  - first:
+      213: -8644657531523683811
+    second: Decorative Original_220
+  - first:
+      213: 2921617800952942085
+    second: Decorative Original_221
+  - first:
+      213: 3608976234360921842
+    second: Decorative Original_222
+  - first:
+      213: 8601851841302105707
+    second: Decorative Original_223
+  - first:
+      213: -570882729180209184
+    second: Decorative Original_224
+  - first:
+      213: -4776051801570511902
+    second: Decorative Original_225
+  - first:
+      213: -649754183120994376
+    second: Decorative Original_226
+  - first:
+      213: 7465218897538657276
+    second: Decorative Original_227
+  - first:
+      213: 3478158414418102249
+    second: Decorative Original_228
+  - first:
+      213: -8499536007083018300
+    second: Decorative Original_229
+  - first:
+      213: -4550806373904435705
+    second: Decorative Original_230
+  - first:
+      213: 4035504109030735688
+    second: Decorative Original_231
+  - first:
+      213: 4949073817827587746
+    second: Decorative Original_232
+  - first:
+      213: 5743810805677257817
+    second: Decorative Original_233
+  - first:
+      213: -6888604040795180039
+    second: Decorative Original_234
+  - first:
+      213: -2656210004410182453
+    second: Decorative Original_235
+  - first:
+      213: -8611736654276707030
+    second: Decorative Original_236
+  - first:
+      213: 2978626113631722309
+    second: Decorative Original_237
+  - first:
+      213: 7821959237966341321
+    second: Decorative Original_238
+  - first:
+      213: 5668725251421259981
+    second: Decorative Original_239
+  - first:
+      213: 2884051513639178483
+    second: Decorative Original_240
+  - first:
+      213: -6644566096527580371
+    second: Decorative Original_241
+  - first:
+      213: 6385067367854735588
+    second: Decorative Original_242
+  - first:
+      213: 8043833766321464170
+    second: Decorative Original_243
+  - first:
+      213: -7181949754835127954
+    second: Decorative Original_244
+  - first:
+      213: -2943550598322113428
+    second: Decorative Original_245
+  - first:
+      213: 88491668152944811
+    second: Decorative Original_246
+  - first:
+      213: 136511996135148768
+    second: Decorative Original_247
+  - first:
+      213: -7706224429193411316
+    second: Decorative Original_248
+  - first:
+      213: -3762301979937222749
+    second: Decorative Original_249
+  - first:
+      213: -4138451640001523725
+    second: Decorative Original_250
+  - first:
+      213: -6641389273321777618
+    second: Decorative Original_251
+  - first:
+      213: -1352133091370251327
+    second: Decorative Original_252
+  - first:
+      213: -3266516564853146988
+    second: Decorative Original_253
+  - first:
+      213: -1909896715305522090
+    second: Decorative Original_254
+  - first:
+      213: -5072484489413539437
+    second: Decorative Original_255
+  - first:
+      213: 1555756265617569713
+    second: Decorative Original_256
+  - first:
+      213: 6982655147973189408
+    second: Decorative Original_257
+  - first:
+      213: 5924503061060520739
+    second: Decorative Original_258
+  - first:
+      213: 8383381846823531961
+    second: Decorative Original_259
+  - first:
+      213: 6186747404773836805
+    second: Decorative Original_260
+  - first:
+      213: -1303371828342144152
+    second: Decorative Original_261
+  - first:
+      213: -4056615154817562884
+    second: Decorative Original_262
+  - first:
+      213: -6136975738395554407
+    second: Decorative Original_263
+  - first:
+      213: -5069640843700499332
+    second: Decorative Original_264
+  - first:
+      213: -3080463821411120488
+    second: Decorative Original_265
+  - first:
+      213: -771568080290714666
+    second: Decorative Original_266
+  - first:
+      213: -4239482845925324327
+    second: Decorative Original_267
+  - first:
+      213: 8651820263417681042
+    second: Decorative Original_268
+  - first:
+      213: 7811722830438036914
+    second: Decorative Original_269
+  - first:
+      213: -2718561471834320120
+    second: Decorative Original_270
+  - first:
+      213: -4712511996415146021
+    second: Decorative Original_271
+  - first:
+      213: 5313626534707264138
+    second: Decorative Original_272
+  - first:
+      213: 4372686727360930166
+    second: Decorative Original_273
+  - first:
+      213: -5912525380758659725
+    second: Decorative Original_274
+  - first:
+      213: -4753020884204774705
+    second: Decorative Original_275
+  - first:
+      213: 1792810496643092519
+    second: Decorative Original_276
+  - first:
+      213: -1086476538668164505
+    second: Decorative Original_277
+  - first:
+      213: 4892639290194870121
+    second: Decorative Original_278
+  - first:
+      213: -7858355148330807734
+    second: Decorative Original_279
+  - first:
+      213: 6956757055353720782
+    second: Decorative Original_280
+  - first:
+      213: -6356234008280348444
+    second: Decorative Original_281
+  - first:
+      213: 5190199486519596212
+    second: Decorative Original_282
+  - first:
+      213: -2022284822924663339
+    second: Decorative Original_283
+  - first:
+      213: 5493021191147133361
+    second: Decorative Original_284
+  - first:
+      213: 2708371880987351185
+    second: Decorative Original_285
+  - first:
+      213: 2395674380604862550
+    second: Decorative Original_286
+  - first:
+      213: 1744458151231567669
+    second: Decorative Original_287
+  - first:
+      213: 2344299645139251331
+    second: Decorative Original_288
+  - first:
+      213: -5886555954949985307
+    second: Decorative Original_289
+  - first:
+      213: -7168737900328869518
+    second: Decorative Original_290
+  - first:
+      213: -3286514653800312851
+    second: Decorative Original_291
+  - first:
+      213: 431155689642971855
+    second: Decorative Original_292
+  - first:
+      213: -5383440595081755832
+    second: Decorative Original_293
+  - first:
+      213: -2583417532689608532
+    second: Decorative Original_294
+  - first:
+      213: 4341788887370110612
+    second: Decorative Original_295
+  - first:
+      213: -5743366353692136503
+    second: Decorative Original_296
+  - first:
+      213: 6719588875959986897
+    second: Decorative Original_297
+  - first:
+      213: -8418498708096904745
+    second: Decorative Original_298
+  - first:
+      213: 4260893937788425834
+    second: Decorative Original_299
+  - first:
+      213: -9017494178402905956
+    second: Decorative Original_300
+  - first:
+      213: 6691420376026460770
+    second: Decorative Original_301
+  - first:
+      213: -590331311725001678
+    second: Decorative Original_302
+  - first:
+      213: 631679148067907036
+    second: Decorative Original_303
+  - first:
+      213: -3401056988584012851
+    second: Decorative Original_304
+  - first:
+      213: -6388199243777855825
+    second: Decorative Original_305
+  - first:
+      213: 3920717982070948436
+    second: Decorative Original_306
+  - first:
+      213: -5627069171314068337
+    second: Decorative Original_307
+  - first:
+      213: -1584934420072223462
+    second: Decorative Original_308
+  - first:
+      213: 1991301981662300736
+    second: Decorative Original_309
+  - first:
+      213: -5115465192986980125
+    second: Decorative Original_310
+  - first:
+      213: 1903119699148833604
+    second: Decorative Original_311
+  - first:
+      213: -2269558321312757229
+    second: Decorative Original_312
+  - first:
+      213: 6922609572170627439
+    second: Decorative Original_313
+  - first:
+      213: -7524483377240328341
+    second: Decorative Original_314
+  - first:
+      213: 6760682526576228576
+    second: Decorative Original_315
+  - first:
+      213: -7070310035045619689
+    second: Decorative Original_316
+  - first:
+      213: -1538868685366059726
+    second: Decorative Original_317
+  - first:
+      213: -772526723864617638
+    second: Decorative Original_318
+  - first:
+      213: 2223871789519343599
+    second: Decorative Original_319
+  - first:
+      213: -4033778050989854793
+    second: Decorative Original_320
+  - first:
+      213: 1016311592748382171
+    second: Decorative Original_321
+  - first:
+      213: 6423423291252032494
+    second: Decorative Original_322
+  - first:
+      213: 4158924537660989025
+    second: Decorative Original_323
+  - first:
+      213: 1194465165511510518
+    second: Decorative Original_324
+  - first:
+      213: -7918921057727804738
+    second: Decorative Original_325
+  - first:
+      213: -6730638270277898025
+    second: Decorative Original_326
+  - first:
+      213: 3203424515273857261
+    second: Decorative Original_327
+  - first:
+      213: 7688531128399050784
+    second: Decorative Original_328
+  - first:
+      213: -1051870603387483627
+    second: Decorative Original_329
+  - first:
+      213: -3021055802128126296
+    second: Decorative Original_330
+  - first:
+      213: 713755787923219263
+    second: Decorative Original_331
+  - first:
+      213: -420493126183658299
+    second: Decorative Original_332
+  - first:
+      213: -3357281640138712350
+    second: Decorative Original_333
+  - first:
+      213: 4002464876270306240
+    second: Decorative Original_334
+  - first:
+      213: -8030699438578643960
+    second: Decorative Original_335
+  - first:
+      213: 8864047719530355104
+    second: Decorative Original_336
+  - first:
+      213: -1658073725663401816
+    second: Decorative Original_337
+  - first:
+      213: 2736868017463245592
+    second: Decorative Original_338
+  - first:
+      213: 7659002677675026569
+    second: Decorative Original_339
+  - first:
+      213: 8140855513395328991
+    second: Decorative Original_340
+  - first:
+      213: 2568360671882724333
+    second: Decorative Original_341
+  - first:
+      213: -5543310293895019818
+    second: Decorative Original_342
+  - first:
+      213: -2283555748936553445
+    second: Decorative Original_343
+  - first:
+      213: 1758039034012126907
+    second: Decorative Original_344
+  - first:
+      213: 4041406755161441213
+    second: Decorative Original_345
+  - first:
+      213: 7903068501604970891
+    second: Decorative Original_346
+  - first:
+      213: -6500304399001159611
+    second: Decorative Original_347
+  - first:
+      213: 6960431203964383664
+    second: Decorative Original_348
+  - first:
+      213: -8202229475533258516
+    second: Decorative Original_349
+  - first:
+      213: -2878697215944127126
+    second: Decorative Original_350
+  - first:
+      213: 1792163147669496479
+    second: Decorative Original_351
+  - first:
+      213: -6685442581605200803
+    second: Decorative Original_352
+  - first:
+      213: -3622390365684724066
+    second: Decorative Original_353
+  - first:
+      213: 2066063200271127417
+    second: Decorative Original_354
+  - first:
+      213: 7265424493944707328
+    second: Decorative Original_355
+  - first:
+      213: 2714725445072220105
+    second: Decorative Original_356
+  - first:
+      213: -2695559869428620416
+    second: Decorative Original_357
+  - first:
+      213: 1869984339403130578
+    second: Decorative Original_358
+  - first:
+      213: 6137915144448838931
+    second: Decorative Original_359
+  - first:
+      213: 2041698171573894313
+    second: Decorative Original_360
+  - first:
+      213: 9075421724806166824
+    second: Decorative Original_361
+  - first:
+      213: 7079620533469398760
+    second: Decorative Original_362
+  - first:
+      213: -8583340535936095136
+    second: Decorative Original_363
+  - first:
+      213: -7022511570218850961
+    second: Decorative Original_364
+  - first:
+      213: -4317366528021502320
+    second: Decorative Original_365
+  - first:
+      213: -6866466688169475794
+    second: Decorative Original_366
+  - first:
+      213: 8410967950146802301
+    second: Decorative Original_367
+  - first:
+      213: 5079347289074338454
+    second: Decorative Original_368
+  - first:
+      213: -593409967145248339
+    second: Decorative Original_369
+  - first:
+      213: -7445619902833447045
+    second: Decorative Original_370
+  - first:
+      213: -4453093746350349878
+    second: Decorative Original_371
+  - first:
+      213: -8762103488831329382
+    second: Decorative Original_372
+  - first:
+      213: -7868372414346124455
+    second: Decorative Original_373
+  - first:
+      213: 6913266796632896740
+    second: Decorative Original_374
+  - first:
+      213: 7471297758803759193
+    second: Decorative Original_375
+  - first:
+      213: 4508737063629740849
+    second: Decorative Original_376
+  - first:
+      213: 1526630125106437476
+    second: Decorative Original_377
+  - first:
+      213: -3888589215952130108
+    second: Decorative Original_378
+  - first:
+      213: 8291076565225697820
+    second: Decorative Original_379
+  - first:
+      213: -3218052572361262995
+    second: Decorative Original_380
+  - first:
+      213: -249588132440058471
+    second: Decorative Original_381
+  - first:
+      213: -591440870252613456
+    second: Decorative Original_382
+  - first:
+      213: 2470309750530573909
+    second: Decorative Original_383
+  - first:
+      213: -746294630869767180
+    second: Decorative Original_384
+  - first:
+      213: -2890327755839470203
+    second: Decorative Original_385
+  - first:
+      213: 5648059235080936568
+    second: Decorative Original_386
+  - first:
+      213: 3961074534977674729
+    second: Decorative Original_387
+  - first:
+      213: 2956498458085355812
+    second: Decorative Original_388
+  - first:
+      213: 3068963212413059082
+    second: Decorative Original_389
+  - first:
+      213: -2102745718561122657
+    second: Decorative Original_390
+  - first:
+      213: -6032503031065981094
+    second: Decorative Original_391
+  - first:
+      213: -929090952094941153
+    second: Decorative Original_392
+  - first:
+      213: 8112946313382296035
+    second: Decorative Original_393
+  - first:
+      213: -2141356994094316038
+    second: Decorative Original_394
+  - first:
+      213: -2192556268756513994
+    second: Decorative Original_395
+  - first:
+      213: -7063808227156012478
+    second: Decorative Original_396
+  - first:
+      213: -8877956259946245922
+    second: Decorative Original_397
+  - first:
+      213: 3680894962693790598
+    second: Decorative Original_398
+  - first:
+      213: -8011159837247595620
+    second: Decorative Original_399
+  - first:
+      213: 4579087132166216237
+    second: Decorative Original_400
+  - first:
+      213: 4528955476177293957
+    second: Decorative Original_401
+  - first:
+      213: 769897618750550139
+    second: Decorative Original_402
+  - first:
+      213: 9119093757375337113
+    second: Decorative Original_403
+  - first:
+      213: 4731663699387981768
+    second: Decorative Original_404
+  - first:
+      213: 994309229391049904
+    second: Decorative Original_405
+  - first:
+      213: 1633640605770824600
+    second: Decorative Original_406
+  - first:
+      213: 3134260653049879499
+    second: Decorative Original_407
+  - first:
+      213: 2005835491252793242
+    second: Decorative Original_408
+  - first:
+      213: -3522313880831264242
+    second: Decorative Original_409
+  - first:
+      213: -3682331358545611428
+    second: Decorative Original_410
+  - first:
+      213: 7308791227915399578
+    second: Decorative Original_411
+  - first:
+      213: -8341924321242404657
+    second: Decorative Original_412
+  - first:
+      213: -8674426897622331630
+    second: Decorative Original_413
+  - first:
+      213: 5211858394856723443
+    second: Decorative Original_414
+  - first:
+      213: 2966611564827060638
+    second: Decorative Original_415
+  - first:
+      213: 2266867681242468977
+    second: Decorative Original_416
+  - first:
+      213: 6250012428420204171
+    second: Decorative Original_417
+  - first:
+      213: -5674737880609625655
+    second: Decorative Original_418
+  - first:
+      213: 1039168259219193887
+    second: Decorative Original_419
+  - first:
+      213: 4659631802902508438
+    second: Decorative Original_420
+  - first:
+      213: -7860619977705622523
+    second: Decorative Original_421
+  - first:
+      213: 3541047469417000352
+    second: Decorative Original_422
+  - first:
+      213: 777858682307993589
+    second: Decorative Original_423
+  - first:
+      213: -4590818212269717209
+    second: Decorative Original_424
+  - first:
+      213: -109098555564640467
+    second: Decorative Original_425
+  - first:
+      213: -6469235092360019997
+    second: Decorative Original_426
+  - first:
+      213: 5917547920525034713
+    second: Decorative Original_427
+  - first:
+      213: -6510065952450622564
+    second: Decorative Original_428
+  - first:
+      213: 4459184873696691151
+    second: Decorative Original_429
+  - first:
+      213: 4043743464362606038
+    second: Decorative Original_430
+  - first:
+      213: 6258200686542569272
+    second: Decorative Original_431
+  - first:
+      213: -1061749338650940555
+    second: Decorative Original_432
+  - first:
+      213: 861754425670776737
+    second: Decorative Original_433
+  - first:
+      213: -2812222272865725070
+    second: Decorative Original_434
+  - first:
+      213: 654680958563511268
+    second: Decorative Original_435
+  - first:
+      213: -5572009833965652794
+    second: Decorative Original_436
+  - first:
+      213: -4453631556435054905
+    second: Decorative Original_437
+  - first:
+      213: -3758072348583910372
+    second: Decorative Original_438
+  - first:
+      213: 7040872705836851860
+    second: Decorative Original_439
+  - first:
+      213: 7976969278886139576
+    second: Decorative Original_440
+  - first:
+      213: 3994089772265339038
+    second: Decorative Original_441
+  - first:
+      213: -3759194097346562169
+    second: Decorative Original_442
+  - first:
+      213: -1105025964487593670
+    second: Decorative Original_443
+  - first:
+      213: 7124696863239758065
+    second: Decorative Original_444
+  - first:
+      213: 257909633384468796
+    second: Decorative Original_445
+  - first:
+      213: -483204243194301279
+    second: Decorative Original_446
+  - first:
+      213: 2211670938077355568
+    second: Decorative Original_447
+  - first:
+      213: 2560682827183383132
+    second: Decorative Original_448
+  - first:
+      213: -7433509712547305631
+    second: Decorative Original_449
+  - first:
+      213: -8458336780272837906
+    second: Decorative Original_450
+  - first:
+      213: -645333832546985717
+    second: Decorative Original_451
+  - first:
+      213: -5148044462212396328
+    second: Decorative Original_452
+  - first:
+      213: -1595890877842253409
+    second: Decorative Original_453
+  - first:
+      213: -3154845674571356214
+    second: Decorative Original_454
+  - first:
+      213: 4071278085415479654
+    second: Decorative Original_455
+  - first:
+      213: 350107500853832717
+    second: Decorative Original_456
+  - first:
+      213: 2556518038278383042
+    second: Decorative Original_457
+  - first:
+      213: -6343657476491989285
+    second: Decorative Original_458
+  - first:
+      213: 7768324323864880014
+    second: Decorative Original_459
+  - first:
+      213: -8700376871069215266
+    second: Decorative Original_460
+  - first:
+      213: -4455666846650063694
+    second: Decorative Original_461
+  - first:
+      213: 7491371654082400748
+    second: Decorative Original_462
+  - first:
+      213: 2091416167374433527
+    second: Decorative Original_463
+  - first:
+      213: -8918470364864499023
+    second: Decorative Original_464
+  - first:
+      213: 2566085567481206560
+    second: Decorative Original_465
+  - first:
+      213: 9092880898269506920
+    second: Decorative Original_466
+  - first:
+      213: -4394061221473163017
+    second: Decorative Original_467
+  - first:
+      213: -6605154559576142087
+    second: Decorative Original_468
+  - first:
+      213: 7655243365387801590
+    second: Decorative Original_469
+  - first:
+      213: 712629263428084221
+    second: Decorative Original_470
+  - first:
+      213: -5024706468014725660
+    second: Decorative Original_471
+  - first:
+      213: 3564597334903011463
+    second: Decorative Original_472
+  - first:
+      213: 4342863615960315307
+    second: Decorative Original_473
+  - first:
+      213: 2301937122441441623
+    second: Decorative Original_474
+  - first:
+      213: -3535663927373237571
+    second: Decorative Original_475
+  - first:
+      213: -571185103884533287
+    second: Decorative Original_476
+  - first:
+      213: -5340090833288843414
+    second: Decorative Original_477
+  - first:
+      213: -396711382360481561
+    second: Decorative Original_478
+  - first:
+      213: -7967835055367710590
+    second: Decorative Original_479
+  - first:
+      213: 7085495729348186334
+    second: Decorative Original_480
+  - first:
+      213: 8044233107407727054
+    second: Decorative Original_481
+  - first:
+      213: 337417660385697805
+    second: Decorative Original_482
+  - first:
+      213: 9089837785769966305
+    second: Decorative Original_483
+  - first:
+      213: 5765983821050405073
+    second: Decorative Original_484
+  - first:
+      213: -3485107457505359211
+    second: Decorative Original_485
+  - first:
+      213: 5884955792856619643
+    second: Decorative Original_486
+  - first:
+      213: -1232957333037405302
+    second: Decorative Original_487
+  - first:
+      213: 5333089595582687262
+    second: Decorative Original_488
+  - first:
+      213: 754907294479656594
+    second: Decorative Original_489
+  - first:
+      213: 2326949263030550179
+    second: Decorative Original_490
+  - first:
+      213: -5823436998997477350
+    second: Decorative Original_491
+  - first:
+      213: -5416050226319004047
+    second: Decorative Original_492
+  - first:
+      213: 2222696744257093658
+    second: Decorative Original_493
+  - first:
+      213: -4371610989214322944
+    second: Decorative Original_494
+  - first:
+      213: -5109703714624795323
+    second: Decorative Original_495
+  - first:
+      213: 6776843248010141716
+    second: Decorative Original_496
+  - first:
+      213: -8170714335792501555
+    second: Decorative Original_497
+  - first:
+      213: 6911892172765310695
+    second: Decorative Original_498
+  - first:
+      213: -3107751190942724080
+    second: Decorative Original_499
+  - first:
+      213: 4019634629884905630
+    second: Decorative Original_500
+  - first:
+      213: 5746940629276395263
+    second: Decorative Original_501
+  - first:
+      213: -779356020496313969
+    second: Decorative Original_502
+  - first:
+      213: -906775030434293170
+    second: Decorative Original_503
+  - first:
+      213: -4673513400483217714
+    second: Decorative Original_504
+  - first:
+      213: -336191294552316077
+    second: Decorative Original_505
+  - first:
+      213: 1673314038173837262
+    second: Decorative Original_506
+  - first:
+      213: 2894379427705971518
+    second: Decorative Original_507
+  - first:
+      213: -8778342321970407945
+    second: Decorative Original_508
+  - first:
+      213: 7350624356617549139
+    second: Decorative Original_509
+  - first:
+      213: -8770556529832339841
+    second: Decorative Original_510
+  - first:
+      213: -6905512805749570443
+    second: Decorative Original_511
+  - first:
+      213: 8487651162613877411
+    second: Decorative Original_512
+  - first:
+      213: -8482869020197829753
+    second: Decorative Original_513
+  - first:
+      213: 802548346684031251
+    second: Decorative Original_514
+  - first:
+      213: -1181552588415984968
+    second: Decorative Original_515
+  - first:
+      213: -996995301791882680
+    second: Decorative Original_516
+  - first:
+      213: -9002115070439332184
+    second: Decorative Original_517
+  - first:
+      213: 3620164594739731117
+    second: Decorative Original_518
+  - first:
+      213: 5035811488059000609
+    second: Decorative Original_519
+  - first:
+      213: -1293701623810200718
+    second: Decorative Original_520
+  - first:
+      213: -3477550603847665950
+    second: Decorative Original_521
+  - first:
+      213: -3534911558223372432
+    second: Decorative Original_522
+  - first:
+      213: 2630320566445164527
+    second: Decorative Original_523
+  - first:
+      213: -6916983452643061998
+    second: Decorative Original_524
+  - first:
+      213: 2984977976022606172
+    second: Decorative Original_525
+  - first:
+      213: 7546646861133368682
+    second: Decorative Original_526
+  - first:
+      213: -5605972840188861152
+    second: Decorative Original_527
+  - first:
+      213: -3080969469767931154
+    second: Decorative Original_528
+  - first:
+      213: 4335884792815374826
+    second: Decorative Original_529
+  - first:
+      213: 4833612204690969864
+    second: Decorative Original_530
+  - first:
+      213: 442218741423076545
+    second: Decorative Original_531
+  - first:
+      213: 7539088965282461323
+    second: Decorative Original_532
+  - first:
+      213: 8553815254100940322
+    second: Decorative Original_533
+  - first:
+      213: 8978211363507190643
+    second: Decorative Original_534
+  - first:
+      213: 6738654701027407489
+    second: Decorative Original_535
+  - first:
+      213: -1552903875108560842
+    second: Decorative Original_536
+  - first:
+      213: 826308602594539077
+    second: Decorative Original_537
+  - first:
+      213: 7875743477898362156
+    second: Decorative Original_538
+  - first:
+      213: 426602195418282651
+    second: Decorative Original_539
+  - first:
+      213: -6642896445135804145
+    second: Decorative Original_540
+  - first:
+      213: -2616599568538128768
+    second: Decorative Original_541
+  - first:
+      213: -4189746296571658684
+    second: Decorative Original_542
+  - first:
+      213: -7123250980283426234
+    second: Decorative Original_543
+  - first:
+      213: -7836567586610618184
+    second: Decorative Original_544
+  - first:
+      213: -5503044671902642430
+    second: Decorative Original_545
+  - first:
+      213: 8817377944888086733
+    second: Decorative Original_546
+  - first:
+      213: -3168388965742453361
+    second: Decorative Original_547
+  - first:
+      213: 1044032946630810491
+    second: Decorative Original_548
+  - first:
+      213: 894910238581830691
+    second: Decorative Original_549
+  - first:
+      213: 5117907028935072603
+    second: Decorative Original_550
+  - first:
+      213: -2022830149575822038
+    second: Decorative Original_551
+  - first:
+      213: -5967300950485661
+    second: Decorative Original_552
+  - first:
+      213: 3122849335685335147
+    second: Decorative Original_553
+  - first:
+      213: -4347614488020680571
+    second: Decorative Original_554
+  - first:
+      213: -4822421695112832905
+    second: Decorative Original_555
+  - first:
+      213: 3767232779745282258
+    second: Decorative Original_556
+  - first:
+      213: -2792401445192890332
+    second: Decorative Original_557
+  - first:
+      213: 4716151906881809175
+    second: Decorative Original_558
+  - first:
+      213: -4921424991176374265
+    second: Decorative Original_559
+  - first:
+      213: 5171948403547553328
+    second: Decorative Original_560
+  - first:
+      213: 1120621409009198581
+    second: Decorative Original_561
+  - first:
+      213: -6464472303710930805
+    second: Decorative Original_562
+  - first:
+      213: -2954627675779849555
+    second: Decorative Original_563
+  - first:
+      213: -3619436966198176190
+    second: Decorative Original_564
+  - first:
+      213: 107524320941859589
+    second: Decorative Original_565
+  - first:
+      213: -6838050142478826814
+    second: Decorative Original_566
+  - first:
+      213: 1237073651023336291
+    second: Decorative Original_567
+  - first:
+      213: -5222581733105595094
+    second: Decorative Original_568
+  - first:
+      213: -6320311390641292452
+    second: Decorative Original_569
+  - first:
+      213: 6707681172854020601
+    second: Decorative Original_570
+  - first:
+      213: 8101723515605457840
+    second: Decorative Original_571
+  - first:
+      213: -8795166392399888165
+    second: Decorative Original_572
+  - first:
+      213: 1963607640262118721
+    second: Decorative Original_573
+  - first:
+      213: -3034559582366129650
+    second: Decorative Original_574
+  - first:
+      213: -8845268766150509980
+    second: Decorative Original_575
+  - first:
+      213: -8406687490002142531
+    second: Decorative Original_576
+  - first:
+      213: -3637651943720030362
+    second: Decorative Original_577
+  - first:
+      213: 8766551043082251821
+    second: Decorative Original_578
+  - first:
+      213: -8462967463838303176
+    second: Decorative Original_579
+  - first:
+      213: 5446498260035027871
+    second: Decorative Original_580
+  - first:
+      213: 3198990378764885294
+    second: Decorative Original_581
+  - first:
+      213: 3616562558727436756
+    second: Decorative Original_582
+  - first:
+      213: 2671504711689128431
+    second: Decorative Original_583
+  - first:
+      213: 898818355334979725
+    second: Decorative Original_584
+  - first:
+      213: -3077745203731085234
+    second: Decorative Original_585
+  - first:
+      213: -36345461924478736
+    second: Decorative Original_586
+  - first:
+      213: 6293262443920407312
+    second: Decorative Original_587
+  - first:
+      213: -2855569072894277289
+    second: Decorative Original_588
+  - first:
+      213: -7919086899738533658
+    second: Decorative Original_589
+  - first:
+      213: 4322089671431412808
+    second: Decorative Original_590
+  - first:
+      213: 6653580483466871777
+    second: Decorative Original_591
+  - first:
+      213: -8271175599563820421
+    second: Decorative Original_592
+  - first:
+      213: -6256567016200528847
+    second: Decorative Original_593
+  - first:
+      213: 5772617702851581312
+    second: Decorative Original_594
+  - first:
+      213: -8546347272493397603
+    second: Decorative Original_595
+  - first:
+      213: 5262306919294071830
+    second: Decorative Original_596
+  - first:
+      213: -5949212612548465116
+    second: Decorative Original_597
+  - first:
+      213: -398291300136969717
+    second: Decorative Original_598
+  - first:
+      213: 4020650119970994242
+    second: Decorative Original_599
+  - first:
+      213: -7372015367573139565
+    second: Decorative Original_600
+  - first:
+      213: 4014819346284010129
+    second: Decorative Original_601
+  - first:
+      213: -6368866406995873361
+    second: Decorative Original_602
+  - first:
+      213: -1563362131043231353
+    second: Decorative Original_603
+  - first:
+      213: 6551581102765049957
+    second: Decorative Original_604
+  - first:
+      213: -138483104064844451
+    second: Decorative Original_605
+  - first:
+      213: 3138255209563715290
+    second: Decorative Original_606
+  - first:
+      213: -2843217736337949918
+    second: Decorative Original_607
+  - first:
+      213: -1261391705981508034
+    second: Decorative Original_608
+  - first:
+      213: 1579050333799205374
+    second: Decorative Original_609
+  - first:
+      213: -7889551903042057255
+    second: Decorative Original_610
+  - first:
+      213: -473557829445077463
+    second: Decorative Original_611
+  - first:
+      213: 5953635319551257666
+    second: Decorative Original_612
+  - first:
+      213: -871643447252752969
+    second: Decorative Original_613
+  - first:
+      213: 6496404557779046371
+    second: Decorative Original_614
+  - first:
+      213: -6708924050235965836
+    second: Decorative Original_615
+  - first:
+      213: 4726388423627080365
+    second: Decorative Original_616
+  - first:
+      213: 5963365574426080335
+    second: Decorative Original_617
+  - first:
+      213: 6750502390100464801
+    second: Decorative Original_618
+  - first:
+      213: 6579583832098653784
+    second: Decorative Original_619
+  - first:
+      213: 3214582786429507918
+    second: Decorative Original_620
+  - first:
+      213: -1270607157235919760
+    second: Decorative Original_621
+  - first:
+      213: -6873181246515687311
+    second: Decorative Original_622
+  - first:
+      213: 2685536329400793629
+    second: Decorative Original_623
+  - first:
+      213: 5939524357799860231
+    second: Decorative Original_624
+  - first:
+      213: -4052304775164452399
+    second: Decorative Original_625
+  - first:
+      213: -2667854615235067752
+    second: Decorative Original_626
+  - first:
+      213: 2320979320921782933
+    second: Decorative Original_627
+  - first:
+      213: -7462485480636131050
+    second: Decorative Original_628
+  - first:
+      213: -5648840845314649321
+    second: Decorative Original_629
+  - first:
+      213: 3244529126505281964
+    second: Decorative Original_630
+  - first:
+      213: 7267409171820977903
+    second: Decorative Original_631
+  - first:
+      213: 7726819123476498983
+    second: Decorative Original_632
+  - first:
+      213: -3279591822903290318
+    second: Decorative Original_633
+  - first:
+      213: -7202299434743980957
+    second: Decorative Original_634
+  - first:
+      213: -4522084546803138010
+    second: Decorative Original_635
+  - first:
+      213: -7101793985608880441
+    second: Decorative Original_636
+  - first:
+      213: -5980202432124981565
+    second: Decorative Original_637
+  - first:
+      213: 1471510044849093103
+    second: Decorative Original_638
+  - first:
+      213: -891954315043629643
+    second: Decorative Original_639
+  - first:
+      213: -63354650900024309
+    second: Decorative Original_640
+  - first:
+      213: 1271202150290368276
+    second: Decorative Original_641
+  - first:
+      213: 7859514499300739365
+    second: Decorative Original_642
+  - first:
+      213: 1089660826746133680
+    second: Decorative Original_643
+  - first:
+      213: 7220520110511170175
+    second: Decorative Original_644
+  - first:
+      213: -7334905435481639205
+    second: Decorative Original_645
+  - first:
+      213: 7147705101422259584
+    second: Decorative Original_646
+  - first:
+      213: -3154003995145719915
+    second: Decorative Original_647
+  - first:
+      213: -9027034780753296746
+    second: Decorative Original_648
+  - first:
+      213: 1149556264204830267
+    second: Decorative Original_649
+  - first:
+      213: -4901694699028202824
+    second: Decorative Original_650
+  - first:
+      213: 7879451515974103736
+    second: Decorative Original_651
+  - first:
+      213: -5062318371330392133
+    second: Decorative Original_652
+  - first:
+      213: 5687529857088092115
+    second: Decorative Original_653
+  - first:
+      213: -4338782023884330947
+    second: Decorative Original_654
+  - first:
+      213: 519560275228388170
+    second: Decorative Original_655
+  - first:
+      213: 5084299296126295825
+    second: Decorative Original_656
+  - first:
+      213: -4034308624426208914
+    second: Decorative Original_657
+  - first:
+      213: -6354715052895341125
+    second: Decorative Original_658
+  - first:
+      213: -4020940586544247701
+    second: Decorative Original_659
+  - first:
+      213: -9120849887031742049
+    second: Decorative Original_660
+  - first:
+      213: -4052753542504923065
+    second: Decorative Original_661
+  - first:
+      213: -7233778314498950764
+    second: Decorative Original_662
+  - first:
+      213: -6618055210467619816
+    second: Decorative Original_663
+  - first:
+      213: 5769481351933966264
+    second: Decorative Original_664
+  - first:
+      213: -3705530976731709851
+    second: Decorative Original_665
+  - first:
+      213: 791639513170411063
+    second: Decorative Original_666
+  - first:
+      213: 8021886448967537767
+    second: Decorative Original_667
+  - first:
+      213: 5499269866660942243
+    second: Decorative Original_668
+  - first:
+      213: 4248714660357901859
+    second: Decorative Original_669
+  - first:
+      213: -6836573693524905535
+    second: Decorative Original_670
+  - first:
+      213: -4353831761808596333
+    second: Decorative Original_671
+  - first:
+      213: -6525834374022587813
+    second: Decorative Original_672
+  - first:
+      213: 6161246094713770211
+    second: Decorative Original_673
+  - first:
+      213: -2377077806581578542
+    second: Decorative Original_674
+  - first:
+      213: 287626944330709736
+    second: Decorative Original_675
+  - first:
+      213: 7336950047792662329
+    second: Decorative Original_676
+  - first:
+      213: -1812428039860858082
+    second: Decorative Original_677
+  - first:
+      213: 2114713560115815909
+    second: Decorative Original_678
+  - first:
+      213: 6951228372332678291
+    second: Decorative Original_679
+  - first:
+      213: 5549986241680780309
+    second: Decorative Original_680
+  - first:
+      213: 5600132652568267662
+    second: Decorative Original_681
+  - first:
+      213: 1753294447718982878
+    second: Decorative Original_682
+  - first:
+      213: 3145198836118279346
+    second: Decorative Original_683
+  - first:
+      213: 5086352496170562309
+    second: Decorative Original_684
+  - first:
+      213: -404973984164656497
+    second: Decorative Original_685
+  - first:
+      213: 7242830475974301357
+    second: Decorative Original_686
+  - first:
+      213: 8895664778739653636
+    second: Decorative Original_687
+  - first:
+      213: -2261120152962627939
+    second: Decorative Original_688
+  - first:
+      213: 1386036637976357758
+    second: Decorative Original_689
+  - first:
+      213: 6914973985391831904
+    second: Decorative Original_690
+  - first:
+      213: 5509013427851515186
+    second: Decorative Original_691
+  - first:
+      213: -5388670479770825692
+    second: Decorative Original_692
+  - first:
+      213: 3142401049670971230
+    second: Decorative Original_693
+  - first:
+      213: -7584402286994365267
+    second: Decorative Original_694
+  - first:
+      213: -2688447474929618962
+    second: Decorative Original_695
+  - first:
+      213: -8457574678311302800
+    second: Decorative Original_696
+  - first:
+      213: -4104295987649563525
+    second: Decorative Original_697
+  - first:
+      213: -3836016978067683200
+    second: Decorative Original_698
+  - first:
+      213: -7498111074208187229
+    second: Decorative Original_699
+  - first:
+      213: 4940458942880888928
+    second: Decorative Original_700
+  - first:
+      213: -8580708704207605869
+    second: Decorative Original_701
+  - first:
+      213: 1710271976490880423
+    second: Decorative Original_702
+  - first:
+      213: 8880952655147911175
+    second: Decorative Original_703
+  - first:
+      213: 5338636414345298619
+    second: Decorative Original_704
+  - first:
+      213: 1369187803153996110
+    second: Decorative Original_705
+  - first:
+      213: -6539412530745780785
+    second: Decorative Original_706
+  - first:
+      213: 8592549374447733983
+    second: Decorative Original_707
+  - first:
+      213: 7813748965402832529
+    second: Decorative Original_708
+  - first:
+      213: 3901028981374739185
+    second: Decorative Original_709
+  - first:
+      213: -1814022048518005296
+    second: Decorative Original_710
+  - first:
+      213: -5012315555515916778
+    second: Decorative Original_711
+  - first:
+      213: -3489771720254723326
+    second: Decorative Original_712
+  - first:
+      213: -8104452585965787111
+    second: Decorative Original_713
+  - first:
+      213: 2068105056340651414
+    second: Decorative Original_714
+  - first:
+      213: -4802953836217574504
+    second: Decorative Original_715
+  - first:
+      213: -1209195968643209921
+    second: Decorative Original_716
+  - first:
+      213: -2551889331233908552
+    second: Decorative Original_717
+  - first:
+      213: 438150042927624006
+    second: Decorative Original_718
+  - first:
+      213: 2320994017019685254
+    second: Decorative Original_719
+  - first:
+      213: 5691460801703883803
+    second: Decorative Original_720
+  - first:
+      213: -4271476668416002121
+    second: Decorative Original_721
+  - first:
+      213: 9000257093706834327
+    second: Decorative Original_722
+  - first:
+      213: 745159120514697380
+    second: Decorative Original_723
+  - first:
+      213: 5017194930513318466
+    second: Decorative Original_724
+  - first:
+      213: 7660359208224079408
+    second: Decorative Original_725
+  - first:
+      213: 634529764118209334
+    second: Decorative Original_726
+  - first:
+      213: 3119281888847700543
+    second: Decorative Original_727
+  - first:
+      213: 502753956195660951
+    second: Decorative Original_728
+  - first:
+      213: 1022108345926046089
+    second: Decorative Original_729
+  - first:
+      213: -5020465687838253332
+    second: Decorative Original_730
+  - first:
+      213: -7440888187841041410
+    second: Decorative Original_731
+  - first:
+      213: -4870810987487874497
+    second: Decorative Original_732
+  - first:
+      213: 5560304925542645548
+    second: Decorative Original_733
+  - first:
+      213: 7901474148948788269
+    second: Decorative Original_734
+  - first:
+      213: 6628448777508203026
+    second: Decorative Original_735
+  - first:
+      213: -1848147144150676285
+    second: Decorative Original_736
+  - first:
+      213: -6404689362573770682
+    second: Decorative Original_737
+  - first:
+      213: 9073248195839752533
+    second: Decorative Original_738
+  - first:
+      213: -997611140217839219
+    second: Decorative Original_739
+  - first:
+      213: 4909759006868069136
+    second: Decorative Original_740
+  - first:
+      213: -2613979913690544694
+    second: Decorative Original_741
+  - first:
+      213: 7915037519008824391
+    second: Decorative Original_742
+  - first:
+      213: 8728217344426732955
+    second: Decorative Original_743
+  - first:
+      213: 1943548281585824824
+    second: Decorative Original_744
+  - first:
+      213: 9160691249307958417
+    second: Decorative Original_745
+  - first:
+      213: 7164319117290464451
+    second: Decorative Original_746
+  - first:
+      213: 6339365646594492660
+    second: Decorative Original_747
+  - first:
+      213: 590659788312887656
+    second: Decorative Original_748
+  - first:
+      213: 7691465187803221608
+    second: Decorative Original_749
+  - first:
+      213: 8558560509562956786
+    second: Decorative Original_750
+  - first:
+      213: 3440941237975606504
+    second: Decorative Original_751
+  - first:
+      213: 396417438656354179
+    second: Decorative Original_752
+  - first:
+      213: -2227703639182589904
+    second: Decorative Original_753
+  - first:
+      213: -3926641228885429229
+    second: Decorative Original_754
+  - first:
+      213: 373539701860371344
+    second: Decorative Original_755
+  - first:
+      213: 1423633497807943217
+    second: Decorative Original_756
+  - first:
+      213: -712809124015678301
+    second: Decorative Original_757
+  - first:
+      213: -8624991285449804011
+    second: Decorative Original_758
+  - first:
+      213: 7145635561127570603
+    second: Decorative Original_759
+  - first:
+      213: -845425702412591225
+    second: Decorative Original_760
+  - first:
+      213: 3810201741299705676
+    second: Decorative Original_761
+  - first:
+      213: -2500814154354230439
+    second: Decorative Original_762
+  - first:
+      213: -3995551601630805391
+    second: Decorative Original_763
+  - first:
+      213: 8813307439540466540
+    second: Decorative Original_764
+  - first:
+      213: 8863652352884894821
+    second: Decorative Original_765
+  - first:
+      213: 6023581030163694601
+    second: Decorative Original_766
+  - first:
+      213: -746555985141492156
+    second: Decorative Original_767
+  - first:
+      213: -7917246421595128362
+    second: Decorative Original_768
+  - first:
+      213: -7621017736471461651
+    second: Decorative Original_769
+  - first:
+      213: -8029082577419327058
+    second: Decorative Original_770
+  - first:
+      213: 6264973343897413803
+    second: Decorative Original_771
+  - first:
+      213: -5733151252562574320
+    second: Decorative Original_772
+  - first:
+      213: 9096077017850205121
+    second: Decorative Original_773
+  - first:
+      213: -4236810877619787085
+    second: Decorative Original_774
+  - first:
+      213: 3984271049581452262
+    second: Decorative Original_775
+  - first:
+      213: 7264134993386174943
+    second: Decorative Original_776
+  - first:
+      213: 1791769115018755424
+    second: Decorative Original_777
+  - first:
+      213: 4181253943365328399
+    second: Decorative Original_778
+  - first:
+      213: 3157616112976280880
+    second: Decorative Original_779
+  - first:
+      213: -3252316172579445206
+    second: Decorative Original_780
+  - first:
+      213: -5208079522209350326
+    second: Decorative Original_781
+  - first:
+      213: 4747184908486638783
+    second: Decorative Original_782
+  - first:
+      213: 2757441298231569010
+    second: Decorative Original_783
+  - first:
+      213: 6433056744480135040
+    second: Decorative Original_784
+  - first:
+      213: -8408523513199842788
+    second: Decorative Original_785
+  - first:
+      213: 5132266866110048862
+    second: Decorative Original_786
+  - first:
+      213: 8241201910980284082
+    second: Decorative Original_787
+  - first:
+      213: 3866301281893831894
+    second: Decorative Original_788
+  - first:
+      213: 6423602342915673888
+    second: Decorative Original_789
+  - first:
+      213: 9171766932927851501
+    second: Decorative Original_790
+  - first:
+      213: -8821438204733690279
+    second: Decorative Original_791
+  - first:
+      213: 5592057874898672119
+    second: Decorative Original_792
+  - first:
+      213: -3844545196486795976
+    second: Decorative Original_793
+  - first:
+      213: -3998348472312879720
+    second: Decorative Original_794
+  - first:
+      213: 8612382712796386393
+    second: Decorative Original_795
+  - first:
+      213: 8630636331782777345
+    second: Decorative Original_796
+  - first:
+      213: -4459362009059619729
+    second: Decorative Original_797
+  - first:
+      213: 711481512987195001
+    second: Decorative Original_798
+  - first:
+      213: -6870398830832960182
+    second: Decorative Original_799
+  - first:
+      213: -2865753952333131705
+    second: Decorative Original_800
+  - first:
+      213: -6221669402093791289
+    second: Decorative Original_801
+  - first:
+      213: 5593634453686534203
+    second: Decorative Original_802
+  - first:
+      213: -9069450100575357869
+    second: Decorative Original_803
+  - first:
+      213: -3966212337602767162
+    second: Decorative Original_804
+  - first:
+      213: 6018853750412029711
+    second: Decorative Original_805
+  - first:
+      213: -5030042833674279598
+    second: Decorative Original_806
+  - first:
+      213: -4012949616593039906
+    second: Decorative Original_807
+  - first:
+      213: -7722599697264127274
+    second: Decorative Original_808
+  - first:
+      213: -7058135156740414120
+    second: Decorative Original_809
+  - first:
+      213: 4036384204793507366
+    second: Decorative Original_810
+  - first:
+      213: -9082010823415650837
+    second: Decorative Original_811
+  - first:
+      213: -5104479936906114316
+    second: Decorative Original_812
+  - first:
+      213: -4866900394047488665
+    second: Decorative Original_813
+  - first:
+      213: 4823282255171361901
+    second: Decorative Original_814
+  - first:
+      213: 2653185326378516698
+    second: Decorative Original_815
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: AF_DeadTree_Large
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 454
+        width: 148
+        height: 278
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: -86}
+        - {x: -33, y: -104}
+        - {x: -38, y: -127}
+        - {x: -8, y: -134}
+        - {x: 31, y: -130}
+        - {x: 39, y: -115}
+        - {x: 30, y: -97}
+        - {x: 21, y: -89}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8beb5e9716672950800000000000000
+      internalID: 6424215645094407054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_DeadTree_Medium
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 454
+        width: 148
+        height: 237
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 2, y: -71.5}
+        - {x: -21, y: -78.5}
+        - {x: -34, y: -96.5}
+        - {x: -20, y: -105.5}
+        - {x: 18, y: -110.5}
+        - {x: 37, y: -98.5}
+        - {x: 28, y: -79.5}
+        - {x: 16, y: -72.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f09bb5125819aae80800000000000000
+      internalID: -8166554973306636017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_DeadTree_Small
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 519
+        width: 148
+        height: 207
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 23, y: -58.5}
+        - {x: 0, y: -57.5}
+        - {x: -10, y: -63.5}
+        - {x: -25, y: -68.5}
+        - {x: -23, y: -92.5}
+        - {x: -7, y: -98.5}
+        - {x: 18, y: -93.5}
+        - {x: 29, y: -83.5}
+        - {x: 30, y: -66.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 861d692a27da5cc30800000000000000
+      internalID: 4379096920553345384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Tree_Medium
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 487
+        width: 156
+        height: 241
+      alignment: 9
+      pivot: {x: 0.5, y: 0.12}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 29, y: -77.5}
+        - {x: 13, y: -73.5}
+        - {x: -3, y: -78.5}
+        - {x: -22, y: -83.5}
+        - {x: -28, y: -94.5}
+        - {x: -20, y: -109.5}
+        - {x: -6, y: -116.5}
+        - {x: 17, y: -112.5}
+        - {x: 30, y: -104.5}
+        - {x: 35, y: -87.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ed79fcc9ae1b4430800000000000000
+      internalID: 3768139227862760931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Tree_Large
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 451
+        width: 155
+        height: 277
+      alignment: 9
+      pivot: {x: 0.52, y: 0.12}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 57.5, y: -124.5}
+        - {x: 48.5, y: -96.5}
+        - {x: 22.5, y: -83.5}
+        - {x: 19.5, y: -47.5}
+        - {x: 33.5, y: -64.5}
+        - {x: 60.5, y: -63.5}
+        - {x: 77.5, y: -57.5}
+        - {x: 77.5, y: 5.5}
+        - {x: 74.5, y: 12.5}
+        - {x: 74.5, y: 32.5}
+        - {x: 64.5, y: 44.5}
+        - {x: 53.5, y: 50.5}
+        - {x: 47.5, y: 44.5}
+        - {x: 39.5, y: 45.5}
+        - {x: 48.5, y: 45.5}
+        - {x: 50.5, y: 47.5}
+        - {x: 49.5, y: 50.5}
+        - {x: 50.5, y: 51.5}
+        - {x: 54.5, y: 54.5}
+        - {x: 59.5, y: 59.5}
+        - {x: 65.5, y: 89.5}
+        - {x: 46.5, y: 102.5}
+        - {x: 50.5, y: 119.5}
+        - {x: 31.5, y: 138.5}
+        - {x: 24.5, y: 138.5}
+        - {x: 17.5, y: 135.5}
+        - {x: 1.5, y: 138.5}
+        - {x: -21.5, y: 138.5}
+        - {x: -40.5, y: 117.5}
+        - {x: -33.5, y: 99.5}
+        - {x: -53.5, y: 96.5}
+        - {x: -63.5, y: 77.5}
+        - {x: -60.5, y: 50.5}
+        - {x: -66.5, y: 29.5}
+        - {x: -63.5, y: 10.5}
+        - {x: -56.5, y: -12.5}
+        - {x: -36.5, y: -13.5}
+        - {x: -64.5, y: -15.5}
+        - {x: -77.5, y: -21.5}
+        - {x: -77.5, y: -58.5}
+        - {x: -44.5, y: -57.5}
+        - {x: -38.5, y: -79.5}
+        - {x: -13.5, y: -78.5}
+        - {x: -37.5, y: -107.5}
+        - {x: -43.5, y: -124.5}
+        - {x: -39.5, y: -133.5}
+        - {x: -17.5, y: -138.5}
+        - {x: 42.5, y: -138.5}
+      physicsShape:
+      - - {x: 19.5, y: -88.5}
+        - {x: -8.5, y: -92.5}
+        - {x: -26.5, y: -98.5}
+        - {x: -35.5, y: -126.5}
+        - {x: -5.5, y: -134.5}
+        - {x: 36.5, y: -131.5}
+        - {x: 45.5, y: -115.5}
+        - {x: 36.5, y: -98.5}
+      tessellationDetail: 0.1
+      bones: []
+      spriteID: cafd34eb6cc60fc90800000000000000
+      internalID: -7138085808530792532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Tree_Small
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 518
+        width: 158
+        height: 216
+      alignment: 9
+      pivot: {x: 0.515, y: 0.14}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 30, y: -71}
+        - {x: 18, y: -64}
+        - {x: -18, y: -65}
+        - {x: -35, y: -83}
+        - {x: -19, y: -100}
+        - {x: -2, y: -104}
+        - {x: 19, y: -99}
+        - {x: 38, y: -90}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c65c86d21a2be590800000000000000
+      internalID: -7643969682133985595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Log_1
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 586
+        width: 143
+        height: 118
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 71.5, y: 42}
+        - {x: 68.5, y: 55}
+        - {x: 45.5, y: 42}
+        - {x: -6.5, y: 32}
+        - {x: -64.5, y: -21}
+        - {x: -63.5, y: -41}
+        - {x: -46.5, y: -43}
+        - {x: -32.5, y: -32}
+        - {x: 5.5, y: 17}
+        - {x: 47.5, y: 35}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d3628917e2771bc0800000000000000
+      internalID: -3812452222654848040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Log_2
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 586
+        width: 143
+        height: 118
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4.5, y: 28}
+        - {x: -64.5, y: 50}
+        - {x: -65.5, y: 41}
+        - {x: -9.5, y: 17}
+        - {x: 45.5, y: -40}
+        - {x: 64.5, y: -37}
+        - {x: 65.5, y: -26}
+        - {x: 4.5, y: 35}
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb19e38cc3ae3480800000000000000
+      internalID: -8917510113365255233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Stump_1
+      rect:
+        serializedVersion: 2
+        x: 1293
+        y: 583
+        width: 166
+        height: 153
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -47, y: 3.5}
+        - {x: -71, y: -8.5}
+        - {x: -74, y: -54.5}
+        - {x: -27, y: -70.5}
+        - {x: 31, y: -68.5}
+        - {x: 76, y: -52.5}
+        - {x: 58, y: 11.5}
+        - {x: 7, y: 10.5}
+      - - {x: 40, y: -6.5}
+        - {x: 37, y: -5.5}
+        - {x: 38, y: -5.5}
+        - {x: 39, y: -6.5}
+        - {x: 47, y: -6.5}
+        - {x: 48, y: -5.5}
+        - {x: 52, y: -5.5}
+        - {x: 53, y: -6.5}
+        - {x: 52, y: -5.5}
+        - {x: 47, y: -4.5}
+        - {x: 43, y: -8.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd2a8e637b1e68ef0800000000000000
+      internalID: -106149364180147493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Stump_2
+      rect:
+        serializedVersion: 2
+        x: 1490
+        y: 553
+        width: 165
+        height: 174
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 29.5, y: 2}
+        - {x: -5.5, y: 5}
+        - {x: -33.5, y: -4}
+        - {x: -50.5, y: -4}
+        - {x: -73.5, y: -17}
+        - {x: -62.5, y: -40}
+        - {x: -73.5, y: -63}
+        - {x: -24.5, y: -76}
+        - {x: 28.5, y: -75}
+        - {x: 73.5, y: -61}
+        - {x: 65.5, y: -20}
+        - {x: 53.5, y: 5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa5d137d2f94c2b50800000000000000
+      internalID: 6569707263767991722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Log_3
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 454
+        width: 228
+        height: 107
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 93, y: -4.5}
+        - {x: 57, y: -12.5}
+        - {x: 42, y: -10.5}
+        - {x: 31, y: -7.5}
+        - {x: -4, y: -8.5}
+        - {x: -11, y: -4.5}
+        - {x: -31, y: -9.5}
+        - {x: -68, y: -5.5}
+        - {x: -91, y: -4.5}
+        - {x: -102, y: -12.5}
+        - {x: -110, y: -18.5}
+        - {x: -106, y: -42.5}
+        - {x: -85, y: -41.5}
+        - {x: -72, y: -34.5}
+        - {x: -7, y: -37.5}
+        - {x: 41, y: -32.5}
+        - {x: 52, y: -32.5}
+        - {x: 91, y: -39.5}
+        - {x: 89, y: -33.5}
+        - {x: 65, y: -21.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: a18e004f7585e1460800000000000000
+      internalID: 7214300787873212442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Log_4
+      rect:
+        serializedVersion: 2
+        x: 1230
+        y: 455
+        width: 228
+        height: 107
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 87, y: -3.5}
+        - {x: 63, y: -8.5}
+        - {x: 16, y: -7.5}
+        - {x: -36, y: -6.5}
+        - {x: -46, y: -10.5}
+        - {x: -88, y: -4.5}
+        - {x: -86, y: -11.5}
+        - {x: -63, y: -19.5}
+        - {x: -94, y: -38.5}
+        - {x: -87, y: -41.5}
+        - {x: -53, y: -28.5}
+        - {x: 3, y: -38.5}
+        - {x: 57, y: -35.5}
+        - {x: 89, y: -42.5}
+        - {x: 106, y: -43.5}
+        - {x: 111, y: -19.5}
+        - {x: 97, y: -7.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78d8cfda8ec05a4a0800000000000000
+      internalID: -6582841086841156217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Tree_Giant
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 17
+        width: 343
+        height: 413
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 36.5, y: -170.5}
+        - {x: 79.5, y: -184.5}
+        - {x: 85.5, y: -178.5}
+        - {x: 55.5, y: -160.5}
+        - {x: 69.5, y: -154.5}
+        - {x: 75.5, y: -138.5}
+        - {x: 61.5, y: -115.5}
+        - {x: 30.5, y: -120.5}
+        - {x: 5.5, y: -110.5}
+        - {x: -21.5, y: -125.5}
+        - {x: -40.5, y: -124.5}
+        - {x: -65.5, y: -136.5}
+        - {x: -61.5, y: -147.5}
+        - {x: -42.5, y: -136.5}
+        - {x: -28.5, y: -142.5}
+        - {x: -38.5, y: -152.5}
+        - {x: -35.5, y: -166.5}
+        - {x: -65.5, y: -178.5}
+        - {x: -58.5, y: -188.5}
+        - {x: -26.5, y: -176.5}
+        - {x: -15.5, y: -181.5}
+        - {x: -25.5, y: -198.5}
+        - {x: -6.5, y: -195.5}
+        - {x: 5.5, y: -176.5}
+        - {x: 35.5, y: -197.5}
+        - {x: 41.5, y: -190.5}
+        - {x: 31.5, y: -180.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab96c7ea213251b50800000000000000
+      internalID: 6563190595106138554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Red_Large
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 390
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ed8b14fca2eb6040800000000000000
+      internalID: 4642053073393126887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Red_Medium
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 399
+        width: 45
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee96486b6e33d68f0800000000000000
+      internalID: -545722913844336146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Red_Double
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 384
+        width: 46
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 784c042a4b27c4230800000000000000
+      internalID: 3624397920268240007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Red_Small
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 416
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6d820eaf42f5d2b0800000000000000
+      internalID: -5560271740883268243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Pink_Large
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 390
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e4715e198f9db870800000000000000
+      internalID: 8700285466417657060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Pink_Medium
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 400
+        width: 45
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41690e262da66c290800000000000000
+      internalID: -7870485846948801004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Pink_Double
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 384
+        width: 46
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e571bb94a5157fe0800000000000000
+      internalID: -1192022729638709792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Pink_Small
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 416
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64450daf67cd83750800000000000000
+      internalID: 6285015683567735878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Yellow_Large
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 390
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a40a3f29174a9fa0800000000000000
+      internalID: -5793239797166635871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Yellow_Medium
+      rect:
+        serializedVersion: 2
+        x: 937
+        y: 399
+        width: 45
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3c2e83f34691a290800000000000000
+      internalID: -7880852654328501190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Yellow_Double
+      rect:
+        serializedVersion: 2
+        x: 1001
+        y: 384
+        width: 46
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c0f9dce713c72f90800000000000000
+      internalID: -6978394590061924156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_BerryBush_Yellow_Small
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 416
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22829bde14a5a75b0800000000000000
+      internalID: -5369880366478186462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_OrangeBerry_1
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 367
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -15.5, y: -20}
+        - {x: 5.5, y: -19}
+        - {x: 18.5, y: -12}
+        - {x: 15.5, y: 11}
+        - {x: -17.5, y: -6}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78b5fbedaa47efa50800000000000000
+      internalID: 6556806384728365959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_LillyBush_1
+      rect:
+        serializedVersion: 2
+        x: 1220
+        y: 361
+        width: 85
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 9.5, y: -6.5}
+        - {x: -9.5, y: -7.5}
+        - {x: -14.5, y: -16.5}
+        - {x: -28.5, y: -16.5}
+        - {x: -29.5, y: -23.5}
+        - {x: -24.5, y: -28.5}
+        - {x: -7.5, y: -28.5}
+        - {x: 1.5, y: -21.5}
+        - {x: 15.5, y: -19.5}
+        - {x: 15.5, y: -9.5}
+      - - {x: 8.5, y: 6.5}
+        - {x: 8.5, y: 16.5}
+        - {x: 26.5, y: 16.5}
+        - {x: 26.5, y: 6.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a10715950edd44e0800000000000000
+      internalID: -1995694944297746014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lillies_1
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 360
+        width: 72
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd7ca9d0c2d816e00800000000000000
+      internalID: 1036264609618249691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_Large_1
+      rect:
+        serializedVersion: 2
+        x: 1418
+        y: 304
+        width: 107
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c19560f58f8224180800000000000000
+      internalID: -9132692047142692580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Ferns_1
+      rect:
+        serializedVersion: 2
+        x: 1537
+        y: 332
+        width: 125
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef6c431d0405fd60800000000000000
+      internalID: 7923243573633118180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_1
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 326
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bcb5a10ccd9a3090800000000000000
+      internalID: -8053951484072182605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_2
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 325
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41dad951a4505a9e0800000000000000
+      internalID: -1610875475966710508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_1
+      rect:
+        serializedVersion: 2
+        x: 494
+        y: 331
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e146b9423619a7430800000000000000
+      internalID: 3781494692132906014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_2
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 330
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ebbe9b55d77d18c0800000000000000
+      internalID: -4026930733550486551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_3
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 326
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85f3b1c256b689160800000000000000
+      internalID: 7032488900414881624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_4
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 325
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7157ea8b4db9d0510800000000000000
+      internalID: 1517039987427538199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_3
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 331
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9cd794c816736f10800000000000000
+      internalID: 2261781286619700381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_4
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 330
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad046b6f0d01c1450800000000000000
+      internalID: 6060737688212226266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_5
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 326
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96973500cc76f03a0800000000000000
+      internalID: -6697019995000178327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Large_6
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 325
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79b36fac082a98820800000000000000
+      internalID: 2921044507371125655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_5
+      rect:
+        serializedVersion: 2
+        x: 1007
+        y: 331
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 093c3e24602e5de10800000000000000
+      internalID: 2221930507697111952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Medium_6
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 330
+        width: 38
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e1addad8a7d05980800000000000000
+      internalID: -8552098572150136349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_1
+      rect:
+        serializedVersion: 2
+        x: 1121
+        y: 291
+        width: 62
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18963dc6706af1330800000000000000
+      internalID: 3683845571033131393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_2
+      rect:
+        serializedVersion: 2
+        x: 1191
+        y: 295
+        width: 52
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56b8006a664ea2d50800000000000000
+      internalID: 6713429324071996261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_3
+      rect:
+        serializedVersion: 2
+        x: 1260
+        y: 296
+        width: 44
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ea9b6f4ac24c21b0800000000000000
+      internalID: -5680091593337759004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_4
+      rect:
+        serializedVersion: 2
+        x: 1326
+        y: 288
+        width: 73
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de4976fd6d5d11880800000000000000
+      internalID: -8641891091099446035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_1
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ce2486f6ffd2c970800000000000000
+      internalID: 8773821275861954246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_2
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 241a3fc91bc2d7150800000000000000
+      internalID: 5871898630515040578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_1
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 290
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6059e240dcaaa790800000000000000
+      internalID: -7518006617465859987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Medium_1
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 265
+        width: 41
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d7d6fb972eff4710800000000000000
+      internalID: 1679840632106309585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Large_1
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 258
+        width: 56
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7b86e410569603e0800000000000000
+      internalID: -2087816106547442817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_3
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48e8f31c12d373d30800000000000000
+      internalID: 4411061575218073220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_4
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38ec848de0270e7c0800000000000000
+      internalID: -4044107057294946685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_3
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 290
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdf43847acc945620800000000000000
+      internalID: 2762004864837046239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Medium_2
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 265
+        width: 41
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32a708ea2cfbfd2b0800000000000000
+      internalID: -5557512572279686621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Large_2
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 258
+        width: 56
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2452148fe3f0eebb0800000000000000
+      internalID: -4904966181032483518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_5
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25dbcfbc132c47ae0800000000000000
+      internalID: -1552402452404454062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_small_6
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 268
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b1f53f301ad29000800000000000000
+      internalID: 41335109914587572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_5
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 290
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 497d422a7bf6d8110800000000000000
+      internalID: 1264789904850999188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Medium_3
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 265
+        width: 41
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8dfbfd92fc5d5bb80800000000000000
+      internalID: -8379556445915463720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Large_3
+      rect:
+        serializedVersion: 2
+        x: 1059
+        y: 258
+        width: 56
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4041136337b00e1c0800000000000000
+      internalID: -4476565440147942396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_2
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 259
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 663ebc81950eecb00800000000000000
+      internalID: 850864052892328806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Small_1
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 258
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fbf2c3d1b51086a0800000000000000
+      internalID: -6449130812888384524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_4
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 259
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59a1c147a80890a40800000000000000
+      internalID: 5334936565738904213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Small_2
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 258
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b322f0f4463e882a0800000000000000
+      internalID: -6734883222769950149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lilly_Tiny_6
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 259
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3d76b191c2235360800000000000000
+      internalID: 7157102447590538554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Fern_Small_3
+      rect:
+        serializedVersion: 2
+        x: 961
+        y: 258
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 195890d041d610480800000000000000
+      internalID: -8934740252840852079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_5
+      rect:
+        serializedVersion: 2
+        x: 1153
+        y: 199
+        width: 64
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fb4fea27091ce570800000000000000
+      internalID: 8497194115517074419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_Fern_1
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 199
+        width: 94
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 516ed62dfa8160af0800000000000000
+      internalID: -430629570938542571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_OrangeBerry_2
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 210
+        width: 54
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d943f2c13fd6b5530800000000000000
+      internalID: 3844787597808186525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_2
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 226
+        width: 36
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35f98f2d886f22d00800000000000000
+      internalID: 946589939216719699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_4
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 227
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0925178f3ec27a520800000000000000
+      internalID: 2713186658151387792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_5
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 202
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63181f9d4b0cf3450800000000000000
+      internalID: 6070782705701847350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_6
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 205
+        width: 32
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7e969a0f00a328c0800000000000000
+      internalID: -4025197655476494722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_7
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 198
+        width: 51
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbbefca5f2e73ca90800000000000000
+      internalID: -7294848229557933125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_9
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 226
+        width: 36
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cd87dff13d8597d0800000000000000
+      internalID: -2912266338139927103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_11
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 227
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f30a42d9de0e69ed0800000000000000
+      internalID: -2407489639634657217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_12
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 202
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b5e0c07fed075010800000000000000
+      internalID: 1177425149620708791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_13
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 205
+        width: 32
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa004872e5cdfd030800000000000000
+      internalID: 3521775730575016106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_14
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 197
+        width: 51
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 472c721e9ea7b5dc0800000000000000
+      internalID: -3649187928130207116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_16
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 226
+        width: 36
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69bb88acd5b4b6730800000000000000
+      internalID: 3993368360796076950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_18
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 227
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dab7f1f644ebe6640800000000000000
+      internalID: 5075203031224515501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_19
+      rect:
+        serializedVersion: 2
+        x: 970
+        y: 202
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f79977a9300a6c30800000000000000
+      internalID: 4353292237429905395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_20
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 204
+        width: 32
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d94f85054cfcb77c0800000000000000
+      internalID: -4072432995957934947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_21
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 197
+        width: 51
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abc58671683a62350800000000000000
+      internalID: 5991656150576684218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_1
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 192
+        width: 51
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03421f0e221fb6410800000000000000
+      internalID: 1471534835371680816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_3
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f27a2b078a6f792f0800000000000000
+      internalID: -966032391741987025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_8
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 192
+        width: 51
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7665f4dc980b6ed90800000000000000
+      internalID: -7068768459209877913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_10
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3de8499c00ec71540800000000000000
+      internalID: 4978674415858650835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_15
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 192
+        width: 51
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f1eafd13cc25ab70800000000000000
+      internalID: 8909576654355620338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Grass_17
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd77a62622dcd68f0800000000000000
+      internalID: -545554432278235169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Ferns_2
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 75
+        width: 125
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c6228b6aef60a0a0800000000000000
+      internalID: -6872369978750654780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_Large_2
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 48
+        width: 107
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d26fe6909dc54da40800000000000000
+      internalID: 5392036741105251885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Lillies_2
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 104
+        width: 72
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81b6fccd1b08847f0800000000000000
+      internalID: -628110646616036584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_LillyBush_2
+      rect:
+        serializedVersion: 2
+        x: 711
+        y: 105
+        width: 85
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 465bc88c13d622a40800000000000000
+      internalID: 5341952168600319332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorative Original_95
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 111
+        width: 65
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc8334969efdfd210800000000000000
+      internalID: 1360051806075566285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorative Original_96
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 114
+        width: 54
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b23a9e0cd6c93a90800000000000000
+      internalID: -7333611869756050765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_Fern_2
+      rect:
+        serializedVersion: 2
+        x: 976
+        y: 103
+        width: 94
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac4131a4148697430800000000000000
+      internalID: 3781167991779169482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_6
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 103
+        width: 64
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c9702c262058cac0800000000000000
+      internalID: -3834726957826672185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_LillyBush_3
+      rect:
+        serializedVersion: 2
+        x: 1184
+        y: 128
+        width: 64
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f29e2203fa2f1c1b0800000000000000
+      internalID: -5637958424250357457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_OrangeBerry_3
+      rect:
+        serializedVersion: 2
+        x: 1251
+        y: 128
+        width: 92
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 818cb1f80f6b7fb90800000000000000
+      internalID: -7208091534273820648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_7
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 131
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 25, y: -3.5}
+        - {x: 22, y: 6.5}
+        - {x: 5, y: 10.5}
+        - {x: -8, y: 8.5}
+        - {x: -12, y: 2.5}
+        - {x: -22, y: -7.5}
+        - {x: -22, y: -11.5}
+        - {x: -19, y: -14.5}
+        - {x: -13, y: -14.5}
+        - {x: -5, y: -18.5}
+        - {x: 9, y: -16.5}
+        - {x: 12, y: -13.5}
+        - {x: 10, y: -6.5}
+        - {x: 22, y: -5.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b57f1e168b6f8d6e0800000000000000
+      internalID: -1812427578240010405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_8
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 32
+        width: 73
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -5.5, y: 10}
+        - {x: -15.5, y: 7}
+        - {x: -22.5, y: -1}
+        - {x: -16.5, y: -10}
+        - {x: -9.5, y: -16}
+        - {x: 2.5, y: -17}
+        - {x: 13.5, y: -15}
+        - {x: 23.5, y: -4}
+        - {x: 21.5, y: 6}
+        - {x: 5.5, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0227b571e60280f10800000000000000
+      internalID: 2236072872199811616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_9
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 40
+        width: 44
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07702f4942b418af0800000000000000
+      internalID: -395952671742097552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_10
+      rect:
+        serializedVersion: 2
+        x: 777
+        y: 38
+        width: 52
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9293df537f0946c0800000000000000
+      internalID: -4158775792696585573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_11
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 35
+        width: 62
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4fca70e49a7e2210800000000000000
+      internalID: 1310119321451286346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_12
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 34
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b63184b8af25ad3d0800000000000000
+      internalID: -3181138950751775893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorative Original_107
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 31
+        width: 92
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a6e2e9a81b726190800000000000000
+      internalID: -7970673044632705368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AF_Rocks_LillyBush_4
+      rect:
+        serializedVersion: 2
+        x: 1057
+        y: 32
+        width: 64
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17cb8123dd21a4940800000000000000
+      internalID: 5281054254282882161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 0c46fb36ea80c9545a157db52dc01ceb
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      AF_Rocks_3: -5680091593337759004
+      AF_Tree_Large: -7138085808530792532
+      AF_Rocks_LillyBush_2: 5341952168600319332
+      AF_Rocks_9: -395952671742097552
+      AF_Rocks_11: 1310119321451286346
+      AF_Lilly_Medium_2: -4026930733550486551
+      AF_Ferns_1: 7923243573633118180
+      AF_Rocks_Fern_2: 3781167991779169482
+      Decorative Original_96: -7333611869756050765
+      AF_BerryBush_Yellow_Small: -5369880366478186462
+      AF_DeadTree_Large: 6424215645094407054
+      AF_Fern_Small_3: -8934740252840852079
+      AF_Grass_9: -2912266338139927103
+      AF_Lilly_Medium_1: 3781494692132906014
+      AF_BerryBush_Red_Small: -5560271740883268243
+      AF_Grass_13: 3521775730575016106
+      AF_Stump_2: 6569707263767991722
+      AF_Lilly_Large_2: -1610875475966710508
+      AF_Rocks_OrangeBerry_2: 3844787597808186525
+      AF_Rocks_12: -3181138950751775893
+      AF_DeadTree_Medium: -8166554973306636017
+      Decorative Original_107: -7970673044632705368
+      Decorative Original_95: 1360051806075566285
+      AF_Log_4: -6582841086841156217
+      AF_Lilly_Large_5: -6697019995000178327
+      AF_Rocks_LillyBush_3: -5637958424250357457
+      AF_Log_2: -8917510113365255233
+      AF_Grass_10: 4978674415858650835
+      AF_Rocks_OrangeBerry_3: -7208091534273820648
+      AF_Lilly_Tiny_1: -7518006617465859987
+      AF_Grass_5: 6070782705701847350
+      AF_Lillies_2: -628110646616036584
+      AF_Tree_Giant: 6563190595106138554
+      AF_Lilly_Medium_5: 2221930507697111952
+      AF_Fern_Medium_2: -5557512572279686621
+      AF_Log_3: 7214300787873212442
+      AF_Lilly_Large_4: 1517039987427538199
+      AF_Grass_20: -4072432995957934947
+      AF_Rocks_Large_2: 5392036741105251885
+      AF_Lilly_Tiny_4: 5334936565738904213
+      AF_Fern_Medium_1: 1679840632106309585
+      AF_Rocks_7: -1812427578240010405
+      AF_Grass_12: 1177425149620708791
+      AF_Grass_7: -7294848229557933125
+      AF_Lilly_small_6: 41335109914587572
+      AF_Fern_Small_1: -6449130812888384524
+      AF_Lilly_Medium_3: 2261781286619700381
+      AF_Lilly_Tiny_5: 1264789904850999188
+      AF_Rocks_Fern_1: -430629570938542571
+      AF_Grass_4: 2713186658151387792
+      AF_Lilly_Tiny_6: 7157102447590538554
+      AF_BerryBush_Pink_Medium: -7870485846948801004
+      AF_Rocks_OrangeBerry_1: 6556806384728365959
+      AF_Grass_18: 5075203031224515501
+      AF_Rocks_5: 8497194115517074419
+      AF_Fern_Small_2: -6734883222769950149
+      AF_Rocks_10: -4158775792696585573
+      AF_Lilly_Large_3: 7032488900414881624
+      AF_Rocks_LillyBush_1: -1995694944297746014
+      AF_Lilly_small_2: 5871898630515040578
+      AF_Lilly_Tiny_2: 850864052892328806
+      AF_Lilly_Medium_4: 6060737688212226266
+      AF_Lillies_1: 1036264609618249691
+      AF_Rocks_Large_1: -9132692047142692580
+      AF_Rocks_4: -8641891091099446035
+      AF_Lilly_small_4: -4044107057294946685
+      AF_Grass_15: 8909576654355620338
+      AF_Rocks_2: 6713429324071996261
+      AF_Grass_17: -545554432278235169
+      AF_Rocks_6: -3834726957826672185
+      AF_DeadTree_Small: 4379096920553345384
+      AF_Lilly_Large_1: -8053951484072182605
+      AF_Grass_2: 946589939216719699
+      AF_Tree_Small: -7643969682133985595
+      AF_BerryBush_Yellow_Medium: -7880852654328501190
+      AF_Lilly_small_3: 4411061575218073220
+      AF_BerryBush_Red_Large: 4642053073393126887
+      AF_Fern_Large_1: -2087816106547442817
+      AF_BerryBush_Red_Medium: -545722913844336146
+      AF_Grass_11: -2407489639634657217
+      AF_Lilly_Tiny_3: 2762004864837046239
+      AF_Grass_3: -966032391741987025
+      AF_Grass_6: -4025197655476494722
+      AF_BerryBush_Pink_Small: 6285015683567735878
+      AF_BerryBush_Yellow_Double: -6978394590061924156
+      AF_BerryBush_Pink_Double: -1192022729638709792
+      AF_Stump_1: -106149364180147493
+      AF_Fern_Large_2: -4904966181032483518
+      AF_Fern_Large_3: -4476565440147942396
+      AF_Rocks_LillyBush_4: 5281054254282882161
+      AF_Grass_21: 5991656150576684218
+      AF_Rocks_1: 3683845571033131393
+      AF_Lilly_small_1: 8773821275861954246
+      AF_Fern_Medium_3: -8379556445915463720
+      AF_Ferns_2: -6872369978750654780
+      AF_Grass_1: 1471534835371680816
+      AF_BerryBush_Yellow_Large: -5793239797166635871
+      AF_BerryBush_Pink_Large: 8700285466417657060
+      AF_Lilly_Large_6: 2921044507371125655
+      AF_Lilly_Medium_6: -8552098572150136349
+      AF_Grass_16: 3993368360796076950
+      AF_Grass_19: 4353292237429905395
+      AF_Rocks_8: 2236072872199811616
+      AF_Grass_8: -7068768459209877913
+      AF_Tree_Medium: 3768139227862760931
+      AF_Lilly_small_5: -1552402452404454062
+      AF_Grass_14: -3649187928130207116
+      AF_BerryBush_Red_Double: 3624397920268240007
+      AF_Log_1: -3812452222654848040
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

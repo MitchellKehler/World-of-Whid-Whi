@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - GameManager
+  - Server
+  - BattleCamera
+  - BattlePanel
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Grass
+  - Water
+  - UI
+  - Elevation
+  - Road
+  - LongGrass
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Ground
+    uniqueID: 824711831
+    locked: 0
+  - name: Ground2
+    uniqueID: 2990292711
+    locked: 0
+  - name: Map_Water
+    uniqueID: 3424670273
+    locked: 0
+  - name: Map_Elevation
+    uniqueID: 3937061233
+    locked: 0
+  - name: Bridges
+    uniqueID: 4033497363
+    locked: 0
+  - name: Battle_Background
+    uniqueID: 2773996085
+    locked: 0
+  - name: Creature_Highlights
+    uniqueID: 3729513207
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Animation
+    uniqueID: 2147517457
+    locked: 0
