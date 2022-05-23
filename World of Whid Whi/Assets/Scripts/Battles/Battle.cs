@@ -339,13 +339,13 @@ public class Battle
         {
             if (CurrentCreature.Owner == Player1)
             {
-                SetInstructionText("Your " + CurrentCreature.Creature.Name + " is Waiting.", Player1);
-                SetInstructionText("Their " + CurrentCreature.Creature.Name + " is Waiting.", Player2);
+                GM.SetInstructionText("Your " + CurrentCreature.Creature.Name + " is Waiting.", Player1);
+                GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is Waiting.", Player2);
             }
             else if (Player2 != GameManager.SERVERID)
             {
-                SetInstructionText("Your " + CurrentCreature.Creature.Name + " is Waiting.", Player1);
-                SetInstructionText("Their " + CurrentCreature.Creature.Name + " is Waiting.", Player2);
+                GM.SetInstructionText("Your " + CurrentCreature.Creature.Name + " is Waiting.", Player1);
+                GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is Waiting.", Player2);
             }
             Stage = BattleStage.PerformingActions;
             ActionsToPerform = new List<Action>();
@@ -500,7 +500,7 @@ public class Battle
     {
         if (CurrentCreature.Owner != Player1)
         {
-            SetInstructionText("Their " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player1);
+            GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player1);
             //if (Player2 != GameManager.SERVERID) // && they have something that can react to it's own creature attacking.
             //{
             //    SetInstructionText("Your " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player2);
@@ -508,7 +508,7 @@ public class Battle
         }
         else if (Player2 != GameManager.SERVERID)
         {
-            SetInstructionText("Their " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player2);
+            GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player2);
             //if (true) // you have something that can react to your own creature attacking
             //{
             //    SetInstructionText("Your " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player1);
@@ -795,14 +795,14 @@ public class Battle
         if (CurrentCreature.Owner == Player1)
         {
             Debug.Log("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.");
-            SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player1);
-            SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player2);
+            GM.SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player1);
+            GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player2);
         }
         else if (Player2 != GameManager.SERVERID)
         {
             Debug.Log("Pick " + CurrentCreature.Creature.Name + "'s next ability!");
-            SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player2);
-            SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player1);
+            GM.SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player2);
+            GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player1);
         }
 
         // AI creature. Server decides it's move
@@ -1077,19 +1077,6 @@ public class Battle
         }
 
         End_Battle = true;
-    }
-
-    public void SetInstructionText(string text, ulong clientId)
-    {
-        ClientRpcParams clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { clientId }
-            }
-        };
-
-        GM.SetInstructionText(text, true, clientRpcParams);
     }
 
     public void SetInstructionText(string text)

@@ -44,6 +44,11 @@ public class CharacterData : INetworkSerializable
 
     }
 
+    public CharacterData(int account)
+    {
+        Account = account;
+    }
+
     public CharacterData(int id, int account, string name, int lvl, int xp, string location, float x, float y)
     {
         ID = id;

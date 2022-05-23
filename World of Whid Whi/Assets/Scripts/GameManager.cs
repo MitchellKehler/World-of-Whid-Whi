@@ -12,8 +12,15 @@ using MLAPI.Spawning;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
+ * Look for !FIX for areas where I know work needs to happen.
+ * 
  * //////////////////     Playability (Make it easier for the user to play)     //////////////////
- * Signout saves player data (need to create a map (clientId, AccountData) on server side.
+ * Add Check Connection
+ * Add Sign Out from in game.
+ * Make sure accounts have valid emails so we don't end up with blank accounts.
+ * Save Creature Data to Database
+ * 
+ * Confirm add and remove player and character buttons work.
  * Add message to indicate enemy is taking their turn.
  * Clear Creatures After Death
  * creatures remain hurt / dead after fight and can be healed / revived at starting well
@@ -31,20 +38,8 @@ using MLAPI.Spawning;
     * Fix Backgrounds to cover whole battle field
     * Add Tags to compononts and add / remove all comonents that should be added or removed based on tags.
  * Add Reactions
- *
- * Add ranged, reduced speed (this is a good thing) for first attack/attacks not moving.
- * Add power up conditions
- * Add powerup stat tracking (leveling up) in battles
- * not notifying the client when an attack isn't performed because all targets are missing / dead.
- * Fix out of combat viewing creatures
- * Fix Ability Pick Panel Open And Close Timing
  * 
- * Add Database and proper Login
  * Add Player Details
-    * Account Name and Password (for now just one character per account but maybe more later
-    * Character 
-        * Name
-        * Lvl
     * Known Creatures List
     * Reputations (worry about later)
     * Achievements and completed quest list (worry about later)
@@ -52,7 +47,13 @@ using MLAPI.Spawning;
     * Initialized Creatures List (with some indicator of which are in current squad and starting lineup layout
     * 
     * Battle Display toggle setting
- * 
+ *
+ * Add ranged, reduced speed (this is a good thing) for first attack/attacks not moving.
+ * Add power up conditions
+ * Add powerup stat tracking (leveling up) in battles
+ * not notifying the client when an attack isn't performed because all targets are missing / dead.
+ * Fix out of combat viewing creatures
+ * Fix Ability Pick Panel Open And Close Timing
  * Add Creature Capture after win
  * Add Creature Damage / death remains after fight
  * Add code to implement pradictability and properly show player the information they should see and not the information they shouldn't see with regards to which moves the enemy is performing.
@@ -595,14 +596,53 @@ public class GameManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SpawnPlayerServerRpc(ulong clientId, CharacterData character) // later this should just be passed clientId / accountId and character ID
+    public void SignOut_ServerRpc(ulong clientId)
+    {
+        Server.Handle_SignOut_Request(clientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DB_DeleteCharacter_ServerRpc(ulong clientId, int id)
+    {
+        Server.Handle_DeleteCharacter_Request(clientId, id);
+    }
+
+    [ClientRpc]
+    public void DeleteCharacter_Response_ClientRpc(bool success, ClientRpcParams rpcParams = default)
+    {
+        Server.Handle_DeleteCharacter_Response(success);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DB_CreateCharacter_ServerRpc(ulong clientId, string name)
+    {
+        Server.Handle_CreateCharacter_Request(clientId, name);
+    }
+
+    [ClientRpc]
+    public void CreateCharacter_Response_ClientRpc(CharacterData character, ClientRpcParams rpcParams = default)
+    {
+        Debug.Log("new character = " + character.ToString());
+        Server.Handle_CreateCharacter_Response(character);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SpawnPlayerServerRpc(ulong clientId, int characterId) // later this should just be passed clientId / accountId and character ID
     {
         // Get Spawn.  Stop if there are no spawn points in the seen
         //Transform spawn = GetSpawnPoint();
         //if (spawn == null) { Debug.Log("No Spawn Points in Scene!"); return; }
 
         Debug.Log("In SpawnPlayerServerRpc");
-        Server.activeCharacters.Add(clientId, character);
+        CharacterData characterData = Server.DB_GetCharacterData(clientId, characterId);
+        if (characterData != null)
+        {
+            Server.activeCharacters[clientId] = characterData;
+        } else
+        {
+            SetInstructionText("You cannot access this character. Please contact ??? for assistance.", clientId);
+        }
+        
 
         // Spawn on Client
         GameObject go = Instantiate(PlayerPrefab, new Vector3(100.5f, -88, 0), Quaternion.identity);
@@ -619,7 +659,7 @@ public class GameManager : NetworkBehaviour
                 TargetClientIds = new ulong[] { clientId }
             }
         };
-        SpawnClientRpc(objectId, character.ID, clientRpcParams);
+        SpawnClientRpc(objectId, Server.activeCharacters[clientId].ID, clientRpcParams);
         NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().GetComponent<Player_Movement_Android>().MyClientId = clientId;
 
     }
@@ -1355,6 +1395,19 @@ public class GameManager : NetworkBehaviour
             InstructionsText.GetComponent<FadingText>().FadeInText("You Lost the battle : (", true);
         }
 
+    }
+
+    public void SetInstructionText(string text, ulong clientId)
+    {
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+
+        SetInstructionText(text, true, clientRpcParams);
     }
 
     public void SetInstructionText(string text, bool AutoClose, ClientRpcParams rpcParams = default)
