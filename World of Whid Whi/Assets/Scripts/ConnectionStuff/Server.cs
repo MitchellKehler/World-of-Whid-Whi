@@ -16,6 +16,8 @@ using System.Linq;
 
 public class Server : MonoBehaviour
 {
+    public bool isServer;
+
     public static readonly Color CharacterButtonSelected = new Color(.25f, .17f, .08f, .375f);
     public static readonly Color CharacterButtonNotSelected = new Color(.44f, .32f, .18f, .375f);
     public const string MSSQL_DataSource = @"DESKTOP-4STICPG\MSSQLSERVER01";
@@ -23,11 +25,13 @@ public class Server : MonoBehaviour
     public const string MSSQL_Password = "FishSticksAreSmelly";
     public const string MSSQL_InitialCatalog = "WWWDB";
 
+    public const float TIME_BETWEEN_NETWORK_CHECKS = 1f;
+
     public Text AccountMenuTitle;
-    public Text Email;
-    public Text Password;
-    public Text CreateAccount_Email;
-    public Text CreateAccount_Password;
+    public InputField Email;
+    public InputField Password;
+    public InputField CreateAccount_Email;
+    public InputField CreateAccount_Password;
     public Text ErrorText;
     public Text NewCharacterName;
     public Connection Connection;
@@ -43,7 +47,10 @@ public class Server : MonoBehaviour
     public int CurrentCharacterIndex;
     public Dictionary<ulong, CharacterData> activeCharacters;
 
-  // Start is called before the first frame update
+    float Timer = 0.0f;
+    float TimeSinceSuccessfulPing = 0;
+
+    // Start is called before the first frame update
     void Start()
     {
         //AccountSelectPanel.SetActive(true);
@@ -58,9 +65,17 @@ public class Server : MonoBehaviour
         //button.transform.position = new Vector3(button.transform.position.x, button.transform.position.y - 160, 0);
     }
 
+    void Update()
+    {
+    }
+
+    public void ReConnect()
+    {
+        Connection.ConnectToServer();
+    }
+
     public void Connect()
     {
-        CurrentCharacterIndex = -1;
 
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         Debug.Log("GetLocalIPAddress() " + GetLocalIPAddress());
@@ -68,13 +83,16 @@ public class Server : MonoBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += clientId => ClientConnectedCallback(clientId);
         NetworkManager.Singleton.OnClientDisconnectCallback += clientId => ClientDisconnectedCallback(clientId);
 
-        if (GetLocalIPAddress() == "10.0.0.38")
+        if (isServer) //GetLocalIPAddress() == "10.0.0.38"
         {
+            // This is the Server
             NetworkManager.Singleton.StartServer();
             activeCharacters = new Dictionary<ulong, CharacterData>();
         }
         else
         {
+            // This is a Client
+            CurrentCharacterIndex = -1;
             ErrorText.text = "Not Connected to the Server!";
             Connection.ConnectToServer();
             //Client.SetActive(true);
@@ -124,6 +142,10 @@ public class Server : MonoBehaviour
         //ErrorText.text = "Connection Approved";
     }
 
+    /// <summary>
+    /// Called on the client when the client connects to the server
+    /// </summary>
+    /// <param name="clientId"></param>
     public void ClientConnectedCallback(ulong clientId)
     {
         //ErrorText.text = "Connected";
@@ -134,6 +156,7 @@ public class Server : MonoBehaviour
             //LoginCanvas.SetActive(false);
             //InGameCanvas.SetActive(true);
             //GM.SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+            CancelInvoke("ReConnect");
             ErrorText.text = "";
         }
         else if (NetworkManager.Singleton.IsServer)
@@ -149,9 +172,10 @@ public class Server : MonoBehaviour
 
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            GM.RemoveScene(Characters[CurrentCharacterIndex].Location);
+//            GM.RemoveScene(Characters[CurrentCharacterIndex].Location); character is already destroyed at this point. we need to keep track of the current location on something other then the player.
             AccountSelectPanel.SetActive(false);
             ErrorText.text = "Not Connected to the Server!";
+            InvokeRepeating("ReConnect", .1f, 1f);
         }
         else if (NetworkManager.Singleton.IsServer)
         {
@@ -162,23 +186,13 @@ public class Server : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (NetworkManager.Singleton.IsServer)
-        //{
-        //    Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
-        //}
-
-        //ConnectionCount.text = NetworkManager.Singleton.ConnectedClients.Count.ToString();
-    }
-
     public void SignIn()
     {
-        Email.text = "";
-        Password.text = "";
+        Debug.Log("In SignIn()");
         GM.LogToServerRpc(NetworkManager.Singleton.LocalClientId, "Signing in");
         GM.DB_SignIn_ServerRpc(NetworkManager.Singleton.LocalClientId, Email.text, Password.text);
+        Email.text = "";
+        Password.text = "";
     }
 
     /// <summary>
@@ -262,6 +276,9 @@ public class Server : MonoBehaviour
                     }
 
                 }
+
+                // next get their creature data info and add icons of their current squad so we can get a bit of info about the character before hitting play
+                // eventually we will probably want a button to show a more full set of character details before jumping into game but we can add that later.
             }
         }
         catch (SqlException e)
@@ -286,17 +303,13 @@ public class Server : MonoBehaviour
     /// Called By Client with the result of the sign in request made.
     /// </summary>
     /// <param name="SignInStatus"></param>
-    public void Handle_Signin_Response(int SignInStatus, CharacterData[] characters)
+    public void Handle_Signin_Response(int AccountId, CharacterData[] characters)
     {
-        if (SignInStatus == -1)
+        if (AccountId == -1)
         {
             ErrorText.text = "Incorrect email or password, please try again.";
         }
-        else if (SignInStatus == -2)
-        {
-            ErrorText.text = "Email already in use.";
-        }
-        else if (SignInStatus == -99)
+        else if (AccountId == -99)
         {
             ErrorText.text = "Unknonw Issue: Please request support.";
         }
@@ -308,9 +321,8 @@ public class Server : MonoBehaviour
             AccountMenuTitle.text = "Welcome " + Email.text;
 
             ErrorText.text = "";
-            AccountID = characters[0].Account;
-
             Characters = characters.ToList();
+            AccountID = AccountId;
             RecreateCharacterButtons();
             Debug.Log("AccountID is " + AccountID);
         }
@@ -375,12 +387,16 @@ public class Server : MonoBehaviour
     public void CreateAccount()
     {
         GM.LogToServerRpc(NetworkManager.Singleton.LocalClientId, "Creating an Account");
-        GM.DB_CreateAccount_ServerRpc(NetworkManager.Singleton.LocalClientId, CreateAccount_Email.text, CreateAccount_Password.text);
-        Email.text = CreateAccount_Email.text;
-        Password.text = CreateAccount_Password.text;
-        CreateAccount_Email.text = "";
-        CreateAccount_Password.text = "";
-        SignIn();
+        if (!CreateAccount_Email.text.Contains('@'))
+        {
+            ErrorText.text = "Please use a valid email address.";
+        } else if (CreateAccount_Password.text.Length < 5)
+        {
+            ErrorText.text = "Password must be at least 6 characters.";
+        } else
+        {
+            GM.DB_CreateAccount_ServerRpc(NetworkManager.Singleton.LocalClientId, CreateAccount_Email.text, CreateAccount_Password.text);
+        }
     }
 
     /// <summary>
@@ -612,6 +628,7 @@ public class Server : MonoBehaviour
     /// Called by server when client attempts to create an account.
     /// 
     /// >= 0: Successful (response == account ID)
+    /// -1: Unknown Error
     /// -2: Email already in use
     /// -99: SQL error
     /// /// </summary>
@@ -619,7 +636,7 @@ public class Server : MonoBehaviour
     public void Handle_CreateAccount_Request(ulong clientId, string email, string password)
     {
         Debug.Log("Got create account request: " + email + ", " + password);
-        int AccountID = -2;
+        int AccountID = -1;
         List<CharacterData> characters = new List<CharacterData>();
 
         // Build connection string
@@ -658,7 +675,7 @@ public class Server : MonoBehaviour
                     }
                 }
 
-                if (AccountID <= 0) // Email not already in use.
+                if (AccountID <= 0)
                 {
                     // sql command
                     sql = "INSERT INTO UserAccount (email, password) VALUES ('" + email + "', '" + password + "')";
@@ -685,6 +702,10 @@ public class Server : MonoBehaviour
                         }
                     }
                 }
+                else // Email already in use.
+                {
+                    AccountID = -2;
+                }
             }
         }
         catch (SqlException e)
@@ -692,8 +713,43 @@ public class Server : MonoBehaviour
             AccountID = -99;
             Debug.Log(e.ToString());
         }
+        GM.CreateAccount_Response_ClientRpc(AccountID);
 
     }
+
+    /// <summary>
+    /// Handles create account responses on the client side
+    /// 
+    /// Response Codes
+    /// 0: Successful (response == account ID)
+    /// -2: Email already in use
+    /// -99: SQL error
+
+    /// </summary>
+    /// <param name="responseCode"></param>
+    public void Handle_CreateAccount_Response(int responseCode)
+    {
+        Debug.Log("responseCode: " + responseCode);
+        if (responseCode == -2) // email already exists
+        {
+            ErrorText.text = "Email already exists, please use a different email.";
+        }
+        else if (responseCode == -1 || responseCode == -99) // SQL Error
+        {
+            ErrorText.text = "Unknonw Issue: Please request support.";
+        }
+        else // responseCode == 0 (success)
+        {
+            Email.text = CreateAccount_Email.text;
+            Password.text = CreateAccount_Password.text;
+            CreateAccount_Email.text = "";
+            CreateAccount_Password.text = "";
+            CreateAccount_Email.transform.parent.gameObject.SetActive(false);
+            SignIn();
+        }
+
+    }
+
 
     /// <summary>
     /// This is called on the client side when the sign out button is clicked

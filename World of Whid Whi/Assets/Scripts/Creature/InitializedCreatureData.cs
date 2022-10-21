@@ -18,7 +18,7 @@ public class InitializedCreatureData : INetworkSerializable
     public int CurrentHP;
     public float HPMultiplier;
     public ulong Owner;
-    public int ID;
+    public int ID; // I think this is just used to identify a creature in game. Maybe should be set to the same as the ID in the database? gotta check where it is set.
     public CreatureSize Size;
     public int Strength;
     public int Agility;

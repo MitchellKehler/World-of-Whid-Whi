@@ -625,7 +625,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 265, y: -280}
+  m_AnchoredPosition: {x: 262.91483, y: -147.75479}
   m_SizeDelta: {x: 290, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &121448334
@@ -676,18 +676,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Server, Assembly-CSharp
         m_MethodName: CreateAccount
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1863932954}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1383,7 +1371,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 28
+    m_FontSize: 32
     m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 2
@@ -2517,7 +2505,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -30.052124, y: 9.894318}
+  m_AnchoredPosition: {x: -30.052246, y: 9.894287}
   m_SizeDelta: {x: -813.8799, y: -336.1737}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &286440941
@@ -4596,30 +4584,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1798644854}
-        m_TargetAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1516666562}
-        m_TargetAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &524686759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5603,7 +5567,7 @@ PrefabInstance:
     - target: {fileID: 4239616435633441616, guid: a10d74337c9b5504e9ce7392ead2691f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2.841278
+      value: -2.8412476
       objectReference: {fileID: 0}
     - target: {fileID: 4239616435633441616, guid: a10d74337c9b5504e9ce7392ead2691f,
         type: 3}
@@ -5779,6 +5743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -7930,7 +7895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 429.285, y: 363.58}
+  m_AnchoredPosition: {x: 429.28506, y: 254.66855}
   m_SizeDelta: {x: 129.585, y: 128.996}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &808415876
@@ -9879,7 +9844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.9999485, y: 151.85104}
+  m_AnchoredPosition: {x: -2.9997559, y: 52.939568}
   m_SizeDelta: {x: 819.635, y: 83.144}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &968581460
@@ -11035,7 +11000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 48, y: 266.00003}
+  m_AnchoredPosition: {x: 47.99997, y: 157.08864}
   m_SizeDelta: {x: 900, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064069654
@@ -11148,11 +11113,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 28
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 300
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 0
@@ -14343,7 +14308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3, y: 34}
+  m_AnchoredPosition: {x: -2.9999695, y: -46.75479}
   m_SizeDelta: {x: 819.635, y: 83.144}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1420888792
@@ -17308,11 +17273,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isServer: 1
   AccountMenuTitle: {fileID: 1096277259}
-  Email: {fileID: 1399277481}
-  Password: {fileID: 331672966}
-  CreateAccount_Email: {fileID: 1083796285}
-  CreateAccount_Password: {fileID: 1184554851}
+  Email: {fileID: 1798644854}
+  Password: {fileID: 1516666562}
+  CreateAccount_Email: {fileID: 968581460}
+  CreateAccount_Password: {fileID: 1420888792}
   ErrorText: {fileID: 1226454349}
   NewCharacterName: {fileID: 940519483}
   Connection: {fileID: 1690720506}
@@ -18722,10 +18688,10 @@ RectTransform:
   m_Father: {fileID: 1118697318}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.4604375, y: 0.08768865}
-  m_AnchorMax: {x: 0.9588751, y: 0.8701734}
-  m_AnchoredPosition: {x: 1.5449829, y: 1.3829956}
-  m_SizeDelta: {x: -2.7650146, y: -2.697998}
+  m_AnchorMin: {x: 0.4604375, y: 0.32200003}
+  m_AnchorMax: {x: 0.9572709, y: 0.8701734}
+  m_AnchoredPosition: {x: 3.044983, y: 1.7944489}
+  m_SizeDelta: {x: 0.23500061, y: -3.5207977}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1863932956
 MonoBehaviour:

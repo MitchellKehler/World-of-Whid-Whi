@@ -50,6 +50,10 @@ public static class InitializeCreatures
         //// 0 -> 1 = 1000; Difference is 190
         //// 0 -> 1 = 1210; Difference is 210
         //// 0 -> 1 = 1440; Difference is 230
+        ///
+        /// attributes apply power up groups instead of power ups
+        /// power up groups contain a number of power ups each applied when their stat conditions are met
+        /// creature type itself is also a power up group for special power ups like a rat's bonus resistance
 
         AllCreatureList = new List<BaseCreature>();
         List<CreatureType> MyTypes = new List<CreatureType>();

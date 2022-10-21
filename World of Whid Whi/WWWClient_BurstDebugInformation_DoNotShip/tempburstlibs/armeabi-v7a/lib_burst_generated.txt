@@ -1,12 +1,12 @@
 Library: lib_burst_generated
 --platform=Android
---backend=burst-llvm-11
+--backend=burst-llvm-12
 --target=ARMV7A_NEON32
 --global-safety-checks-setting=Off
 --dump=Function
 --float-precision=Standard
 --disable-warnings=BC1370
---compilation-defines=UNITY_2021_3_2
+--compilation-defines=UNITY_2021_3_9
 --compilation-defines=UNITY_2021_3
 --compilation-defines=UNITY_2021
 --compilation-defines=UNITY_5_3_OR_NEWER
@@ -143,6 +143,7 @@ Library: lib_burst_generated
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Addressables.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.ResourceManager.dll
+--root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.2D.Tilemap.Extras.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.RenderPipeline.Universal.ShaderLibrary.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
@@ -154,7 +155,6 @@ Library: lib_burst_generated
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.Device.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll
---root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Core.ShaderLibrary.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=D:\World-of-Whid-Whi\World of Whid Whi\Temp\StagingArea\Data\Managed\Unity.Multiplayer.MLAPI.Prototyping.dll

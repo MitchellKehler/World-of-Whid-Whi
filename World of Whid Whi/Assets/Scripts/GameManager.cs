@@ -14,30 +14,28 @@ using MLAPI.Spawning;
  * 
  * Look for !FIX for areas where I know work needs to happen.
  * 
+ * At some point I need to move some of the stuff out of updates and use events instead!
+ * 
  * //////////////////     Playability (Make it easier for the user to play)     //////////////////
- * Add Check Connection
- * Add Sign Out from in game.
- * Make sure accounts have valid emails so we don't end up with blank accounts.
  * Save Creature Data to Database
  * 
- * Confirm add and remove player and character buttons work.
  * Add message to indicate enemy is taking their turn.
  * Clear Creatures After Death
  * creatures remain hurt / dead after fight and can be healed / revived at starting well
  * load creatures from database for existing account
  * save creatures to database on sign out
- * add create character
  * add leveling of creatures
  * add capturing creatures
  * 
  * Basic AI for picking attack to have a higher chance to pick higher ranked attacks.
  * Fix attack timing
  * Small creatures health bar and name closer to sprite
- * Add creatures when space opens up
  * Fix Battle Details
     * Fix Backgrounds to cover whole battle field
     * Add Tags to compononts and add / remove all comonents that should be added or removed based on tags.
+ * Rework battles to use events to track turns instead of updates (apply any other events in place of updates code that is found during this process)
  * Add Reactions
+ * Add creatures when space opens up
  * 
  * Add Player Details
     * Known Creatures List
@@ -221,14 +219,9 @@ public class GameManager : NetworkBehaviour
     bool ReturnBattleCreature;
     BattleCreatureClient CreatureToReturn;
 
-    // Cameras
-    //public Camera PlayerCamera;
-    //public Camera BattleCamera;
-
     // Game Objects
     public GameObject Player;
     public GameObject PlayerPrefab;
-    //public List<BaseCreature> AllCreatures;
 
     // UI Elements
     public GameObject Detail_Panel_Close_Button;
@@ -236,16 +229,6 @@ public class GameManager : NetworkBehaviour
     // UI - Battle Objects
     public GameObject EmptyCreature;
     public GameObject HealthBar;
-    //public InitializedCreature EncounterCreature1;
-    //public InitializedCreature EncounterCreature2;
-    //public InitializedCreature EncounterCreature3;
-    //public InitializedCreature EncounterCreature4;
-    //public InitializedCreature EncounterCreature5;
-    //public InitializedCreature EncounterCreature6;
-    //public InitializedCreature EncounterCreature7;
-    //public InitializedCreature EncounterCreature8;
-    //public List<InitializedCreature> EncounterCreatures;
-
     public GameObject Battle_Action_Panel;
 
     public List<GameObject> Selected_Creature_Highlights; // should really be named Current_Creature_Highlight
@@ -334,11 +317,6 @@ public class GameManager : NetworkBehaviour
     float Timer = 0.0f;
     public PositionManager position_manager;
 
-    //public float hSliderValueR = 0.0F;
-    //public float hSliderValueG = 0.0F;
-    //public float hSliderValueB = 0.0F;
-    //public float hSliderValueA = 1.0F;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -348,7 +326,7 @@ public class GameManager : NetworkBehaviour
 
         Server.Connect();
 
-        if (Server.GetLocalIPAddress() == "10.0.0.38") //NetworkManager.Singleton.IsServer
+        if (Server.isServer) //Server.GetLocalIPAddress() == "10.0.0.38" //NetworkManager.Singleton.IsServer
         {
             Debug.Log("I'm the Server");
             //LogToServerRpc(0, "I'm the Server");
@@ -374,29 +352,6 @@ public class GameManager : NetworkBehaviour
         //LogToServerRpc(0, "I'm NOT the Server");
         ////Server.ErrorText.text = "Made it through GM Constructor!";
 
-    }
-
-
-    // WWW_Server2
-    // FishSticksAreSmelly
-    [ServerRpc(RequireOwnership = false)]
-    public void DB_SignIn_ServerRpc(ulong clientId, string email, string password)
-    {
-        Server.Handle_Signin_Request(clientId, email, password);
-    }
-
-    [ClientRpc]
-    public void SignIn_Response_ClientRpc(int SignInStatus, CharacterData[] characters, ClientRpcParams rpcParams = default)
-    {
-        Server.Handle_Signin_Response(SignInStatus, characters);
-    }
-
-    // WWW_Server2
-    // FishSticksAreSmelly
-    [ServerRpc(RequireOwnership = false)]
-    public void DB_CreateAccount_ServerRpc(ulong clientId, string email, string password)
-    {
-        Server.Handle_CreateAccount_Request(clientId, email, password);
     }
 
     // Update is called once per frame
@@ -595,10 +550,36 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DB_SignIn_ServerRpc(ulong clientId, string email, string password)
+    {
+        Server.Handle_Signin_Request(clientId, email, password);
+    }
+
+    [ClientRpc]
+    public void SignIn_Response_ClientRpc(int AccountId, CharacterData[] characters, ClientRpcParams rpcParams = default)
+    {
+        Server.Handle_Signin_Response(AccountId, characters);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SignOut_ServerRpc(ulong clientId)
     {
         Server.Handle_SignOut_Request(clientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DB_CreateAccount_ServerRpc(ulong clientId, string email, string password)
+    {
+        Server.Handle_CreateAccount_Request(clientId, email, password);
+    }
+
+    [ClientRpc]
+    public void CreateAccount_Response_ClientRpc(int responseCode, ClientRpcParams rpcParams = default)
+    {
+        Debug.Log("new account creation attempt returned = " + responseCode);
+        Server.Handle_CreateAccount_Response(responseCode);
     }
 
     [ServerRpc(RequireOwnership = false)]
