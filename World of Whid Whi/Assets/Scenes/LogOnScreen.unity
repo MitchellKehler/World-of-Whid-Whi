@@ -7954,8 +7954,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1083796285}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+      - m_Target: {fileID: 968581460}
+        m_TargetAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
         m_MethodName: set_text
         m_Mode: 5
         m_Arguments:
@@ -7966,8 +7966,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1184554851}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+      - m_Target: {fileID: 1420888792}
+        m_TargetAssemblyTypeName: UnityEngine.UI.InputField, UnityEngine.UI
         m_MethodName: set_text
         m_Mode: 5
         m_Arguments:
@@ -15288,7 +15288,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495960644}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1495960646
 Camera:
   m_ObjectHideFlags: 0
@@ -17268,7 +17268,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690720502}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
@@ -18690,7 +18690,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.4604375, y: 0.32200003}
   m_AnchorMax: {x: 0.9572709, y: 0.8701734}
-  m_AnchoredPosition: {x: 3.044983, y: 1.7944489}
+  m_AnchoredPosition: {x: 3.044983, y: 1.7944336}
   m_SizeDelta: {x: 0.23500061, y: -3.5207977}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1863932956

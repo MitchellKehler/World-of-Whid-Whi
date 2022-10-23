@@ -24,9 +24,8 @@ public class InitializedCreature
     public int Electric_Resistance;
     public int Death_Resistance;
     public List<AbilityData> KnownAbilities;
-    public List<AttributeName> CurrentAttributes;
-    public Dictionary<PowerUpStat, int> TrackedStats;
-    public int CurrentLvl; // many not need it (just limited by it becoming too difficult to gan XP)
+    public List<PowerUpGroup> PowerUpGroups;
+    public int CurrentXP; // many not need it (just limited by it becoming too difficult to gan XP)
     public Rating Rating;
 
     public int Strength;
@@ -39,7 +38,7 @@ public class InitializedCreature
 
     //Not set up properly yet
     public InitializedCreature(string MyName, string MyShortName, List<CreatureType> MyTypes, CreatureSize MySize,
-    CreatureIntelligence MyIntelligence, List<Ability> MyStartingAbilities, List<PowerUps> MyPowerUps, int MyMaxLvl,
+    CreatureIntelligence MyIntelligence, List<Ability> MyStartingAbilities, List<PowerUpGroup> MyPowerUps, int MyMaxLvl,
     Rating MyRating, int MyPowerLevel)
     {
 
@@ -47,13 +46,15 @@ public class InitializedCreature
 
     public InitializedCreature(BaseCreature NewBaseCreature)
     {
-        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         //GM.LogToServerRpc(0, "In InitializedCreature Constructor");
 
-        CurrentAttributes = new List<AttributeName>();
         KnownAbilities = new List<AbilityData>();
-        TrackedStats = new Dictionary<PowerUpStat, int>();
-        TrackedStats.Add(PowerUpStat.XP, 10);
+        PowerUpGroups = new List<PowerUpGroup>();
+        foreach (PowerUpGroup powerUpGroup in NewBaseCreature.PowerUpGroups)
+        {
+            PowerUpGroups.Add(powerUpGroup.Clone());
+        }
 
         HPMultiplier = 1;
 
@@ -65,7 +66,7 @@ public class InitializedCreature
         Size = NewBaseCreature.Size;
 
         // these will increase with powerups
-        CurrentLvl = 1;
+        CurrentXP = 0;
         Rating = NewBaseCreature.Rating;
         Armor = 0;
         General_Resistance = 0;
@@ -83,8 +84,7 @@ public class InitializedCreature
 
         // I don't like this. I think Agiliy should be effected little if at all by size. Size should effect dodge chance more. Maybe need a new category along with size and intelegence of athletecisim? also need to add mind to things that impact initiative. 
 
-        GetInitialPowerups();
-        ApplyArmor();
+        //GetInitialPowerups(); should just be get powerups
         ApplyPowerups();
 
         CurrentHP = GetMaxHp();
@@ -102,58 +102,67 @@ public class InitializedCreature
         //Debug.Log("Total Strength = " + GetTotalStrength());
     }
 
-    public InitializedCreature(InitializedCreatureData NewCreatureData)
+    public InitializedCreature(InitializedCreatureData CreatureData)
     {
         GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        BaseCreature NewBaseCreature = GM.AllCreatures.Find(creature => creature.Name.Equals(NewCreatureData.Name));
+        GM.LogToServerRpc(0, "In InitializedCreature from creature data constructor");
+        BaseCreature NewBaseCreature = InitializeCreatures.AllCreatureList[CreatureData.Name];
+        GM.LogToServerRpc(0, "In InitializedCreature after creating base creature");
 
         //GM.LogToServerRpc(0, "In InitializedCreature Constructor");
 
-        HPMultiplier = NewCreatureData.HPMultiplier;
+        // needs to get everything from the initialized creature data then apply powerups for everything else
 
-        Name = NewCreatureData.Name;
+        //HPMultiplier = NewBaseCreature.HPMultiplier;
+
+        Name = CreatureData.Name;
         Path = NewBaseCreature.Path;
-        NickName = NewCreatureData.NickName;
+        NickName = CreatureData.NickName;
         ShortName = NewBaseCreature.ShortName;
         Description = NewBaseCreature.Description;
         //        Types = MyTypes;
-        Size = NewCreatureData.Size;
+        Size = CreatureData.Size;
 
         // these will increase with powerups
-        Armor = NewCreatureData.Armor;
-        General_Resistance = NewCreatureData.General_Resistance;
-        Fire_Resistance = NewCreatureData.Fire_Resistance;
-        Water_Resistance = NewCreatureData.Water_Resistance;
-        Poison_Resistance = NewCreatureData.Poison_Resistance;
-        Electric_Resistance = NewCreatureData.Electric_Resistance;
-        Death_Resistance = NewCreatureData.Death_Resistance;
-        Strength = NewCreatureData.Strength;
-        Agility = NewCreatureData.Agility;
-        Mind = NewCreatureData.Mind;
-        Will = NewCreatureData.Will;
+        Strength = CreatureData.Strength;
+        Agility = CreatureData.Agility;
+        Mind = CreatureData.Mind;
+        Will = CreatureData.Will;
 
-        CurrentAttributes = (List<AttributeName>)NewCreatureData.CurrentAttributes.ToList(); // should look like the known abilities, need to make an AttributeData first.
+        HPMultiplier = 1;
+        Armor = 0;
+        General_Resistance = 0;
+        Fire_Resistance = 0;
+        Water_Resistance = 0;
+        Poison_Resistance = 0;
+        Electric_Resistance = 0;
+        Death_Resistance = 0;
 
-        KnownAbilities = new List<AbilityData>(); // NewCreatureData.KnownAbilities.ToList();
-        for (int i = 0; i < NewCreatureData.KnownAbilities.Length; i++)
-        {
-            KnownAbilities.Add(new AbilityData(AllAbilities.CloneAbility(NewCreatureData.KnownAbilities[i])));
-        }
-
-        //GM.LogToServerRpc(0, "Before " + NewCreatureData.TrackedStat.Clone());
-        TrackedStats = new Dictionary<PowerUpStat, int>();
-        for (int i = 0; i < NewCreatureData.StatsToTrack.Length; i++)
-        {
-            TrackedStats.Add(NewCreatureData.StatsToTrack[i], NewCreatureData.CurrentAmounts[i]);
-        }
+        ////GM.LogToServerRpc(0, "Before " + NewCreatureData.TrackedStat.Clone());
+        //TrackedStats = new Dictionary<PowerUpStat, int>();
+        //for (int i = 0; i < NewCreatureData.StatsToTrack.Length; i++)
+        //{
+        //    TrackedStats.Add(NewCreatureData.StatsToTrack[i], NewCreatureData.CurrentAmounts[i]);
+        //}
 
         // TODO Add to the power up stats based on the stats passed in InitializedCreatureData
         //        KnownAbilities = MyStartingAbilities;
         //        RecievedPowerUps = MyPowerUps; // May add to abilities, attributes, and regular stats.
-        CurrentLvl = NewCreatureData.CurrentLvl;
+        CurrentXP = CreatureData.CurrentXP;
         Rating = NewBaseCreature.Rating;
 
-        CurrentHP = NewCreatureData.CurrentHP;
+        CurrentHP = CreatureData.CurrentHP;
+
+        GM.LogToServerRpc(0, "In InitializedCreature before applying powerups");
+        KnownAbilities = new List<AbilityData>();
+
+        PowerUpGroups = new List<PowerUpGroup>();
+        foreach (PowerUpGroup powerUpGroup in NewBaseCreature.PowerUpGroups)
+        {
+            PowerUpGroups.Add(powerUpGroup.Clone());
+        }
+        ApplyPowerups();
+        GM.LogToServerRpc(0, "In InitializedCreature after applying powerups");
 
         Conditions = new List<Condition>();
 
@@ -332,7 +341,7 @@ public class InitializedCreature
 
     public int GetMaxHp()
     {
-        return (int)(((GetTotalStrength() * 5) + 100 * GetStrengthMultiplier()) * HPMultiplier);
+        return (int)(((GetTotalStrength() * 5) + (100 * GetStrengthMultiplier())) * HPMultiplier);
     }
 
     public int GetTotalWill()
@@ -526,102 +535,102 @@ public class InitializedCreature
 
     }
 
-    public void ApplyArmor()
-    {
-        BaseCreature creature = GM.AllCreatures.Find(creature => creature.Name.Equals(Name));
+    //public void ApplyArmor()
+    //{
+    //    BaseCreature creature = InitializeCreatures.GetCreature(Name);
 
-        int armor = 0;
-        int resistance = 0;
-        int agility = 0;
-        bool gotNaturalArmor = false;
+    //    int armor = 0;
+    //    int resistance = 0;
+    //    int agility = 0;
+    //    bool gotNaturalArmor = false;
 
-        foreach (AttributeName attribute in CurrentAttributes)
-        {
-            if (attribute == AttributeName.Skin && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)((SizeToNumber(creature.Size) / 4) - 1);
-                resistance = (int)((SizeToNumber(creature.Size) / 4) - 1);
-                gotNaturalArmor = true;
-            }
-            if (attribute == AttributeName.ThickSkin && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) * 1);
-                resistance = (int)(SizeToNumber(creature.Size) / 4);
-                agility = (int)(-SizeToNumber(creature.Size));
-                gotNaturalArmor = true;
-            }
-            else if (attribute == AttributeName.SuperThickSkin && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) * 1.5);
-                resistance = (int)(SizeToNumber(creature.Size) / 3);
-                agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
-            }
-            else if (attribute == AttributeName.Feathers && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) / 3f);
-                resistance = (int)(SizeToNumber(creature.Size) * .75f);
-                agility = 3;
-            }
-            else if (attribute == AttributeName.Fur && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) * 1);
-                resistance = (int)(SizeToNumber(creature.Size) * 1.5f);
-            }
-            else if (attribute == AttributeName.Scales && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) * 1.5);
-                resistance = (int)(SizeToNumber(creature.Size) / 3);
-                agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
-            }
-            else if (attribute == AttributeName.Chitin && !gotNaturalArmor)
-            {
-                //Debug.Log("Armor Type = " + attribute);
-                armor = (int)(SizeToNumber(creature.Size) * 1.5);
-                resistance = (int)(SizeToNumber(creature.Size) / 3);
-                agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
-            }
-        }
+    //    foreach (AttributeName attribute in CurrentAttributes)
+    //    {
+    //        if (attribute == AttributeName.Skin && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)((SizeToNumber(creature.Size) / 4) - 1);
+    //            resistance = (int)((SizeToNumber(creature.Size) / 4) - 1);
+    //            gotNaturalArmor = true;
+    //        }
+    //        if (attribute == AttributeName.ThickSkin && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) * 1);
+    //            resistance = (int)(SizeToNumber(creature.Size) / 4);
+    //            agility = (int)(-SizeToNumber(creature.Size));
+    //            gotNaturalArmor = true;
+    //        }
+    //        else if (attribute == AttributeName.SuperThickSkin && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) * 1.5);
+    //            resistance = (int)(SizeToNumber(creature.Size) / 3);
+    //            agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
+    //        }
+    //        else if (attribute == AttributeName.Feathers && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) / 3f);
+    //            resistance = (int)(SizeToNumber(creature.Size) * .75f);
+    //            agility = 3;
+    //        }
+    //        else if (attribute == AttributeName.Fur && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) * 1);
+    //            resistance = (int)(SizeToNumber(creature.Size) * 1.5f);
+    //        }
+    //        else if (attribute == AttributeName.Scales && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) * 1.5);
+    //            resistance = (int)(SizeToNumber(creature.Size) / 3);
+    //            agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
+    //        }
+    //        else if (attribute == AttributeName.Chitin && !gotNaturalArmor)
+    //        {
+    //            //Debug.Log("Armor Type = " + attribute);
+    //            armor = (int)(SizeToNumber(creature.Size) * 1.5);
+    //            resistance = (int)(SizeToNumber(creature.Size) / 3);
+    //            agility = (int)(-SizeToNumber(creature.Size) * 1.5f);
+    //        }
+    //    }
 
-        //Debug.Log("armor = " + armor);
-        //Debug.Log("resistance = " + resistance);
-        //Debug.Log("agility = " + agility);
+    //    //Debug.Log("armor = " + armor);
+    //    //Debug.Log("resistance = " + resistance);
+    //    //Debug.Log("agility = " + agility);
 
-        if (armor > 0)
-        {
-            Armor += armor;
-        }
-        else
-        {
-            Armor += 0;
-        }
-        //Debug.Log("Armor = " + Armor);
+    //    if (armor > 0)
+    //    {
+    //        Armor += armor;
+    //    }
+    //    else
+    //    {
+    //        Armor += 0;
+    //    }
+    //    //Debug.Log("Armor = " + Armor);
 
-        if (resistance > 0)
-        {
-            General_Resistance += resistance;
-        }
-        else
-        {
-            General_Resistance += 0;
-        }
-        //Debug.Log("General_Resistance = " + General_Resistance);
+    //    if (resistance > 0)
+    //    {
+    //        General_Resistance += resistance;
+    //    }
+    //    else
+    //    {
+    //        General_Resistance += 0;
+    //    }
+    //    //Debug.Log("General_Resistance = " + General_Resistance);
 
-        if (agility > 0)
-        {
-            Agility += agility;
-        }
-        else
-        {
-            Agility += 0;
-        }
-        //Debug.Log("Agility = " + Agility);
-    }
+    //    if (agility > 0)
+    //    {
+    //        Agility += agility;
+    //    }
+    //    else
+    //    {
+    //        Agility += 0;
+    //    }
+    //    //Debug.Log("Agility = " + Agility);
+    //}
 
     // Start is called before the first frame update
     void Start()
@@ -635,17 +644,17 @@ public class InitializedCreature
         
     }
 
-    public void GetInitialPowerups()
-    {
-        BaseCreature ThisCreature = GM.AllCreatures.Find(creature => creature.Name.Equals(this.Name));
-        foreach (PowerUps powerUp in ThisCreature.PowerUps)
-        {
-            if (powerUp.TrackedStat == PowerUpStat.None)
-            {
-                ApplyReward(powerUp.Reward);
-            }
-        }
-    }
+    //public void GetInitialPowerups()
+    //{
+    //    BaseCreature ThisCreature =  InitializeCreatures.GetCreature(Name);
+    //    foreach (PowerUps powerUp in ThisCreature.PowerUps)
+    //    {
+    //        if (powerUp.TrackedStat == PowerUpStat.None)
+    //        {
+    //            ApplyReward(powerUp.Reward);
+    //        }
+    //    }
+    //}
 
     //public void GetPowerUps() // Get BaseCreature from GameController and check if any unrecieved stat goals are now met.
     //{
@@ -663,6 +672,7 @@ public class InitializedCreature
 
     public void ApplyReward(Reward reward)
     {
+        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         switch (reward.Type)
         {
             case RewardType.Stat:
@@ -696,35 +706,40 @@ public class InitializedCreature
                         Death_Resistance += (int)reward.Amount;
                         break;
                     case RewardStat.HP_Multiplier: // HP_Multiplier
-                        HPMultiplier = this.HPMultiplier * reward.Amount;
+                        HPMultiplier += reward.Amount;
                         break;
                     default:
                         break;
                 }
                 break;
-            case RewardType.Attribute:
-                Attribute TempAttribute = new Attribute(reward.AttributeName);
-                if (!CurrentAttributes.Contains(reward.AttributeName)) 
-                {
-                    if (TempAttribute.AttributeReward != null)
-                    {
-                        ApplyReward(TempAttribute.AttributeReward);
-                    }
-                    CurrentAttributes.Add(TempAttribute.Name);
-                }
-                break;
+            //case RewardType.Attribute:
+            //    Attribute TempAttribute = new Attribute(reward.AttributeName);
+            //    if (!CurrentAttributes.Contains(reward.AttributeName)) 
+            //    {
+            //        if (TempAttribute.AttributeReward != null)
+            //        {
+            //            ApplyReward(TempAttribute.AttributeReward);
+            //        }
+            //        CurrentAttributes.Add(TempAttribute.Name);
+            //    }
+            //    break;
             case RewardType.Ability:
+                GM.LogToServerRpc(0, "Recieving Ability: " + reward.AbilityName);
                 Ability ability = AllAbilities.GetAbility(reward.AbilityName);
                 if (ability.Upgrades)
                 {
+                    GM.LogToServerRpc(0, "Checking for known abilities to remove.");
                     KnownAbilities.Remove(KnownAbilities.Find(knownAbility => knownAbility.AbilityName == ability.UpgradedAbility));
                 }
                 KnownAbilities.Add(new AbilityData(ability, AllAbilities.GetAbility(reward.AbilityName).Speed));
+
+                GM.LogToServerRpc(0, "Listing abilities in KnownAbilities.");
+                foreach (AbilityData ability1 in KnownAbilities)
+                    GM.LogToServerRpc(0, "Ability: " + ability1.AbilityName);
                 break;
             case RewardType.Lvl:
-                CurrentLvl++;
                 // Check attributes for additional increases or decreases. E.G Intellegent, Dumb, Fast, Slow...
-                AddBaseStats(Rating, GM.AllCreatures.Find(creature => creature.Name.Equals(Name)).CreatureTypePercents, 1);
+                AddBaseStats(Rating, InitializeCreatures.AllCreatureList[Name].CreatureTypePercents, 1);
                 break;
             case RewardType.Evolution:
 
@@ -734,180 +749,235 @@ public class InitializedCreature
         }
     }
 
-    public void UpdatePowerupStats(Dictionary<PowerUpStat, int> stats)
+    //public void UpdatePowerupStats(Dictionary<PowerUpStat, int> stats)
+    //{
+    //    for (int i = 0; i < stats.Count; i++)
+    //    {
+    //        PowerUpStat key = stats.Keys.ElementAt(i);
+    //        if (TrackedStats.ContainsKey(key))
+    //        {
+    //            TrackedStats[key] += stats[key];
+    //            //Debug.Log("Increasing Tracked Stat By: " + key + " gets " + stats[key]);
+    //        }
+    //        else
+    //        {
+    //            TrackedStats.Add(key, stats[key]);
+    //            //Debug.Log("Adding New Stat To Track: " + key + " gets " + stats[key]);
+    //        }
+    //    }
+    //}
+
+    public void ApplyPowerUp(PowerUp powerUp)
     {
-        for (int i = 0; i < stats.Count; i++)
+        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if (powerUp.Reward.Type == RewardType.Stat)
         {
-            PowerUpStat key = stats.Keys.ElementAt(i);
-            if (TrackedStats.ContainsKey(key))
+            Debug.Log("In ApplyPowerUp: " + powerUp.Reward.RewardStat);
+            GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        }
+        else if (powerUp.Reward.Type == RewardType.Ability)
+        {
+            Debug.Log("In ApplyPowerUp: " + powerUp.Reward.AbilityName);
+            GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.AbilityName);
+        }
+        if (!powerUp.recieved)
+        {
+            Debug.Log("has not already recived");
+            GM.LogToServerRpc(0, "has not already recived");
+            bool AllConditionsPassed = true;
+            foreach (PowerUpCondition condition in powerUp.conditions)
             {
-                TrackedStats[key] += stats[key];
-                //Debug.Log("Increasing Tracked Stat By: " + key + " gets " + stats[key]);
-            }
-            else
-            {
-                TrackedStats.Add(key, stats[key]);
-                //Debug.Log("Adding New Stat To Track: " + key + " gets " + stats[key]);
-            }
-        }
-    }
-
-    public void ApplyPowerups()
-    {
-        BaseCreature baseCreature = GM.AllCreatures.Find(creature => creature.Name.Equals(Name));
-
-        //Debug.Log("ApplyPowerups");
-        //Debug.Log("TrackedStats[PowerUpStat.XP] = " + TrackedStats[PowerUpStat.XP]);
-        //Debug.Log("InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]) = " + InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]));
-        //Debug.Log("CurrentLvl = " + CurrentLvl);
-
-        // Check for Level Ups
-        int levelDiff = InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]) - CurrentLvl;
-        //Debug.Log("levelDiff = " + levelDiff);
-        if (levelDiff > 0)
-        {
-            int previousMaxHp = GetMaxHp();
-            for (int i = 0; i < levelDiff; i++)
-            {
-                //Debug.Log(Name + " gets a level up!");
-                ApplyReward(new Reward(RewardType.Lvl, "Level Up"));
-                //Debug.Log(Name + "'s new level is " + CurrentLvl);
-            }
-            CurrentHP += GetMaxHp() - previousMaxHp;
-        }
-
-        // Add creature specific powerups
-        foreach (PowerUps powerUp in baseCreature.PowerUps)
-        {
-            if (powerUp.Reward != null && powerUp.TrackedStat != PowerUpStat.None && powerUp.Reward.Type != RewardType.Stat && powerUp.Reward.Type != RewardType.Lvl)
-            {
-                if (TrackedStats[powerUp.TrackedStat] >= powerUp.StatGoal)
-                    ApplyReward(powerUp.Reward);
-            }
-        }
-
-
-        // Add attribute based rewards
-
-        // I think later I will just have this list stored on the initialized creature itself instead of a list of ability datas.
-        List<AbilityName> abilityNames = new List<AbilityName>();
-        foreach(AbilityData ability in KnownAbilities)
-        {
-            abilityNames.Add(ability.AbilityName);
-        }
-
-        // Add Attribute Based Bonuses - This may need to be made more efficient later
-        if (HasAttribute(AttributeName.Claws))
-        {
-            if (!abilityNames.Contains(AbilityName.Scratch_1))
-                ApplyReward(new Reward(AbilityName.Scratch_1));
-
-            if (HasAttribute(AttributeName.SharpClaws))
-            {
-                if (!abilityNames.Contains(AbilityName.Scratch_2))
-                    ApplyReward(new Reward(AbilityName.Scratch_2));
-            }
-
-            if (Mind > 20)
-            {
-                if (!abilityNames.Contains(AbilityName.Swipe_2))
-                    ApplyReward(new Reward(AbilityName.Swipe_2));
-            }
-        }
-
-        if (HasAttribute(AttributeName.Talons))
-        {
-            if (!abilityNames.Contains(AbilityName.Scratch_1))
-                ApplyReward(new Reward(AbilityName.Scratch_1));
-        }
-
-        if (HasAttribute(AttributeName.SharpTeath))
-        {
-            if (!abilityNames.Contains(AbilityName.Bite_1))
-                ApplyReward(new Reward(AbilityName.Bite_1));
-
-            if (HasAttribute(AttributeName.Pestilent) && Mind > 15)
-            {
-                if (!abilityNames.Contains(AbilityName.VileBite_2))
-                    ApplyReward(new Reward(AbilityName.VileBite_2));
-            }
-        }
-
-        if (HasAttribute(AttributeName.Beak))
-        {
-            if (!abilityNames.Contains(AbilityName.Peck_1))
-                ApplyReward(new Reward(AbilityName.Peck_1));
-        }
-
-        if (HasAttribute(AttributeName.StrongJaws))
-        {
-            if (!abilityNames.Contains(AbilityName.Crunch_1))
-                ApplyReward(new Reward(AbilityName.Crunch_1));
-        }
-
-        if (HasAttribute(AttributeName.PowerfulJaws))
-        {
-            if (Strength > 20)
-                if (!abilityNames.Contains(AbilityName.Crunch_2))
-                    ApplyReward(new Reward(AbilityName.Crunch_2));
-        }
-
-        if (HasAttribute(AttributeName.LongTongue))
-        {
-            if (!abilityNames.Contains(AbilityName.TongueSmack_1))
-                ApplyReward(new Reward(AbilityName.TongueSmack_1));
-
-            if (Strength > 20)
-                if (!abilityNames.Contains(AbilityName.TongueBash_2))
-                    ApplyReward(new Reward(AbilityName.TongueBash_2));
-
-            if (Mind > 15)
-            {
-                if (!abilityNames.Contains(AbilityName.TongueHarpoon_2))
-                    ApplyReward(new Reward(AbilityName.TongueHarpoon_2));
-
-                if (Strength > 15 && Agility > 15)
+                Debug.Log("condition.TrackedStat: " + condition.TrackedStat);
+                GM.LogToServerRpc(0, "condition.TrackedStat: " + condition.TrackedStat);
+                if (condition.TrackedStat == PowerUpStat.XP)
                 {
-                    if (!abilityNames.Contains(AbilityName.TongueLash_2))
-                        ApplyReward(new Reward(AbilityName.TongueLash_2));
+                    Debug.Log("CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
+                    GM.LogToServerRpc(0, "CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
+                    if (CurrentXP < condition.StatGoal)
+                    {
+                        Debug.Log("condition failed");
+                        GM.LogToServerRpc(0, "condition failed");
+                        AllConditionsPassed = false;
+                    }
                 }
             }
-        }
-
-        if (HasAttribute(AttributeName.HardHead) && HasAttribute(AttributeName.PowerfulLegs))
-        {
-            if (!abilityNames.Contains(AbilityName.HeadButt_1))
-                ApplyReward(new Reward(AbilityName.HeadButt_1));
-            if (HasAttribute(AttributeName.SharpHorned))
+            if (AllConditionsPassed)
             {
-                if (!abilityNames.Contains(AbilityName.HornedHeadButt_2))
-                    ApplyReward(new Reward(AbilityName.HornedHeadButt_2));
+                Debug.Log("all conditions passed");
+                GM.LogToServerRpc(0, "all conditions passed");
+                ApplyReward(powerUp.Reward);
+                powerUp.recieved = true;
             }
         }
-
-            if (HasAttribute(AttributeName.PoisonStinger))
-        {
-            if (!abilityNames.Contains(AbilityName.Sting_1))
-                ApplyReward(new Reward(AbilityName.Sting_1));
-
-            if (HasAttribute(AttributeName.PowerfulStinger))
-            {
-                if (!abilityNames.Contains(AbilityName.Sting_2))
-                    ApplyReward(new Reward(AbilityName.Sting_2));
-            }
-        }
+        Debug.Log("Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        GM.LogToServerRpc(0, "Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
     }
 
-    public bool HasAttribute(AttributeName attribute)
+    /// <summary>
+    /// This needs to be changed 
+    /// instead pass a power up to it and if they meet the conditions (required stats amounts and skills) they get the reward
+    /// 
+    /// </summary>
+    public void ApplyPowerups()
     {
-        foreach(AttributeName attributeName in CurrentAttributes)
+        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        Debug.Log("In ApplyPowerups");
+        GM.LogToServerRpc(0, "In ApplyPowerups");
+
+        foreach (PowerUpGroup powerUpGroup in PowerUpGroups)
         {
-            if (new Attribute(attributeName).IsOrHasParent(attribute))
+            Debug.Log("PowerUpGroup: " + powerUpGroup.description);
+            GM.LogToServerRpc(0, "PowerUpGroup: " + powerUpGroup.description);
+            foreach (PowerUp powerUp in powerUpGroup.powerups)
             {
-                return true;
+                ApplyPowerUp(powerUp);
             }
         }
-        return false;
+        Debug.Log("Done ApplyPowerups");
+        GM.LogToServerRpc(0, "Done ApplyPowerups");
+
+        //BaseCreature baseCreature = InitializeCreatures.AllCreatureList[Name];
+
+        ////Debug.Log("ApplyPowerups");
+        ////Debug.Log("TrackedStats[PowerUpStat.XP] = " + TrackedStats[PowerUpStat.XP]);
+        ////Debug.Log("InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]) = " + InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]));
+        ////Debug.Log("CurrentLvl = " + CurrentLvl);
+
+        //// Check for Level Ups
+        //int levelDiff = InitializeCreatures.XpToLevel(TrackedStats[PowerUpStat.XP]) - CurrentLvl;
+        ////Debug.Log("levelDiff = " + levelDiff);
+        //if (levelDiff > 0)
+        //{
+        //    int previousMaxHp = GetMaxHp();
+        //    for (int i = 0; i < levelDiff; i++)
+        //    {
+        //        //Debug.Log(Name + " gets a level up!");
+        //        ApplyReward(new Reward(RewardType.Lvl, "Level Up"));
+        //        //Debug.Log(Name + "'s new level is " + CurrentLvl);
+        //    }
+        //    CurrentHP += GetMaxHp() - previousMaxHp;
+        //}
+
+        ////// Add creature specific powerups
+        ////foreach (PowerUps powerUp in baseCreature.PowerUps)
+        ////{
+        ////    if (powerUp.Reward != null && powerUp.TrackedStat != PowerUpStat.None && powerUp.Reward.Type != RewardType.Stat && powerUp.Reward.Type != RewardType.Lvl)
+        ////    {
+        ////        if (TrackedStats[powerUp.TrackedStat] >= powerUp.StatGoal)
+        ////            ApplyReward(powerUp.Reward);
+        ////    }
+        ////}
+
+
+        //// Add attribute based rewards
+
+        //// I think later I will just have this list stored on the initialized creature itself instead of a list of ability datas.
+        //List<AbilityName> abilityNames = new List<AbilityName>();
+        //foreach(AbilityData ability in KnownAbilities)
+        //{
+        //    abilityNames.Add(ability.AbilityName);
+        //}
+
+        //// Add Attribute Based Bonuses - This may need to be made more efficient later
+        //if (HasAttribute(AttributeName.Claws))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Scratch_1))
+        //        ApplyReward(new Reward(AbilityName.Scratch_1));
+
+        //    if (HasAttribute(AttributeName.SharpClaws))
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.Scratch_2))
+        //            ApplyReward(new Reward(AbilityName.Scratch_2));
+        //    }
+
+        //    if (Mind > 20)
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.Swipe_2))
+        //            ApplyReward(new Reward(AbilityName.Swipe_2));
+        //    }
+        //}
+
+        //if (HasAttribute(AttributeName.Talons))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Scratch_1))
+        //        ApplyReward(new Reward(AbilityName.Scratch_1));
+        //}
+
+        //if (HasAttribute(AttributeName.SharpTeath))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Bite_1))
+        //        ApplyReward(new Reward(AbilityName.Bite_1));
+
+        //    if (HasAttribute(AttributeName.Pestilent) && Mind > 15)
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.VileBite_2))
+        //            ApplyReward(new Reward(AbilityName.VileBite_2));
+        //    }
+        //}
+
+        //if (HasAttribute(AttributeName.Beak))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Peck_1))
+        //        ApplyReward(new Reward(AbilityName.Peck_1));
+        //}
+
+        //if (HasAttribute(AttributeName.StrongJaws))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Crunch_1))
+        //        ApplyReward(new Reward(AbilityName.Crunch_1));
+        //}
+
+        //if (HasAttribute(AttributeName.PowerfulJaws))
+        //{
+        //    if (Strength > 20)
+        //        if (!abilityNames.Contains(AbilityName.Crunch_2))
+        //            ApplyReward(new Reward(AbilityName.Crunch_2));
+        //}
+
+        //if (HasAttribute(AttributeName.LongTongue))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.TongueSmack_1))
+        //        ApplyReward(new Reward(AbilityName.TongueSmack_1));
+
+        //    if (Strength > 20)
+        //        if (!abilityNames.Contains(AbilityName.TongueBash_2))
+        //            ApplyReward(new Reward(AbilityName.TongueBash_2));
+
+        //    if (Mind > 15)
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.TongueHarpoon_2))
+        //            ApplyReward(new Reward(AbilityName.TongueHarpoon_2));
+
+        //        if (Strength > 15 && Agility > 15)
+        //        {
+        //            if (!abilityNames.Contains(AbilityName.TongueLash_2))
+        //                ApplyReward(new Reward(AbilityName.TongueLash_2));
+        //        }
+        //    }
+        //}
+
+        //if (HasAttribute(AttributeName.HardHead) && HasAttribute(AttributeName.PowerfulLegs))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.HeadButt_1))
+        //        ApplyReward(new Reward(AbilityName.HeadButt_1));
+        //    if (HasAttribute(AttributeName.SharpHorned))
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.HornedHeadButt_2))
+        //            ApplyReward(new Reward(AbilityName.HornedHeadButt_2));
+        //    }
+        //}
+
+        //    if (HasAttribute(AttributeName.PoisonStinger))
+        //{
+        //    if (!abilityNames.Contains(AbilityName.Sting_1))
+        //        ApplyReward(new Reward(AbilityName.Sting_1));
+
+        //    if (HasAttribute(AttributeName.PowerfulStinger))
+        //    {
+        //        if (!abilityNames.Contains(AbilityName.Sting_2))
+        //            ApplyReward(new Reward(AbilityName.Sting_2));
+        //    }
+        //}
     }
 
 }

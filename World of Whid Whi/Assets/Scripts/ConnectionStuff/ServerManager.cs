@@ -14,7 +14,7 @@ public class ServerManager : NetworkBehaviour
     // Game Objects
     //public GameObject Player;
     public GameManager GM;
-    public List<BaseCreature> AllCreatures;
+    public Dictionary<string, BaseCreature> AllCreatures;
 
     //// UI Elements
     //public GameObject Detail_Panel_Close_Button;

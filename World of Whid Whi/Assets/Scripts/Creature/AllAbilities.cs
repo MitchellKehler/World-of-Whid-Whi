@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Switch this out with something similar to how I'm handling Creatures now!!!!
+/// </summary>
 public static class AllAbilities
 {
     private static Dictionary<AbilityName, Ability> Abilities;
@@ -32,6 +35,19 @@ public static class AllAbilities
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Abilities.Add(AbilityName.Scratch_2, new Ability(AbilityName.Scratch_2, 2, "Scratch (Rank 2)", "Scratch the enemy with four quick swipes.", 90, Pradictability.Unreadable, Actions, true));
+
+        Actions = new List<Action>();
+        Effects = new List<Effect>();
+        Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 1.3f));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
+        Abilities.Add(AbilityName.Shred_4, new Ability(AbilityName.Shred_4, 4, "Shred (Rank 4)", "Shred the enemy with eight very quick swipes.", 90, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
@@ -154,6 +170,7 @@ public enum AbilityName
     Wait,
     Scratch_1,
     Scratch_2,
+    Shred_4,
     Swipe_2,
     Peck_1,
     Bite_1,

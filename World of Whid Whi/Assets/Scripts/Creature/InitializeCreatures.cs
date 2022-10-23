@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,9 +24,9 @@ public static class InitializeCreatures
 {
     // In the future much of this may be handled by SQL
 
-    public static List<BaseCreature> AllCreatureList;
+    public static Dictionary<string, BaseCreature> AllCreatureList;
 
-    public static List<BaseCreature> GetInitializedCreatures()
+    public static Dictionary<string, BaseCreature> GetInitializedCreatures()
     {
         //public BaseCreature(string MyName, List<CreatureType> MyTypes, CreatureSize MySize, CreatureIntelligence MyIntelligence, List<Abilities> MyStartingAbilities,
         //    List<PowerUps> MyPowerUps, int MyMaxLvl, Rating MyRating, int MyPowerLevel)
@@ -55,124 +56,83 @@ public static class InitializeCreatures
         /// power up groups contain a number of power ups each applied when their stat conditions are met
         /// creature type itself is also a power up group for special power ups like a rat's bonus resistance
 
-        AllCreatureList = new List<BaseCreature>();
+        AllCreatureList = new Dictionary<string, BaseCreature>();
         List<CreatureType> MyTypes = new List<CreatureType>();
-        List<PowerUps> MyPowerUps = new List<PowerUps>();
+        List<PowerUpGroup> PowerUpGroups = new List<PowerUpGroup>();
         string CreatureDescription = "";
         CreatureTypePercents creatureTypePercents;
+
 
         // Create Rat
         CreatureDescription = "Narsty little roadents, though little is relative in this case. They are as large as a dog and much harder to kill. Prone to spreading deseases these creatures are generally hated although some races like Rat Men and goblins favor them as pets.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fur)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Claws)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpTeath)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.BalancingTail)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.PoisonResistant)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.VeryTough)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.XP, 40, new Reward(AttributeName.Pestilent))); // Later I want this to be based off of poison damage taken I think
-
-        //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Giant Rat"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
-        AllCreatureList.Add(new BaseCreature("GiantRat", "Rats\\GiantRat\\GiantRat", "Giant Rat", CreatureDescription, MyTypes, CreatureSize.SuperSmall, MyPowerUps, 10, Rating.Average, creatureTypePercents));
+        AllCreatureList.Add("GiantRat", new BaseCreature("GiantRat", "Rats\\GiantRat\\GiantRat", "Giant Rat", CreatureDescription, MyTypes, CreatureSize.SuperSmall, PowerUpGroups, 10, Rating.Average, creatureTypePercents));
 
-        // Pestarat
-        CreatureDescription = "Narsty little roadents, though little is relative in this case. They are as large as a dog and much harder to kill. Prone to spreading deseases these creatures are generally hated although some races like Rat Men and goblins favor them as pets.";
-        MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fur)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Claws)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpTeath)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.BalancingTail)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.PoisonResistant)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.VeryTough)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.XP, 40, new Reward(AttributeName.Pestilent))); // Later I want this to be based off of poison damage taken I think
-
-        //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
-        // Types: fire, water, earth, air, life, death, blood, arcane
-        creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
-        AllCreatureList.Add(new BaseCreature("Pestarat", "Rats\\Pestarat\\Pestarat", "Pestarat", CreatureDescription, MyTypes, CreatureSize.SuperSmall, MyPowerUps, 10, Rating.AboveAverage, creatureTypePercents));
+        //// Pestarat
+        //CreatureDescription = "Narsty little roadents, though little is relative in this case. They are as large as a dog and much harder to kill. Prone to spreading deseases these creatures are generally hated although some races like Rat Men and goblins favor them as pets.";
+        //MyTypes = new List<CreatureType>();
+        //PowerUpGroups = new List<PowerUpGroup>();        //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
+        //// Types: fire, water, earth, air, life, death, blood, arcane
+        //creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
+        //AllCreatureList.Add("Pestarat", new BaseCreature("Pestarat", "Rats\\Pestarat\\Pestarat", "Pestarat", CreatureDescription, MyTypes, CreatureSize.SuperSmall, PowerUpGroups, 10, Rating.AboveAverage, creatureTypePercents));
 
         // Create Grey Wolf
         CreatureDescription = "These are among the smallest and least threatening of the wolves in Whid Whi but in large groups they are still very dangerous.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fur)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Claws)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpTeath)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.BalancingTail)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fast)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Grey Wolf"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
-        AllCreatureList.Add(new BaseCreature("GreyWolf", "GreyWolf\\GreyWolf", "Grey Wolf", CreatureDescription, MyTypes, CreatureSize.VerySmall, MyPowerUps, 10, Rating.Average, creatureTypePercents));
+        AllCreatureList.Add("GreyWolf", new BaseCreature("GreyWolf", "GreyWolf\\GreyWolf", "Grey Wolf", CreatureDescription, MyTypes, CreatureSize.VerySmall, PowerUpGroups, 10, Rating.Average, creatureTypePercents));
 
         // Create White Wolf
         CreatureDescription = "Much larger then their grey wolf companions white wolves are vicious and deadly.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fur)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpClaws)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpTeath)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.BalancingTail)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fast)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["White Wolf"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Sharp Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
-        AllCreatureList.Add(new BaseCreature("WhiteWolf", "WhiteWolf\\WhiteWolf", "White Wolf", CreatureDescription, MyTypes, CreatureSize.Small, MyPowerUps, 10, Rating.AboveAverage, creatureTypePercents));
+        AllCreatureList.Add("WhiteWolf", new BaseCreature("WhiteWolf", "WhiteWolf\\WhiteWolf", "White Wolf", CreatureDescription, MyTypes, CreatureSize.Small, PowerUpGroups, 10, Rating.AboveAverage, creatureTypePercents));
 
         // Create Wasp
         CreatureDescription = "Definately the worst sort of insect. About the size of a rat these huge wasps sting will certainly ruin your day.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Chitin)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.PowerfulStinger)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.InsectoidWings)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Wasp"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Stinger"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 20, 30, 15, 0, 35, 0);
-        AllCreatureList.Add(new BaseCreature("Wasp", "Wasp\\Wasp", "Wasp", CreatureDescription, MyTypes, CreatureSize.VeryTiny, MyPowerUps, 10, Rating.Average, creatureTypePercents));
+        AllCreatureList.Add("Wasp", new BaseCreature("Wasp", "Wasp\\Wasp", "Wasp", CreatureDescription, MyTypes, CreatureSize.VeryTiny, PowerUpGroups, 10, Rating.Average, creatureTypePercents));
 
         // Create Bear
         CreatureDescription = "This large fury beast may look rolly polly and haggable but it will rip your face off pretty quick if you make it angry.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Fur)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.StrongClaws)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpTeath)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.StrongJaws)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Bear"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 0, 0, 25, 0, 75, 0);
-        AllCreatureList.Add(new BaseCreature("Bear", "\\Bear", "Bear", CreatureDescription, MyTypes, CreatureSize.VeryLarge, MyPowerUps, 10, Rating.Average, creatureTypePercents));
+        AllCreatureList.Add("Bear", new BaseCreature("Bear", "\\Bear", "Bear", CreatureDescription, MyTypes, CreatureSize.VeryLarge, PowerUpGroups, 10, Rating.Average, creatureTypePercents));
 
         // Create Moo Beast
         CreatureDescription = "This slow and simple beast is content to spend all of it's days eating grass in a field.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.ThickSkin)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.PowerfulLegs)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.HardHead)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Tough)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Slow)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Dumb)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Moo Beast"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Hard Head"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 0, 0, 20, 0, 80, 0);
-        AllCreatureList.Add(new BaseCreature("MooBeast", "MooBeast\\MooBeast", "Moo Beast", CreatureDescription, MyTypes, CreatureSize.VeryLarge, MyPowerUps, 10, Rating.Average, creatureTypePercents));
+        AllCreatureList.Add("MooBeast", new BaseCreature("MooBeast", "MooBeast\\MooBeast", "Moo Beast", CreatureDescription, MyTypes, CreatureSize.VeryLarge, PowerUpGroups, 10, Rating.Average, creatureTypePercents));
 
         //// Create Eatern Moo Beast (Yack
         //CreatureDescription = "A silly but loveable flightless bird.";
@@ -194,17 +154,12 @@ public static class InitializeCreatures
         // Create Greater Moo Beast
         CreatureDescription = "It's bigger, smarter, faster and much angrier looking then the Moo Beast.";
         MyTypes = new List<CreatureType>();
-        MyPowerUps = new List<PowerUps>();
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.ThickSkin)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.StrongLegs)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.PowerfulLegs)));
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.SharpHorned)));
-
-        MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Tough)));
-
+        PowerUpGroups = new List<PowerUpGroup>();
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Greater Moo Beast"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Horns"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 0, 0, 20, 0, 80, 0);
-        AllCreatureList.Add(new BaseCreature("GreaterMooBeast", "GreaterMooBeast\\GreaterMooBeast", "G Moo Beast", CreatureDescription, MyTypes, CreatureSize.ExtremelyLarge, MyPowerUps, 10, Rating.AboveAverage, creatureTypePercents));
+        AllCreatureList.Add("GreaterMooBeast", new BaseCreature("GreaterMooBeast", "GreaterMooBeast\\GreaterMooBeast", "G Moo Beast", CreatureDescription, MyTypes, CreatureSize.ExtremelyLarge, PowerUpGroups, 10, Rating.AboveAverage, creatureTypePercents));
 
         //// Create Rooster
         //CreatureDescription = "A silly but loveable flightless bird.";
@@ -258,3 +213,21 @@ public static class InitializeCreatures
         return (int)Mathf.Pow((float)xp / 10, .5f);
     }
 }
+
+//public class GiantRat : BaseCreature
+//{
+//    public GiantRat()
+//    {
+//        Name = "GiantRat";
+//        Path = "Rats\\GiantRat\\GiantRat";
+//        ShortName = "Giant Rat";
+//        Description = "Narsty little roadents, though little is relative in this case. They are as large as a dog and much harder to kill. Prone to spreading deseases these creatures are generally hated although some races like Rat Men and goblins favor them as pets.";
+//        Types = new List<CreatureType>(); // not implemented yet
+//        Size = CreatureSize.SuperSmall;
+//        PowerUpGroups.Add(InitializePowerUpGroups.GetPowerUpGroup("GiantRatPowerups")); // switch with anatomies
+//        PowerUpGroups.Add(InitializePowerUpGroups.GetPowerUpGroup("Claws")); // switch with anatomies
+//        MaxLvl = 10;
+//        Rating = Rating.Average;
+//        CreatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
+//    }
+//}

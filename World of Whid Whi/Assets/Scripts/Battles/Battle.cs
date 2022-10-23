@@ -87,20 +87,18 @@ public class Battle
         foreach (InitializedCreatureData creatureData in teamOneCreatures)
         {
             InitializedCreature creature = new InitializedCreature(creatureData);
-            //Debug.Log("New Creature " + creature.Name);
-            //Debug.Log("Creature has " + creature.HPMultiplier + " HPMultiplier.");
-            //Debug.Log("Creature has " + creature.GetMaxHp() + " Max HP.");
-            //Debug.Log("Creature has " + creature.CurrentHP + " CurrentHP.");
+            Debug.Log("New Creature " + creature.Name);
+            Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
+            Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
             BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player1ID, creature);
             BattleCreatures.Add(BattleCreature);
         }
         foreach (InitializedCreatureData creatureData in teamTwoCreatures)
         {
             InitializedCreature creature = new InitializedCreature(creatureData);
-            //Debug.Log("New Creature " + creature.Name);
-            //Debug.Log("Creature has " + creature.HPMultiplier + " HPMultiplier.");
-            //Debug.Log("Creature has " + creature.GetMaxHp() + " Max HP.");
-            //Debug.Log("Creature has " + creature.CurrentHP + " CurrentHP.");
+            Debug.Log("New Creature " + creature.Name);
+            Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
+            Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
             BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player2ID, creature);
             BattleCreatures.Add(BattleCreature);
         }
@@ -240,14 +238,24 @@ public class Battle
         // figure out what rank of ability to pick
         // pick a random ability of that rank.
 
-        //public List<List<Ability>> knownAbilityRankGroups = new List<List<Ability>>();
-        
-        //foreach(AbilityData abilityData in CurrentCreature.Creature.KnownAbilities)
-        //{
+        List<AbilityData> validAbilities = new List<AbilityData>();
+        foreach(AbilityData abilityData in CurrentCreature.Creature.KnownAbilities)
+        {
+            validAbilities.Add(abilityData);
+        }
 
-        //}
+        if (validAbilities.Count > 0)
+        {
+            Debug.Log("CurrentCreature.Creature.KnownAbilities.Count: " + CurrentCreature.Creature.KnownAbilities.Count);
+            int nextAbilityIndex = UnityEngine.Random.Range(0, CurrentCreature.Creature.KnownAbilities.Count);
 
-        CurrentCreature.NextAbility = AllAbilities.CloneAbility(CurrentCreature.Creature.KnownAbilities[UnityEngine.Random.Range(0, CurrentCreature.Creature.KnownAbilities.Count)].AbilityName); // later we will want to also check cool downs when applicable.
+            CurrentCreature.NextAbility = AllAbilities.CloneAbility(validAbilities[nextAbilityIndex].AbilityName); // later we will want to also check cool downs when applicable.
+        }
+        else
+        {
+            CurrentCreature.NextAbility = AllAbilities.GetAbility(AbilityName.Wait).Clone();
+        }
+
         // needs to highlight creature and display picked ability next to it. (once targets are added they should also be highlighted.
 
         // Update player that creature is taking it's turn

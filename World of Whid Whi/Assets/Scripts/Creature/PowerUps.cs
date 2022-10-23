@@ -1,8 +1,38 @@
+using Spine.Unity.AttachmentTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUps
+/// <summary>
+/// Use similar setup as for creating creatures from base creature
+/// Each PowerUpGroup should have a description and a list of powerups (I think that's it)
+/// Power ups will have conditions and a reward
+/// 
+/// </summary>
+public class PowerUpGroup
+{
+    public string description;
+    public List<PowerUp> powerups;
+
+    public PowerUpGroup(string myDescription, List<PowerUp> myPowerups)
+    {
+        description = myDescription;
+        powerups = myPowerups;
+    }
+
+    public PowerUpGroup Clone()
+    {
+        List<PowerUp> powerupsClone = new List<PowerUp>();
+        foreach (PowerUp powerup in powerups)
+        {
+            powerupsClone.Add(powerup.Clone());
+        }
+        return new PowerUpGroup(description, powerupsClone);
+    }
+}
+
+
+public class PowerUp
 {
     /// <summary>
     /// Power Ups
@@ -16,27 +46,32 @@ public class PowerUps
 
     public const int NUMBER_OF_POWERUP_STATS = 2;
 
+    public List<PowerUpCondition> conditions;
+    public Reward Reward;
+    public bool recieved;
+
+    public PowerUp(List<PowerUpCondition> myConditions, Reward reward)
+    {
+        conditions = myConditions;
+        Reward = reward;
+        recieved = false;
+    }
+
+    public PowerUp Clone()
+    {
+        return new PowerUp(conditions, Reward);
+    }
+}
+
+public class PowerUpCondition
+{
     public PowerUpStat TrackedStat; // this is the stat that will calculated to determine if the creature gets the power up yet. Can be none if the creature starts with the power up.
     public int StatGoal; // this is the stat goal of the stat that must be reached to recieve the power up.
-    public Reward Reward; 
 
-    public PowerUps(PowerUpStat trackedStat, int statGoal, Reward reward)
+    public PowerUpCondition (PowerUpStat trackedStat, int statGoal)
     {
         TrackedStat = trackedStat;
         StatGoal = statGoal;
-        Reward = reward;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
 
@@ -48,7 +83,6 @@ public class Reward
     public float Amount; // The quantity of the reward that will be recieved for simple reward types
     public string Name; // The name of the reward if it is a complex type like an ability, attribute, or evelution
     public RewardStat RewardStat; // The stat that will be incarease for simple reward types.
-    public AttributeName AttributeName;
     public AbilityName AbilityName;
 
     public Reward(RewardType type, string name)
@@ -64,16 +98,10 @@ public class Reward
         Amount = amount;
     }
 
-    public Reward(AttributeName attribute)
-    {
-        Type = RewardType.Attribute;
-        AttributeName = attribute; // maybe should just add an attribute
-    }
-
     public Reward(AbilityName ability)
     {
         Type = RewardType.Ability;
-        AbilityName = ability; // maybe should just add an attribute
+        AbilityName = ability;
     }
 
 }
@@ -81,14 +109,18 @@ public class Reward
 public enum PowerUpStat
 {
     None,
-    XP
+    XP,
+    STR,
+    AGI,
+    WILL,
+    MIND,
+    SIZE
 }
 
 public enum RewardType
 {
     Stat,
     Attribute,
-    //Level, Probably don't need Lvl. Lvls are just XP based power ups. May want to define standard XP Goals though which would be like levels.
     Ability,
     Evolution,
     Lvl

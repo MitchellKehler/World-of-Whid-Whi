@@ -17,15 +17,15 @@ using MLAPI.Spawning;
  * At some point I need to move some of the stuff out of updates and use events instead!
  * 
  * //////////////////     Playability (Make it easier for the user to play)     //////////////////
- * Save Creature Data to Database
+ * Add at least the ability stat checks in applying powerups
+ * load creatures from database for existing account
+ * save creatures to database on sign out
+ * creatures remain hurt / dead after fight and can be healed / revived at starting well
+ * Add Icons for first 6 creatures in sign in menu
+ * Add Natural armor
  * 
  * Add message to indicate enemy is taking their turn.
  * Clear Creatures After Death
- * creatures remain hurt / dead after fight and can be healed / revived at starting well
- * load creatures from database for existing account
- * save creatures to database on sign out
- * add leveling of creatures
- * add capturing creatures
  * 
  * Basic AI for picking attack to have a higher chance to pick higher ranked attacks.
  * Fix attack timing
@@ -35,7 +35,14 @@ using MLAPI.Spawning;
     * Add Tags to compononts and add / remove all comonents that should be added or removed based on tags.
  * Rework battles to use events to track turns instead of updates (apply any other events in place of updates code that is found during this process)
  * Add Reactions
- * Add creatures when space opens up
+ * 
+ * Clean up general battle feel and visuals to make it easy to understand what is going on
+ * Fix creature details menu
+ * 
+ * add leveling of creatures
+ * add capturing creatures
+ * 
+ * Clean up comments!!!!!
  * 
  * Add Player Details
     * Known Creatures List
@@ -46,6 +53,7 @@ using MLAPI.Spawning;
     * 
     * Battle Display toggle setting
  *
+ * Add creatures when space opens up
  * Add ranged, reduced speed (this is a good thing) for first attack/attacks not moving.
  * Add power up conditions
  * Add powerup stat tracking (leveling up) in battles
@@ -307,7 +315,7 @@ public class GameManager : NetworkBehaviour
     public Server Server;
 
     // Other Objects
-    public List<BaseCreature> AllCreatures;
+    public Dictionary<string, BaseCreature> AllCreatures;
     public List<GameObject> BattleCreatures;
     //public List<GameObject> BattleCreatureDetailsButtons;
 
@@ -322,6 +330,7 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Game Started");
 
+        InitializePowerUpGroups.SetAllPowerUps();
         AllCreatures = InitializeCreatures.GetInitializedCreatures();
 
         Server.Connect();
@@ -664,61 +673,6 @@ public class GameManager : NetworkBehaviour
         StartPvpBattleServerRpc(player1, player2);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void StartPvpBattleServerRpc(ulong player1, ulong player2)
-    {
-        NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
-        NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
-
-        ClientRpcParams clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { player1 }
-            }
-        };
-        StopMovingClientRpc(player1, clientRpcParams);
-        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
-
-        clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { player2 }
-            }
-        };
-        StopMovingClientRpc(player2, clientRpcParams);
-        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
-
-        Battles.Add(new Battle(player1, NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), player2, NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray()));
-    }
-
-
-    public void StartClientEncounter(ulong clientId, InitializedCreatureData[] PassedEnemyCreatures, string EnemyName)
-    {
-        Debug.Log("In StartClientEncounter");
-        Debug.Log("clientId = " + clientId);
-        Debug.Log("My network ID is " + NetworkManager.Singleton.LocalClientId);
-
-        StopMovingClientRpc(clientId);
-
-        ClientRpcParams clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { clientId }
-            }
-        };
-
-        Debug.Log("NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting = " + NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam);
-        Debug.Log("PassedEnemyCreatures " + PassedEnemyCreatures);
-
-        // Probably should send this from in the battle and pass the IDs with it.
-        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), PassedEnemyCreatures, EnemyName, clientRpcParams); // BattleStartingCreatures
-        Battles.Add(new Battle(clientId, NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), SERVERID, PassedEnemyCreatures));
-
-    }
-
     [ClientRpc]
     public void StopMovingClientRpc(ulong clientId, ClientRpcParams rpcParams = default)
     {
@@ -997,6 +951,184 @@ public class GameManager : NetworkBehaviour
         IncreaseInitiativeClientRpc(creatureInitiatives, highestInitiative, lowestInitiative, rpcParams);
     }
 
+
+    /// <summary>
+    /// Initializes all the creatures for an encounter creature.
+    /// Encounters have an encounter group which can have one or more encounter creatures.
+    /// Each encounter creature can add 0 or more creatures to the battle but they will all be the same type of creature.
+    /// </summary>
+    /// <param name="creature"></param>
+    /// <returns></returns>
+    public List<InitializedCreatureData> InitializeNewCreatures(EncounterCreature creature)
+    {
+        List<InitializedCreatureData> newCreatures = new List<InitializedCreatureData>();
+
+        Debug.Log("GM.InitializeNewCreatures");
+        Debug.Log("creature.StatRangeList[PowerUpStat.XP] = " + creature.StatRangeList[PowerUpStat.XP].Low + ", " + creature.StatRangeList[PowerUpStat.XP].High);
+
+        int NumberOfCreature = UnityEngine.Random.Range(creature.Min, creature.Max);
+        for (int i = 0; i < NumberOfCreature; i++)
+        {
+            // Add Enemy
+            InitializedCreatureData NewCreature = new InitializedCreatureData(AllCreatures[creature.CreatureName]);
+
+            Dictionary<PowerUpStat, int> randomlyAssignedStats = new Dictionary<PowerUpStat, int>();
+            for (int statCount = 0; statCount < creature.StatRangeList.Count; statCount++)
+            {
+                randomlyAssignedStats.Add(creature.StatRangeList.Keys.ElementAt(statCount), UnityEngine.Random.Range(creature.StatRangeList.ElementAt(statCount).Value.Low, creature.StatRangeList.ElementAt(statCount).Value.High));
+                if (randomlyAssignedStats.ElementAt(statCount).Key.Equals(PowerUpStat.XP))
+                    NewCreature.CurrentXP = randomlyAssignedStats.ElementAt(statCount).Value;
+                Debug.Log("New Stat: " + randomlyAssignedStats.ElementAt(statCount).Key + " gets " + randomlyAssignedStats.ElementAt(statCount).Value);
+            }
+            // will need some version of this once we add more stats
+            //NewCreature.UpdatePowerupStats(randomlyAssignedStats);
+
+            newCreatures.Add(NewCreature);
+        }
+
+        // needs to pass stat to track list boosts. Create the creature normally then boost it's stats the same way you would after a battle. Need a function for this!
+
+        Debug.Log("newCreatures.Count: " + newCreatures.Count);
+
+        return newCreatures;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void StartPvpBattleServerRpc(ulong player1, ulong player2)
+    {
+        NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
+        NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { player1 }
+            }
+        };
+        StopMovingClientRpc(player1, clientRpcParams);
+        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
+
+        clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { player2 }
+            }
+        };
+        StopMovingClientRpc(player2, clientRpcParams);
+        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
+
+        Battles.Add(new Battle(player1, NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), player2, NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray()));
+    }
+
+
+    public void StartClientEncounter(ulong clientId, InitializedCreatureData[] PassedEnemyCreatures, string EnemyName)
+    {
+        Debug.Log("In StartClientEncounter");
+        Debug.Log("clientId = " + clientId);
+        Debug.Log("My network ID is " + NetworkManager.Singleton.LocalClientId);
+
+        StopMovingClientRpc(clientId);
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+
+        Debug.Log("NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting = " + NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam);
+        Debug.Log("PassedEnemyCreatures.Length " + PassedEnemyCreatures.Length);
+
+        // Probably should send this from in the battle and pass the IDs with it.
+        StartBattleClientRpc(NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), PassedEnemyCreatures, EnemyName, clientRpcParams); // BattleStartingCreatures
+        Battles.Add(new Battle(clientId, NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.ToArray(), SERVERID, PassedEnemyCreatures));
+
+    }
+
+
+    [ClientRpc]
+    public void StartBattleClientRpc(InitializedCreatureData[] PlayerCreatures, InitializedCreatureData[] EnemyCreatures, string enemyName, ClientRpcParams rpcParams = default) //InitializedCreatureData[] PassedEnemyCreatures
+    {
+        LogToServerRpc(NetworkManager.LocalClientId, "StartBattleClientRpc");
+        LogToServerRpc(NetworkManager.LocalClientId, "PlayerCreatures.Length = " + PlayerCreatures.Length);
+        LogToServerRpc(NetworkManager.LocalClientId, "EnemyCreatures.Length = " + EnemyCreatures.Length);
+
+        Player.GetComponent<Player>().inBattle = true;
+
+        //EncounterCreatures.Clear();
+
+        Battle_Action_Panel.SetActive(true);
+        //Battle_Friendly_Icon_Panel.SetActive(true);
+        //Battle_Enemy_Icon_Panel.SetActive(true);
+
+        Battle_Player_1_Name.text = "Player 1"; // Will be players actual name once we have the database set up.
+        Battle_Player_2_Name.text = enemyName;
+
+        //LogToServerRpc(NetworkManager.LocalClientId, "After setting initial veriables");
+
+        Show_Battle_Details();
+
+        //LogToServerRpc(NetworkManager.LocalClientId, "After Show_Battle_Details()");
+
+        for (int i = 0; i < PlayerCreatures.Length; i++)
+        {
+            //Vector3 creatureLocation = position_manager.FRIENDLY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
+            bool success = SetUpBattleCreature(PlayerCreatures[i], NetworkManager.LocalClientId);
+            if (!success)
+            {
+                break;
+            }
+        }
+        LogToServerRpc(NetworkManager.LocalClientId, "Finished adding player creatures.");
+
+        for (int i = 0; i < EnemyCreatures.Length; i++)
+        {
+            //Vector3 creatureLocation = position_manager.ENEMY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
+            bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
+            if (!success)
+            {
+                break;
+            }
+        }
+
+        LogToServerRpc(NetworkManager.LocalClientId, "Finished adding enemy creatures.");
+
+        Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
+        foreach (Text text in texts)
+        {
+            if (text.name.Equals("Go_Button_Info_Text"))
+            {
+                text.text = "Pre-Battle Delay";
+            }
+        }
+
+        Battle_GO_Button.gameObject.SetActive(true);
+
+        //foreach (InitializedCreatureData creature in BattleStartingCreatures)
+        //{
+        //    Debug.Log("Inside Loop! creature: " + creature);
+        //    if (creature != null && creature.Name != null)
+        //    {
+        //        Debug.Log("creature.Name: " + creature.Name);
+        //        EncounterCreature5 = new InitializedCreature(creature);
+        //    }
+        //}
+
+
+        //string name = PassedEnemyCreatures.Name;
+        //Debug.Log("The creatuer's name is " + name);
+        //EncounterCreature5 = new InitializedCreature(AllCreatures.Find(thisCreature => thisCreature.Name.Equals(name)));
+
+
+
+        // Later we need to deal with multiple enemies.
+        LogToServerRpc(NetworkManager.LocalClientId, "Out of StartBattleClientRpc");
+
+    }
+
     public bool SetUpBattleCreature(InitializedCreatureData creatureData, ulong Owner)
     {
         LogToServerRpc(NetworkManager.LocalClientId, "In SetUpBattleCreature");
@@ -1127,7 +1259,7 @@ public class GameManager : NetworkBehaviour
             if (positionSize == BattlePositionSize.Small)
             {
                 CreatureName.transform.position = new Vector3(position.x + (detailsButtonSize.x * 1.2f), detailsButtonY + detailsButtonSize.y * .5f, 0);
-                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + new_InitilizedCreature.CurrentLvl;
+                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + InitializeCreatures.XpToLevel(new_InitilizedCreature.CurrentXP);
                 GameObject CreatureName2 = Instantiate(Resources.Load("CreatureName")) as GameObject;
                 CreatureName2.GetComponentInChildren<MeshRenderer>().sortingOrder = BattleCreature.layer;
                 CreatureName2.transform.position = new Vector3(position.x - offset.x * .5f, healthBarPosition.y + (CreatureName.GetComponent<MeshRenderer>().bounds.size.y * 1.1f), 0);
@@ -1138,106 +1270,33 @@ public class GameManager : NetworkBehaviour
             else if (positionSize == BattlePositionSize.Smallest)
             {
                 CreatureName.transform.position = new Vector3(position.x + (detailsButtonSize.x * 1.2f), position.y, 0);
-                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + new_InitilizedCreature.CurrentLvl;
+                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + InitializeCreatures.XpToLevel(new_InitilizedCreature.CurrentXP);
                 healthBarPosition = new Vector3(healthBarPosition.x, healthBarPosition.y + (offset.y * .2f), healthBarPosition.z);
             }
             else
             {
                 CreatureName.transform.position = new Vector3(position.x + (detailsButtonSize.x * 1.2f), position.y, 0);
-                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + new_InitilizedCreature.CurrentLvl + " " + nameToUse;
+                CreatureName.GetComponent<TextMesh>().text = "Lvl: " + InitializeCreatures.XpToLevel(new_InitilizedCreature.CurrentXP) + " " + nameToUse;
             }
             
             GameObject EncounterCreature_HealthBar = Instantiate(HealthBar, healthBarPosition, Quaternion.identity) as GameObject;
             EncounterCreature_HealthBar.transform.localScale = new Vector3(EncounterCreature_HealthBar.transform.localScale.x * position_manager.HealthBarScale(new_InitilizedCreature.Size), EncounterCreature_HealthBar.transform.localScale.y * position_manager.HealthBarScale(new_InitilizedCreature.Size), 1);
+            LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.CurrentHP: " + new_InitilizedCreature.CurrentHP);
+            LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.GetMaxHp(): " + new_InitilizedCreature.GetMaxHp());
             EncounterCreature_HealthBar.GetComponent<HealthBarScript>().SetHealthPercent(new_InitilizedCreature.CurrentHP / new_InitilizedCreature.GetMaxHp());
             EncounterCreature_HealthBar.transform.SetParent(BattleCreature.transform);
+            LogToServerRpc(NetworkManager.LocalClientId, "Getting Details Button");
             GameObject Details_Button = Instantiate(Creature_Details_Button, detailsButtonPosition, Quaternion.identity) as GameObject;
             Details_Button.transform.SetParent(BattleCreature.transform);
             BattleCreatures.Add(BattleCreature);
             //BattleCreatureDetailsButtons.Add(Details_Button);
             //Details_Button.GetComponent<SelectedCreature>().SetCreatureNumber(battleCreatureClient.ID);
+            LogToServerRpc(NetworkManager.LocalClientId, "returning true");
             return true; // creature successfully added
         } else
         {
             return false;// couldn't find a spot to put the creature
         }
-
-    }
-
-    [ClientRpc]
-    public void StartBattleClientRpc(InitializedCreatureData[] PlayerCreatures, InitializedCreatureData[] EnemyCreatures, string enemyName, ClientRpcParams rpcParams = default) //InitializedCreatureData[] PassedEnemyCreatures
-    {
-        LogToServerRpc(NetworkManager.LocalClientId, "StartBattleClientRpc");
-        LogToServerRpc(NetworkManager.LocalClientId, "PlayerCreatures.Length = " + PlayerCreatures.Length);
-        LogToServerRpc(NetworkManager.LocalClientId, "EnemyCreatures.Length = " + EnemyCreatures.Length);
-
-        Player.GetComponent<Player>().inBattle = true;
-
-        //EncounterCreatures.Clear();
-
-        Battle_Action_Panel.SetActive(true);
-        //Battle_Friendly_Icon_Panel.SetActive(true);
-        //Battle_Enemy_Icon_Panel.SetActive(true);
-
-        Battle_Player_1_Name.text = "Player 1"; // Will be players actual name once we have the database set up.
-        Battle_Player_2_Name.text = enemyName;
-
-        //LogToServerRpc(NetworkManager.LocalClientId, "After setting initial veriables");
-
-        Show_Battle_Details();
-
-        //LogToServerRpc(NetworkManager.LocalClientId, "After Show_Battle_Details()");
-
-        for (int i = 0; i < PlayerCreatures.Length; i++)
-        {
-            //Vector3 creatureLocation = position_manager.FRIENDLY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            bool success = SetUpBattleCreature(PlayerCreatures[i], NetworkManager.LocalClientId);
-            if (!success)
-            {
-                break;
-            }
-        }
-
-        for (int i = 0; i < EnemyCreatures.Length; i++)
-        {
-            //Vector3 creatureLocation = position_manager.ENEMY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
-            if (!success)
-            {
-                break;
-            }
-        }
-
-        Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
-        foreach (Text text in texts)
-        {
-            if (text.name.Equals("Go_Button_Info_Text"))
-            {
-                text.text = "Pre-Battle Delay";
-            }
-        }
-
-        Battle_GO_Button.gameObject.SetActive(true);
-
-        //foreach (InitializedCreatureData creature in BattleStartingCreatures)
-        //{
-        //    Debug.Log("Inside Loop! creature: " + creature);
-        //    if (creature != null && creature.Name != null)
-        //    {
-        //        Debug.Log("creature.Name: " + creature.Name);
-        //        EncounterCreature5 = new InitializedCreature(creature);
-        //    }
-        //}
-
-
-        //string name = PassedEnemyCreatures.Name;
-        //Debug.Log("The creatuer's name is " + name);
-        //EncounterCreature5 = new InitializedCreature(AllCreatures.Find(thisCreature => thisCreature.Name.Equals(name)));
-
-
-
-        // Later we need to deal with multiple enemies.
-        LogToServerRpc(NetworkManager.LocalClientId, "Out of StartBattleClientRpc");
 
     }
 
@@ -2067,7 +2126,7 @@ public class GameManager : NetworkBehaviour
     public void OpenCreatureDetails(InitializedCreature SelectedCreature) // IdentifyCreature just sets which creature was clicked and should show it's details
     {
         LogToServerRpc(NetworkManager.LocalClientId, "OpenCreatureDetails");
-        BaseCreature baseCreature = AllCreatures.Find(creature => creature.Name.Equals(SelectedCreature.Name));
+        BaseCreature baseCreature = AllCreatures[SelectedCreature.Name];
 
         //int MaxHpForBattle = (int)Mathf.Floor(SelectedCreature.MaxHP * SelectedCreature.HPMultiplier); // need to move this, I'm no longer sure why I have this.
         Creature_Details_Name_Text.GetComponent<Text>().text = SelectedCreature.Name;
@@ -2080,7 +2139,7 @@ public class GameManager : NetworkBehaviour
         //}
 
         Creature_Details_Rating_Text.GetComponent<Text>().text = SelectedCreature.Rating.ToString();
-        Creature_Details_Lvl_Text.GetComponent<Text>().text = SelectedCreature.CurrentLvl.ToString();
+        Creature_Details_Lvl_Text.GetComponent<Text>().text = InitializeCreatures.XpToLevel(SelectedCreature.CurrentXP).ToString();
         Creature_Details_Str_Text.GetComponent<Text>().text = SelectedCreature.GetTotalStrength().ToString();
         Creature_Details_Agi_Text.GetComponent<Text>().text = SelectedCreature.GetTotalAgility().ToString();
         Creature_Details_Mnd_Text.GetComponent<Text>().text = SelectedCreature.Mind.ToString();
@@ -2142,12 +2201,13 @@ public class GameManager : NetworkBehaviour
         Creature_Details_Attributes_Dropdown.ClearOptions();
         List<Dropdown.OptionData> DropDownData = new List<Dropdown.OptionData>();
 
-        DropDownData.Add(new Dropdown.OptionData("Attributes"));
-        foreach (AttributeName attribute in SelectedCreature.CurrentAttributes)
-        {
-            DropDownData.Add(new Dropdown.OptionData(attribute.ToString()));
-        }
-        Creature_Details_Attributes_Dropdown.AddOptions(DropDownData);
+        // Probably want to replace this with power up groups
+        //DropDownData.Add(new Dropdown.OptionData("Attributes"));
+        //foreach (AttributeName attribute in SelectedCreature.CurrentAttributes)
+        //{
+        //    DropDownData.Add(new Dropdown.OptionData(attribute.ToString()));
+        //}
+        //Creature_Details_Attributes_Dropdown.AddOptions(DropDownData);
 
         Creature_Details_Abilities_Dropdown.ClearOptions();
         DropDownData = new List<Dropdown.OptionData>();
@@ -2169,44 +2229,6 @@ public class GameManager : NetworkBehaviour
         Creature_Details_Background_Panel.SetActive(false);
     }
 
-    /// <summary>
-    /// Initializes all the creatures for an encounter creature.
-    /// Encounters have an encounter group which can have one or more encounter creatures.
-    /// Each encounter creature can add 0 or more creatures to the battle but they will all be the same type of creature.
-    /// </summary>
-    /// <param name="creature"></param>
-    /// <returns></returns>
-    public List<InitializedCreatureData> InitializeNewCreatures(EncounterCreature creature)
-    {
-        List<InitializedCreatureData> newCreatures = new List<InitializedCreatureData>();
-
-        //Debug.Log("GM.InitializeNewCreatures");
-        //Debug.Log("creature.StatRangeList[PowerUpStat.XP] = " + creature.StatRangeList[PowerUpStat.XP].Low + ", " + creature.StatRangeList[PowerUpStat.XP].High);
-
-        int NumberOfCreature = UnityEngine.Random.Range(creature.Min, creature.Max);
-        for (int i = 0; i < NumberOfCreature; i++)
-        {
-            // Add Enemy
-            InitializedCreature NewCreature = new InitializedCreature(AllCreatures.Find(baseCreature => baseCreature.Name.Equals(creature.CreatureName)));
-
-            Dictionary<PowerUpStat, int> randomlyAssignedStats = new Dictionary<PowerUpStat, int>();
-            for (int statCount = 0; statCount < creature.StatRangeList.Count; statCount++)
-            {
-                randomlyAssignedStats.Add(creature.StatRangeList.Keys.ElementAt(statCount), UnityEngine.Random.Range(creature.StatRangeList.ElementAt(statCount).Value.Low, creature.StatRangeList.ElementAt(statCount).Value.High));
-                Debug.Log("New Stat: " + randomlyAssignedStats.ElementAt(statCount).Key + " gets " + randomlyAssignedStats.ElementAt(statCount).Value);
-            }
-            NewCreature.UpdatePowerupStats(randomlyAssignedStats);
-            NewCreature.ApplyPowerups();
-            newCreatures.Add(new InitializedCreatureData(NewCreature));
-        }
-
-        // needs to pass stat to track list boosts. Create the creature normally then boost it's stats the same way you would after a battle. Need a function for this!
-
-
-
-        return newCreatures;
-    }
-
     public void ChangeToCreatureDescriptionPanel(InitializedCreature SelectedCreature)
     {
         Creature_Details_Description_Panel.SetActive(true);
@@ -2218,26 +2240,26 @@ public class GameManager : NetworkBehaviour
         Creature_Details_Description.text = SelectedCreature.Description;
     }
 
-    public void OpenAttributeDescriptionPanel()
-    {
-        Attribute SelectedAttribute = new Attribute(AttributeName.Tough);
+    //public void OpenAttributeDescriptionPanel()
+    //{
+    //    Attribute SelectedAttribute = new Attribute(AttributeName.Tough);
 
-        Creature_Details_Description_Panel.SetActive(false);
-        Creature_Details_Attributes_Panel.SetActive(true);
-        Creature_Details_Abilities_Panel.SetActive(false);
+    //    Creature_Details_Description_Panel.SetActive(false);
+    //    Creature_Details_Attributes_Panel.SetActive(true);
+    //    Creature_Details_Abilities_Panel.SetActive(false);
 
-        Creature_Details_Attribute_Description.text = SelectedAttribute.Description;
-    }
-    public void OpenAbilityDescriptionPanel()
-    {
-        Attribute SelectedAttribute = new Attribute(AttributeName.Tough);
+    //    Creature_Details_Attribute_Description.text = SelectedAttribute.Description;
+    //}
+    //public void OpenAbilityDescriptionPanel()
+    //{
+    //    Attribute SelectedAttribute = new Attribute(AttributeName.Tough);
 
-        Creature_Details_Description_Panel.SetActive(false);
-        Creature_Details_Attributes_Panel.SetActive(true);
-        Creature_Details_Abilities_Panel.SetActive(false);
+    //    Creature_Details_Description_Panel.SetActive(false);
+    //    Creature_Details_Attributes_Panel.SetActive(true);
+    //    Creature_Details_Abilities_Panel.SetActive(false);
 
-        Creature_Details_Attribute_Description.text = SelectedAttribute.Description;
-    }
+    //    Creature_Details_Attribute_Description.text = SelectedAttribute.Description;
+    //}
 
     public void Show_Battle_Details()
     {

@@ -21,9 +21,7 @@ public class BaseCreature
     public string Description;
     public List<CreatureType> Types;
     public CreatureSize Size;
-    public List<Attribute> Attributes;
-    public List<PowerUps> PowerUps;
-    public int MaxLvl; // many not need it (just limited by it becoming too difficult to gan XP)
+    public List<PowerUpGroup> PowerUpGroups;
     public Rating Rating;
     public CreatureTypePercents CreatureTypePercents;
     // Creatures Lvl goes up as they get xp. Rating is often closely related to rarity and defines how strong the creature will be within a power level.
@@ -33,7 +31,7 @@ public class BaseCreature
     // needs a way to store all the above data in a database and quickly level up a random creature to an appropriate level. Speaking of which do zones have lvl ranges?
 
     public BaseCreature(string MyName, string MyPath, string MyShortName, string MyDescription, List<CreatureType> MyTypes, CreatureSize MySize, 
-        List<PowerUps> MyPowerUps, int MyMaxLvl, Rating MyRating, CreatureTypePercents creatureTypePercents)
+        List<PowerUpGroup> MyPowerUpGroups, int MyMaxLvl, Rating MyRating, CreatureTypePercents creatureTypePercents)
     {
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "BaseCreature constructor");
         Name = MyName;
@@ -42,8 +40,7 @@ public class BaseCreature
         Description = MyDescription;
         Types = MyTypes;
         Size = MySize;
-        PowerUps = MyPowerUps;
-        MaxLvl = MyMaxLvl;
+        PowerUpGroups = MyPowerUpGroups;
         Rating = MyRating;
         CreatureTypePercents = creatureTypePercents;
     }
