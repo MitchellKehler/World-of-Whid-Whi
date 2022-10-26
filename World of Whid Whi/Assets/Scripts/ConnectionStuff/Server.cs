@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using UnityEngine.TextCore.Text;
 
 public class Server : MonoBehaviour
 {
@@ -49,6 +50,9 @@ public class Server : MonoBehaviour
 
     float Timer = 0.0f;
     float TimeSinceSuccessfulPing = 0;
+
+    // Data base
+    SqlConnectionStringBuilder builder;
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +92,14 @@ public class Server : MonoBehaviour
             // This is the Server
             NetworkManager.Singleton.StartServer();
             activeCharacters = new Dictionary<ulong, CharacterData>();
+
+            // Build connection string
+            builder = new SqlConnectionStringBuilder();
+            builder.DataSource = MSSQL_DataSource;
+            //builder.TrustServerCertificate = true;
+            builder.UserID = MSSQL_UserID;
+            builder.Password = MSSQL_Password;
+            builder.InitialCatalog = MSSQL_InitialCatalog;
         }
         else
         {
@@ -209,14 +221,6 @@ public class Server : MonoBehaviour
         int AccountID = -1;
         List<CharacterData> characters = new List<CharacterData>();
 
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
         try
         {
             // connect to the databases
@@ -279,6 +283,7 @@ public class Server : MonoBehaviour
 
                 // next get their creature data info and add icons of their current squad so we can get a bit of info about the character before hitting play
                 // eventually we will probably want a button to show a more full set of character details before jumping into game but we can add that later.
+                connection.Close();
             }
         }
         catch (SqlException e)
@@ -337,14 +342,7 @@ public class Server : MonoBehaviour
         Debug.Log("Handle_Disconnect");
         Debug.Log("ID = " + activeCharacters[clientId].ID);
         Debug.Log("x = " + activeCharacters[clientId].Position_X);
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
+
         try
         {
             // connect to the databases
@@ -364,6 +362,7 @@ public class Server : MonoBehaviour
                 SqlCommand command = new SqlCommand(sql, connection);
                 command.ExecuteNonQuery();
                 Debug.Log("Character Updated");
+                connection.Close();
             }
         }
         catch (SqlException e)
@@ -477,14 +476,6 @@ public class Server : MonoBehaviour
         Debug.Log("Got delete character request: " + clientId + ", " + id);
         bool success = false;
 
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
         try
         {
             // connect to the databases
@@ -510,6 +501,7 @@ public class Server : MonoBehaviour
                         //}
                     }
                 }
+                connection.Close();
             }
             success = true;
         }
@@ -560,14 +552,7 @@ public class Server : MonoBehaviour
     {
         Debug.Log("Got create character request: " + clientId + ", " + name);
         CharacterData newCharacterData = null;
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
+
         try
         {
             // connect to the databases
@@ -603,6 +588,7 @@ public class Server : MonoBehaviour
                         }
                     }
                 }
+                connection.Close();
             }
         }
         catch (SqlException e)
@@ -639,14 +625,6 @@ public class Server : MonoBehaviour
         int AccountID = -1;
         List<CharacterData> characters = new List<CharacterData>();
 
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
         try
         {
             // connect to the databases
@@ -706,6 +684,7 @@ public class Server : MonoBehaviour
                 {
                     AccountID = -2;
                 }
+                connection.Close();
             }
         }
         catch (SqlException e)
@@ -794,18 +773,11 @@ public class Server : MonoBehaviour
     /// <returns></returns>
     public CharacterData DB_GetCharacterData(ulong clientId, int characterId)
     {
+        Debug.Log("In DB_GetCharacterData: " + clientId + ", " + characterId);
         int accountId = activeCharacters[clientId].Account;
-        Debug.Log("Got Play Request (AccountId, CharacterId): " + characterId + ", " + accountId);
+        Debug.Log("Got Play Request (AccountId, CharacterId): " + accountId);
         CharacterData character = null;
 
-        // Build connection string
-        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-        builder.DataSource = MSSQL_DataSource;
-        //builder.TrustServerCertificate = true;
-        builder.UserID = MSSQL_UserID;
-        builder.Password = MSSQL_Password;
-        builder.InitialCatalog = MSSQL_InitialCatalog;
-        //builder.PersistSecurityInfo = true;
         try
         {
             // connect to the databases
@@ -839,9 +811,11 @@ public class Server : MonoBehaviour
                             double x = (double)reader["Position_X"];
                             double y = (double)reader["Position_Y"];
                             character = new CharacterData((int)reader["ID"], AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y);
+                            Debug.Log("New Character = " + character);
                         }
                     }
                 }
+                connection.Close();
 
             }
         }
@@ -851,7 +825,69 @@ public class Server : MonoBehaviour
             Debug.Log(e.ToString());
         }
 
+        Debug.Log("Returning Character = " + character);
         return character;
+    }
+
+    /// <summary>
+    /// 
+    /// 
+    /// Also need to add code to create creatures on create account and to save creature data on sign out.
+    /// </summary>
+    /// <param name="characterId"></param>
+    /// <returns></returns>
+    public List<InitializedCreatureData> DB_GetPlayerCreatures(int characterId)
+    {
+        Debug.Log("In DB_GetPlayerCreatures");
+        List<InitializedCreatureData> creatures = new List<InitializedCreatureData>();
+        try
+        {
+            // connect to the databases
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                // if open then the connection is established
+                connection.Open();
+                Debug.Log("connection established");
+
+                // sql command
+                string sql = "SELECT ID, character, name, nick_name, current_hp, size, strength, agility, mind, will, xp  " +
+                    "FROM Creature " +
+                    "WHERE character = '" + characterId + "'";
+                Debug.Log(sql);
+                // execute sql command
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    // read
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // each line in the output
+                        while (reader.Read())
+                        {
+                            Debug.Log((int)reader["ID"]);
+                            Debug.Log((int)reader["character"]);
+                            Debug.Log((string)reader["name"]);
+                            Debug.Log((string)reader["nick_name"]);
+                            Debug.Log((int)reader["current_hp"]);
+                            Debug.Log((string)reader["size"]);
+                            Debug.Log((int)reader["strength"]);
+                            Debug.Log((int)reader["agility"]);
+                            Debug.Log((int)reader["mind"]);
+                            Debug.Log((int)reader["will"]);
+                            Debug.Log((int)reader["xp"]);
+                            creatures.Add(new InitializedCreatureData((int)reader["ID"], (string)reader["name"], (string)reader["nick_name"], (int)reader["current_hp"], (string)reader["size"], (int)reader["strength"], 
+                                (int)reader["agility"], (int)reader["mind"], (int)reader["will"], (int)reader["xp"]));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+        }
+        catch (SqlException e)
+        {
+            AccountID = -99;
+            Debug.Log(e.ToString());
+        }
+        return creatures;
     }
 
     // instead of sending the character fields we should just send the index (the sql index not a local one). Then the server just loads in that index for that account so no changing you data.

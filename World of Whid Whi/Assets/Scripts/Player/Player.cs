@@ -52,7 +52,7 @@ public class Player : NetworkBehaviour
         currentLocation = location;
         GM.position_manager = new PositionManager(width, height);
         GM.SetInitialMapLocation(location, posX, posY); // Later this will be which ever location the player signed out in. May need a version of change scene that also sets position.
-        SetUpPlayerServerRpc();
+        //SetUpPlayerServerRpc();
 
 
     }
@@ -91,70 +91,70 @@ public class Player : NetworkBehaviour
     //    return playerCam;
     //}
 
-    [ServerRpc]
-    public void SetUpPlayerServerRpc(ServerRpcParams rpcParams = default)
-    {
-        if (NetworkManager.Singleton.IsServer) //NetworkManager.Singleton.IsServer
-        {
+    //[ServerRpc]
+    //public void SetUpPlayerServerRpc(ServerRpcParams rpcParams = default)
+    //{
+    //    if (NetworkManager.Singleton.IsServer) //NetworkManager.Singleton.IsServer
+    //    {
 
-            Debug.Log("Setting up player for Client " + OwnerClientId + ".");
-            NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures = new List<InitializedCreatureData>();
-            NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam = new List<InitializedCreatureData>();
+    //        Debug.Log("Setting up player for Client " + OwnerClientId + ".");
+    //        NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures = new List<InitializedCreatureData>();
+    //        NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam = new List<InitializedCreatureData>();
 
-            int count = 0;
+    //        int count = 0;
 
-            Debug.Log("creating owned creatures.");
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Wasp"))));
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Wasp"))));
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures["GiantRat"]));
-            NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            Debug.Log("finished creating owned creatures.");
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Pestarat"))));
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("GreyWolf"))));
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("GreaterMooBeast"))));
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
-            //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam[0]
+    //        Debug.Log("creating owned creatures.");
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Wasp"))));
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Wasp"))));
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures["GiantRat"]));
+    //        NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        Debug.Log("finished creating owned creatures.");
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("Pestarat"))));
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("GreyWolf"))));
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals("GreaterMooBeast"))));
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam.Add(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[count++]);
+    //        //NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam[0]
 
-            ///////////// Should get player info from the database ////////////////////
+    //        ///////////// Should get player info from the database ////////////////////
 
-            //string randomName = "";
-            //int randomNum = Random.Range(0, 2);
-            //switch (randomNum)
-            //{
-            //    case 0:
-            //        randomName = "Rat";
-            //        break;
-            //    case 1:
-            //        randomName = "Rooster";
-            //        break;
-            //    default:
-            //        randomName = "Frog";
-            //        break;
-            //}
-            //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals(randomName))));
-            //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting.Add(NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[0]);
+    //        //string randomName = "";
+    //        //int randomNum = Random.Range(0, 2);
+    //        //switch (randomNum)
+    //        //{
+    //        //    case 0:
+    //        //        randomName = "Rat";
+    //        //        break;
+    //        //    case 1:
+    //        //        randomName = "Rooster";
+    //        //        break;
+    //        //    default:
+    //        //        randomName = "Frog";
+    //        //        break;
+    //        //}
+    //        //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals(randomName))));
+    //        //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting.Add(NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[0]);
 
-            //randomNum = Random.Range(0, 2);
-            //switch (randomNum)
-            //{
-            //    case 0:
-            //        randomName = "Rat";
-            //        break;
-            //    case 1:
-            //        randomName = "Rooster";
-            //        break;
-            //    default:
-            //        randomName = "Frog";
-            //        break;
-            //}
-            //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals(randomName))));
-            //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting.Add(NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[1]);
-        }
-    }
+    //        //randomNum = Random.Range(0, 2);
+    //        //switch (randomNum)
+    //        //{
+    //        //    case 0:
+    //        //        randomName = "Rat";
+    //        //        break;
+    //        //    case 1:
+    //        //        randomName = "Rooster";
+    //        //        break;
+    //        //    default:
+    //        //        randomName = "Frog";
+    //        //        break;
+    //        //}
+    //        //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures.Add(new InitializedCreatureData(GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().AllCreatures.Find(creature => creature.Name.Equals(randomName))));
+    //        //NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().Squad_Starting.Add(NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures[1]);
+    //    }
+    //}
 
 
 }

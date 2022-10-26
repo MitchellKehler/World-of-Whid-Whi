@@ -13,11 +13,13 @@ public class PowerUpGroup
 {
     public string description;
     public List<PowerUp> powerups;
+    public PowerUpGroupType type;
 
-    public PowerUpGroup(string myDescription, List<PowerUp> myPowerups)
+    public PowerUpGroup(string description, List<PowerUp> powerups, PowerUpGroupType type)
     {
-        description = myDescription;
-        powerups = myPowerups;
+        this.description = description;
+        this.powerups = powerups;
+        this.type = type;
     }
 
     public PowerUpGroup Clone()
@@ -27,7 +29,7 @@ public class PowerUpGroup
         {
             powerupsClone.Add(powerup.Clone());
         }
-        return new PowerUpGroup(description, powerupsClone);
+        return new PowerUpGroup(description, powerupsClone, type);
     }
 }
 

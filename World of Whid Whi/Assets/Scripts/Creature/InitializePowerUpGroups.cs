@@ -77,31 +77,31 @@ public static class InitializePowerUpGroups
         reward = new Reward(RewardStat.HP_Multiplier, 0.25f);
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Giant Rat", new PowerUpGroup("Giant Rat", powerups.Concat(levelup_powerups).ToList()));
+        AllPowerUps.Add("Giant Rat", new PowerUpGroup("Giant Rat", powerups.Concat(levelup_powerups).ToList(), PowerUpGroupType.Creature));
 
         // Create Grey Wolf
         // May need to create a clone of the list for creatures without any unique powerups
-        AllPowerUps.Add("Grey Wolf", new PowerUpGroup("Grey Wolf", levelup_powerups));
+        AllPowerUps.Add("Grey Wolf", new PowerUpGroup("Grey Wolf", levelup_powerups, PowerUpGroupType.Creature));
 
         // Create White Wolf
 
-        AllPowerUps.Add("White Wolf", new PowerUpGroup("White Wolf", levelup_powerups));
+        AllPowerUps.Add("White Wolf", new PowerUpGroup("White Wolf", levelup_powerups, PowerUpGroupType.Creature));
 
         // Create Wasp
 
-        AllPowerUps.Add("Wasp", new PowerUpGroup("Wasp", levelup_powerups));
+        AllPowerUps.Add("Wasp", new PowerUpGroup("Wasp", levelup_powerups, PowerUpGroupType.Creature));
 
         // Create Bear
 
-        AllPowerUps.Add("Bear", new PowerUpGroup("Bear", levelup_powerups));
+        AllPowerUps.Add("Bear", new PowerUpGroup("Bear", levelup_powerups, PowerUpGroupType.Creature));
 
         // Create Moo Beast
 
-        AllPowerUps.Add("Moo Beast", new PowerUpGroup("Moo Beast", levelup_powerups));
+        AllPowerUps.Add("Moo Beast", new PowerUpGroup("Moo Beast", levelup_powerups, PowerUpGroupType.Creature));
 
         // Create Greater Moo Beast
 
-        AllPowerUps.Add("Greater Moo Beast", new PowerUpGroup("Greater Moo Beast", levelup_powerups));
+        AllPowerUps.Add("Greater Moo Beast", new PowerUpGroup("Greater Moo Beast", levelup_powerups, PowerUpGroupType.Creature));
 
 
         ////////////////// Anatomy Power Up Groups //////////////////
@@ -120,7 +120,7 @@ public static class InitializePowerUpGroups
         reward = new Reward(AbilityName.Shred_4); // look into a better way to keep track of ability levels (there has to be a way to seriolize a simple ability class
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Claws", new PowerUpGroup("Claws", powerups));
+        AllPowerUps.Add("Claws", new PowerUpGroup("Claws", powerups, PowerUpGroupType.Anatomy));
 
         // Sharp Claws
 
@@ -136,7 +136,7 @@ public static class InitializePowerUpGroups
         reward = new Reward(AbilityName.Shred_4); // look into a better way to keep track of ability levels (there has to be a way to seriolize a simple ability class
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Sharp Claws", new PowerUpGroup("Sharp Claws", powerups));
+        AllPowerUps.Add("Sharp Claws", new PowerUpGroup("Sharp Claws", powerups, PowerUpGroupType.Anatomy));
 
         // Stinger
 
@@ -151,7 +151,7 @@ public static class InitializePowerUpGroups
         reward = new Reward(AbilityName.Sting_2); // look into a better way to keep track of ability levels (there has to be a way to seriolize a simple ability class
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Stinger", new PowerUpGroup("Stinger", powerups));
+        AllPowerUps.Add("Stinger", new PowerUpGroup("Stinger", powerups, PowerUpGroupType.Anatomy));
 
         // Hard Head
 
@@ -161,7 +161,7 @@ public static class InitializePowerUpGroups
         reward = new Reward(AbilityName.HeadButt_1);
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Hard Head", new PowerUpGroup("Hard Head", powerups));
+        AllPowerUps.Add("Hard Head", new PowerUpGroup("Hard Head", powerups, PowerUpGroupType.Anatomy));
 
         // Horns
 
@@ -171,57 +171,64 @@ public static class InitializePowerUpGroups
         reward = new Reward(AbilityName.HornedHeadButt_2); // maybe make a more generic scure that can be used for other things too
         powerups.Add(new PowerUp(conditions, reward));
 
-        AllPowerUps.Add("Horns", new PowerUpGroup("Horns", powerups));
+        AllPowerUps.Add("Horns", new PowerUpGroup("Horns", powerups, PowerUpGroupType.Anatomy));
 
 
 
         ////////////////// Natural Armor //////////////////
 
-        // I think I need to instead handle natural armor bonuses based on size with it's own special logic like level ups.
 
-        //// Fur
+        // Skin
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, InitializedCreature.SizeToNumber(CreatureSize.Small)));
-        //reward = new Reward(RewardStat.Armour, 1); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        powerups = new List<PowerUp>();
+        conditions = new List<PowerUpCondition>();
+        conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 0));
+        reward = new Reward(RewardStat.Armour, .4f); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 1));
-        //reward = new Reward(RewardStat.General_Resistance, 1); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        reward = new Reward(RewardStat.General_Resistance, .4f); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 2));
-        //reward = new Reward(RewardStat.Armour, 2); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        AllPowerUps.Add("Skin", new PowerUpGroup("Skin", powerups, PowerUpGroupType.NaturalArmor));
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 2));
-        //reward = new Reward(RewardStat.General_Resistance, 2); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        // Fur
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 3));
-        //reward = new Reward(RewardStat.Armour, 3); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        powerups = new List<PowerUp>();
+        conditions = new List<PowerUpCondition>();
+        conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 0));
+        reward = new Reward(RewardStat.Armour, 1); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
 
-        //powerups = new List<PowerUp>();
-        //conditions = new List<PowerUpCondition>();
-        //conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 3));
-        //reward = new Reward(RewardStat.General_Resistance, 3); // should be based on size
-        //powerups.Add(new PowerUp(conditions, reward));
+        reward = new Reward(RewardStat.General_Resistance, 2); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
 
-        //AllPowerUps.Add("Fur", new PowerUpGroup("Fur", powerups));
+        AllPowerUps.Add("Fur", new PowerUpGroup("Fur", powerups, PowerUpGroupType.NaturalArmor));
+
+        // Chitin
+
+        powerups = new List<PowerUp>();
+        conditions = new List<PowerUpCondition>();
+        conditions.Add(new PowerUpCondition(PowerUpStat.SIZE, 0));
+        reward = new Reward(RewardStat.Armour, 2f); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
+
+        reward = new Reward(RewardStat.General_Resistance, .5f); // should be based on size
+        powerups.Add(new PowerUp(conditions, reward));
+
+        AllPowerUps.Add("Chitin", new PowerUpGroup("Chitin", powerups, PowerUpGroupType.NaturalArmor));
 
 
         return AllPowerUps;
     }
+}
+
+public enum PowerUpGroupType
+{
+    Creature,
+    Anatomy,
+    NaturalArmor, // sort of just another anatomy but with some additional rules.
+    Item,
+    Training
 }
 
 

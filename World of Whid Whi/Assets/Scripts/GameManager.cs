@@ -12,13 +12,29 @@ using MLAPI.Spawning;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
+ * High Level To Do List
+ * 
+ * Add database and start storing player, character, and creature details there
+ * Fix minor bugs with displays so that creature details displays correctly, settings has the option to sign out, and all other displays at least don't look broken (coming soon or something)
+ * Move combat stuff out of updates where possible in favor of events and fix minor issues with combat like animation timings and clearing dead creatures
+ * Add reactions
+ * Add creature leveling and evelutions
+ * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
+ * Add better player models and model choices (requires purchase)
+ * Add mini map
+ * Add Items
+ * Add player as a creature on the battle field
+ * Add Chat
+ * Add basic jurnal
+ * Add basic NPCs and dialog
+ * Add Quests
+ * Make brush move when you walk through it
+ * Switch out creature spawning to add creatures to map areas instead of coliding while walking through brush
+ * Add caves and area over the bridge (maybe improve / revamp map)
+ * 
  * Look for !FIX for areas where I know work needs to happen.
  * 
- * At some point I need to move some of the stuff out of updates and use events instead!
- * 
  * //////////////////     Playability (Make it easier for the user to play)     //////////////////
- * Add at least the ability stat checks in applying powerups
- * load creatures from database for existing account
  * save creatures to database on sign out
  * creatures remain hurt / dead after fight and can be healed / revived at starting well
  * Add Icons for first 6 creatures in sign in menu
@@ -440,6 +456,9 @@ public class GameManager : NetworkBehaviour
             {
                 if (BattleNumber >= 0 && BattleNumber < Battles.Count)
                 {
+                    NetworkManager.Singleton.ConnectedClients[Battles[BattleNumber].Player1].PlayerObject.gameObject.GetComponent<Player>().inBattle = false;
+                    if (Battles[BattleNumber].Player2 != GameManager.SERVERID)
+                        NetworkManager.Singleton.ConnectedClients[Battles[BattleNumber].Player2].PlayerObject.gameObject.GetComponent<Player>().inBattle = false;
                     Battles.RemoveAt(BattleNumber);
                 }
             }
@@ -630,13 +649,13 @@ public class GameManager : NetworkBehaviour
             Server.activeCharacters[clientId] = characterData;
         } else
         {
+            Debug.Log("characterData is null!");
             SetInstructionText("You cannot access this character. Please contact ??? for assistance.", clientId);
         }
         
 
         // Spawn on Client
         GameObject go = Instantiate(PlayerPrefab, new Vector3(100.5f, -88, 0), Quaternion.identity);
-
 
         Debug.Log("clientId = " + clientId);
         go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
@@ -652,6 +671,14 @@ public class GameManager : NetworkBehaviour
         SpawnClientRpc(objectId, Server.activeCharacters[clientId].ID, clientRpcParams);
         NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().GetComponent<Player_Movement_Android>().MyClientId = clientId;
 
+        Debug.Log("Getting creatures");
+        // Get creatures from the database
+        List<InitializedCreatureData> creatures = Server.DB_GetPlayerCreatures(characterId);
+        Debug.Log("Got Creatures: " + creatures);
+        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures = creatures;
+        // should not necessarily get all creatures once players start having more then can fit in a starting line up
+        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().CurrentCreatureTeam = new List<InitializedCreatureData> (creatures); //new List<InitializedCreatureData>(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures);
+        Debug.Log("Finished SpawnPlayerServerRpc");
     }
 
     // A ClientRpc can be invoked by the server to be executed on a client
@@ -893,7 +920,7 @@ public class GameManager : NetworkBehaviour
         {
             LogToServerRpc(NetworkManager.LocalClientId, "i = " + i);
             LogToServerRpc(NetworkManager.LocalClientId, "Getting Creature To Update");
-            GameObject CreatureToUpdate = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == newEncounterCreatures[i].ID);
+            GameObject CreatureToUpdate = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == newEncounterCreatures[i].battleCreatureID);
             if (CreatureToUpdate != null)
             {
                 LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate not null, name is " + CreatureToUpdate.name);
@@ -996,6 +1023,7 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void StartPvpBattleServerRpc(ulong player1, ulong player2)
     {
+        // should really be handled when the challenged player accepts but we will leave it here for now.
         NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
         NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
 
@@ -1057,7 +1085,6 @@ public class GameManager : NetworkBehaviour
         LogToServerRpc(NetworkManager.LocalClientId, "EnemyCreatures.Length = " + EnemyCreatures.Length);
 
         Player.GetComponent<Player>().inBattle = true;
-
         //EncounterCreatures.Clear();
 
         Battle_Action_Panel.SetActive(true);
@@ -1283,7 +1310,7 @@ public class GameManager : NetworkBehaviour
             EncounterCreature_HealthBar.transform.localScale = new Vector3(EncounterCreature_HealthBar.transform.localScale.x * position_manager.HealthBarScale(new_InitilizedCreature.Size), EncounterCreature_HealthBar.transform.localScale.y * position_manager.HealthBarScale(new_InitilizedCreature.Size), 1);
             LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.CurrentHP: " + new_InitilizedCreature.CurrentHP);
             LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.GetMaxHp(): " + new_InitilizedCreature.GetMaxHp());
-            EncounterCreature_HealthBar.GetComponent<HealthBarScript>().SetHealthPercent(new_InitilizedCreature.CurrentHP / new_InitilizedCreature.GetMaxHp());
+            EncounterCreature_HealthBar.GetComponent<HealthBarScript>().SetHealthPercent((float)new_InitilizedCreature.CurrentHP / (float)new_InitilizedCreature.GetMaxHp());
             EncounterCreature_HealthBar.transform.SetParent(BattleCreature.transform);
             LogToServerRpc(NetworkManager.LocalClientId, "Getting Details Button");
             GameObject Details_Button = Instantiate(Creature_Details_Button, detailsButtonPosition, Quaternion.identity) as GameObject;
@@ -1678,36 +1705,54 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void EncounterCreatureClickedServerRpc(ulong clientId, int CreatureNumber)
     {
-        //Debug.Log("Got Selected Creature Click: " + CreatureNumber);
+        Debug.Log("In EncounterCreatureClickedServerRpc, CreatureNumber is " + CreatureNumber);
         //needs to pass the following to the client
         //  CreatureNumber
         //  Is clicked creature owned by player and picking an ability
         //  List of abilities of clicked creature
         //      For each we will need to know: the name of the ability, is the ability currently selected, is the ability not available and if so then why? (could be on cool down or need to much mana for example)
 
+        // may want to put battles into a dictionary later if we have a lot of them. Use player names as keys?
         Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
         if (battle != null)
         {
-            battle.EncounterCreatureClickedServerRpc(clientId, CreatureNumber);
-
-            //Debug.Log("In EncounterCreatureClickedServerRpc");
-            //Debug.Log("CreatureNumber is " + CreatureNumber);
-            //Debug.Log("Player1SelectedCreature " + battle.Player1SelectedCreature);
-
-            // !!!!!!!!!!!!!!!!!!!!!! Keeps getting an Object reference not set to an instance of an object error here at random times !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // Don't need to pass this if we decide not to change back to sending the actual speed of abilities (after agility calculations and what not).
-            int WaitSpeed = battle.GetInitiative(battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber), AllAbilities.GetAbility(AbilityName.Wait));
-
-            ClientRpcParams clientRpcParams = new ClientRpcParams
+            Debug.Log("battle is not null");
+            BattleCreature battleCreature = battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber);
+            if (battleCreature != null)
             {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { clientId }
-                }
-            };
+                Debug.Log("battleCreature is not null");
+                battle.EncounterCreatureClickedServerRpc(clientId, CreatureNumber);
 
-            Display_AbilityPick_PanelClientRpc(CreatureNumber, (battle.Stage == BattleStage.ChooseAbility && battle.CurrentCreature.Owner == clientId && battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber).Equals(battle.CurrentCreature)), battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber).Creature.KnownAbilities.ToArray(), WaitSpeed, clientRpcParams);
+                //Debug.Log("In EncounterCreatureClickedServerRpc");
+                //Debug.Log("CreatureNumber is " + CreatureNumber);
+                //Debug.Log("Player1SelectedCreature " + battle.Player1SelectedCreature);
+
+                // !!!!!!!!!!!!!!!!!!!!!! Keeps getting an Object reference not set to an instance of an object error here at random times !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // Don't need to pass this if we decide not to change back to sending the actual speed of abilities (after agility calculations and what not).
+                int WaitSpeed = battle.GetInitiative(battleCreature, AllAbilities.GetAbility(AbilityName.Wait));
+                Debug.Log("WaitSpeed Set");
+
+                ClientRpcParams clientRpcParams = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new ulong[] { clientId }
+                    }
+                };
+                bool AllowAbilityPick = false;
+                if (battle.CurrentCreature != null) // if it is null then the battle has not started yet.
+                {
+                    bool InChooseAbilityStage = battle.Stage == BattleStage.ChooseAbility;
+                    bool ClientIsCreatureOwner = battle.CurrentCreature.Owner == clientId;
+                    bool IsCreaturesTurn = battleCreature.Equals(battle.CurrentCreature);
+                    AllowAbilityPick = InChooseAbilityStage && ClientIsCreatureOwner && IsCreaturesTurn;
+                }
+                Debug.Log("bools set");
+
+                Display_AbilityPick_PanelClientRpc(CreatureNumber, AllowAbilityPick, battleCreature.Creature.KnownAbilities.ToArray(), WaitSpeed, clientRpcParams);
+            }
         }
+        Debug.Log("Finished EncounterCreatureClickedServerRpc");
 
     }
 

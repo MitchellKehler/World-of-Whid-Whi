@@ -67,6 +67,7 @@ public static class InitializeCreatures
         CreatureDescription = "Narsty little roadents, though little is relative in this case. They are as large as a dog and much harder to kill. Prone to spreading deseases these creatures are generally hated although some races like Rat Men and goblins favor them as pets.";
         MyTypes = new List<CreatureType>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Giant Rat"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Fur"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 15, 0, 25, 0, 60, 0);
@@ -85,6 +86,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Grey Wolf"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Fur"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
@@ -96,6 +98,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["White Wolf"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Fur"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Sharp Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
@@ -107,6 +110,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Wasp"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Chitin"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Stinger"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
@@ -118,6 +122,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Bear"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Fur"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Claws"].Clone()); // switch with anatomies
         //MyPowerUps.Add(new PowerUps(PowerUpStat.None, 0, new Reward(AttributeName.Intellegent)));
         // Types: fire, water, earth, air, life, death, blood, arcane
@@ -129,6 +134,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Moo Beast"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Skin"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Hard Head"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 0, 0, 20, 0, 80, 0);
@@ -156,6 +162,7 @@ public static class InitializeCreatures
         MyTypes = new List<CreatureType>();
         PowerUpGroups = new List<PowerUpGroup>();
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Greater Moo Beast"].Clone()); // switch with anatomies
+        PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Skin"].Clone()); // switch with anatomies
         PowerUpGroups.Add(InitializePowerUpGroups.AllPowerUps["Horns"].Clone()); // switch with anatomies
         // Types: fire, water, earth, air, life, death, blood, arcane
         creatureTypePercents = new CreatureTypePercents(0, 0, 0, 0, 20, 0, 80, 0);

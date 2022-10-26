@@ -9,6 +9,7 @@ public class InitializedCreature
 {
     private GameManager GM;
 
+    private int ID;
     public string Name;
     public string Path;
     public string ShortName; // used for displays like the battle icons where space is limited.
@@ -48,6 +49,8 @@ public class InitializedCreature
     {
         //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         //GM.LogToServerRpc(0, "In InitializedCreature Constructor");
+
+        ID = -1;
 
         KnownAbilities = new List<AbilityData>();
         PowerUpGroups = new List<PowerUpGroup>();
@@ -104,6 +107,8 @@ public class InitializedCreature
 
     public InitializedCreature(InitializedCreatureData CreatureData)
     {
+        ID = CreatureData.GetID();
+
         GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         GM.LogToServerRpc(0, "In InitializedCreature from creature data constructor");
         BaseCreature NewBaseCreature = InitializeCreatures.AllCreatureList[CreatureData.Name];
@@ -168,6 +173,11 @@ public class InitializedCreature
 
         //Debug.Log("Data Creature Initialized");
         //Debug.Log("Level = " + CurrentLvl);
+    }
+
+    public int GetID()
+    {
+        return ID;
     }
 
     // number to add is multiplied based on rating
@@ -632,18 +642,6 @@ public class InitializedCreature
     //    //Debug.Log("Agility = " + Agility);
     //}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     //public void GetInitialPowerups()
     //{
     //    BaseCreature ThisCreature =  InitializeCreatures.GetCreature(Name);
@@ -670,43 +668,81 @@ public class InitializedCreature
     //    }
     //}
 
-    public void ApplyReward(Reward reward)
+    /// <summary>
+    /// Applys a reward to this initilized creature based on the reward stat, amount, and multiplier provided.
+    /// The multiplier is only used for certain reward conditions like size.
+    /// 
+    /// Need to add power up groups as a reward type
+    /// </summary>
+    /// <param name="reward"></param>
+    /// <param name="multiplier"></param>
+        public void ApplyReward(Reward reward, float multiplier)
     {
-        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         switch (reward.Type)
         {
             case RewardType.Stat:
                 switch (reward.RewardStat)
                 {
                     case RewardStat.Strength:
-                        Strength += (int)reward.Amount;
+                        Strength += (int)(reward.Amount * multiplier);
+                        if (Strength < 0)
+                            Strength = 0;
                         break;
                     case RewardStat.Agility:
-                        Agility += (int)reward.Amount;
+                        Agility += (int)(reward.Amount * multiplier);
+                        if (Agility < 0)
+                            Agility = 0;
+                        break;
+                    case RewardStat.Mind:
+                        Mind += (int)(reward.Amount * multiplier);
+                        if (Mind < 0)
+                            Mind = 0;
+                        break;
+                    case RewardStat.Will:
+                        Will += (int)(reward.Amount * multiplier);
+                        if (Will < 0)
+                            Will = 0;
                         break;
                     case RewardStat.Armour:
-                        Armor += (int)reward.Amount;
+                        Armor += (int)(reward.Amount * multiplier);
+                        if (Armor < 0)
+                            Armor = 0;
                         break;
                     case RewardStat.General_Resistance:
-                        General_Resistance += (int)reward.Amount;
+                        General_Resistance += (int)(reward.Amount * multiplier);
+                        if (General_Resistance < 0)
+                            General_Resistance = 0;
                         break;
                     case RewardStat.Fire_Resistance:
-                        Fire_Resistance += (int)reward.Amount;
+                        Fire_Resistance += (int)(reward.Amount * multiplier);
+                        if (Fire_Resistance < 0)
+                            Fire_Resistance = 0;
                         break;
                     case RewardStat.Water_Resistance:
-                        Water_Resistance += (int)reward.Amount;
+                        Water_Resistance += (int)(reward.Amount * multiplier);
+                        if (Water_Resistance < 0)
+                            Water_Resistance = 0;
                         break;
                     case RewardStat.Poison_Resistance:
-                        Poison_Resistance += (int)reward.Amount;
+                        Poison_Resistance += (int)(reward.Amount * multiplier);
+                        if (Poison_Resistance < 0)
+                            Poison_Resistance = 0;
                         break;
                     case RewardStat.Electric_Resistance:
-                        Electric_Resistance += (int)reward.Amount;
+                        Electric_Resistance += (int)(reward.Amount * multiplier);
+                        if (Electric_Resistance < 0)
+                            Electric_Resistance = 0;
                         break;
                     case RewardStat.Death_Resistance:
-                        Death_Resistance += (int)reward.Amount;
+                        Death_Resistance += (int)(reward.Amount * multiplier);
+                        if (Death_Resistance < 0)
+                            Death_Resistance = 0;
                         break;
                     case RewardStat.HP_Multiplier: // HP_Multiplier
                         HPMultiplier += reward.Amount;
+                        if (HPMultiplier < 0)
+                            HPMultiplier = 0;
                         break;
                     default:
                         break;
@@ -724,18 +760,18 @@ public class InitializedCreature
             //    }
             //    break;
             case RewardType.Ability:
-                GM.LogToServerRpc(0, "Recieving Ability: " + reward.AbilityName);
+                //GM.LogToServerRpc(0, "Recieving Ability: " + reward.AbilityName);
                 Ability ability = AllAbilities.GetAbility(reward.AbilityName);
                 if (ability.Upgrades)
                 {
-                    GM.LogToServerRpc(0, "Checking for known abilities to remove.");
+                    //GM.LogToServerRpc(0, "Checking for known abilities to remove.");
                     KnownAbilities.Remove(KnownAbilities.Find(knownAbility => knownAbility.AbilityName == ability.UpgradedAbility));
                 }
                 KnownAbilities.Add(new AbilityData(ability, AllAbilities.GetAbility(reward.AbilityName).Speed));
 
-                GM.LogToServerRpc(0, "Listing abilities in KnownAbilities.");
-                foreach (AbilityData ability1 in KnownAbilities)
-                    GM.LogToServerRpc(0, "Ability: " + ability1.AbilityName);
+                //GM.LogToServerRpc(0, "Listing abilities in KnownAbilities.");
+                //foreach (AbilityData ability1 in KnownAbilities)
+                //    GM.LogToServerRpc(0, "Ability: " + ability1.AbilityName);
                 break;
             case RewardType.Lvl:
                 // Check attributes for additional increases or decreases. E.G Intellegent, Dumb, Fast, Slow...
@@ -748,6 +784,8 @@ public class InitializedCreature
                 break;
         }
     }
+
+
 
     //public void UpdatePowerupStats(Dictionary<PowerUpStat, int> stats)
     //{
@@ -767,50 +805,99 @@ public class InitializedCreature
     //    }
     //}
 
+    /// <summary>
+    /// 
+    /// 
+    /// Need to add an option to check for other power up groups as a condition type
+    /// </summary>
+    /// <param name="powerUp"></param>
     public void ApplyPowerUp(PowerUp powerUp)
     {
-        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        if (powerUp.Reward.Type == RewardType.Stat)
-        {
-            Debug.Log("In ApplyPowerUp: " + powerUp.Reward.RewardStat);
-            GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.RewardStat);
-        }
-        else if (powerUp.Reward.Type == RewardType.Ability)
-        {
-            Debug.Log("In ApplyPowerUp: " + powerUp.Reward.AbilityName);
-            GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.AbilityName);
-        }
+        float multiplier = 1;
+        //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //if (powerUp.Reward.Type == RewardType.Stat)
+        //{
+        //    Debug.Log("In ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        //    GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        //}
+        //else if (powerUp.Reward.Type == RewardType.Ability)
+        //{
+        //    Debug.Log("In ApplyPowerUp: " + powerUp.Reward.AbilityName);
+        //    GM.LogToServerRpc(0, "In ApplyPowerUp: " + powerUp.Reward.AbilityName);
+        //}
         if (!powerUp.recieved)
         {
-            Debug.Log("has not already recived");
-            GM.LogToServerRpc(0, "has not already recived");
+            //Debug.Log("has not already recived");
+            //GM.LogToServerRpc(0, "has not already recived");
             bool AllConditionsPassed = true;
+
+            // Size is not included in this list because it is always passed.
+            // Size based powerups apply size based rewards and are handled with uneique logic when applying rewords.
             foreach (PowerUpCondition condition in powerUp.conditions)
             {
-                Debug.Log("condition.TrackedStat: " + condition.TrackedStat);
-                GM.LogToServerRpc(0, "condition.TrackedStat: " + condition.TrackedStat);
+                //Debug.Log("condition.TrackedStat: " + condition.TrackedStat);
+                //GM.LogToServerRpc(0, "condition.TrackedStat: " + condition.TrackedStat);
                 if (condition.TrackedStat == PowerUpStat.XP)
                 {
-                    Debug.Log("CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
-                    GM.LogToServerRpc(0, "CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
+                    //Debug.Log("CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
+                    //GM.LogToServerRpc(0, "CurrentXP: " + CurrentXP + ", condition.StatGoal: " + condition.StatGoal);
                     if (CurrentXP < condition.StatGoal)
                     {
-                        Debug.Log("condition failed");
-                        GM.LogToServerRpc(0, "condition failed");
+                        //Debug.Log("condition failed");
+                        //GM.LogToServerRpc(0, "condition failed");
                         AllConditionsPassed = false;
                     }
+                }
+                else if (condition.TrackedStat == PowerUpStat.STR)
+                {
+                    if (Strength < condition.StatGoal)
+                    {
+                        //Debug.Log("condition failed");
+                        //GM.LogToServerRpc(0, "condition failed");
+                        AllConditionsPassed = false;
+                    }
+                }
+                else if (condition.TrackedStat == PowerUpStat.AGI)
+                {
+                    if (Agility < condition.StatGoal)
+                    {
+                        //Debug.Log("condition failed");
+                        //GM.LogToServerRpc(0, "condition failed");
+                        AllConditionsPassed = false;
+                    }
+                }
+                else if (condition.TrackedStat == PowerUpStat.WILL)
+                {
+                    if (Will < condition.StatGoal)
+                    {
+                        //Debug.Log("condition failed");
+                        //GM.LogToServerRpc(0, "condition failed");
+                        AllConditionsPassed = false;
+                    }
+                }
+                else if (condition.TrackedStat == PowerUpStat.MIND)
+                {
+                    if (Mind < condition.StatGoal)
+                    {
+                        //Debug.Log("condition failed");
+                        //GM.LogToServerRpc(0, "condition failed");
+                        AllConditionsPassed = false;
+                    }
+                } else if (condition.TrackedStat == PowerUpStat.SIZE)
+                {
+                    multiplier = SizeToNumber(Size);
                 }
             }
             if (AllConditionsPassed)
             {
-                Debug.Log("all conditions passed");
-                GM.LogToServerRpc(0, "all conditions passed");
-                ApplyReward(powerUp.Reward);
+                //Debug.Log("all conditions passed");
+                //GM.LogToServerRpc(0, "all conditions passed");
+                ApplyReward(powerUp.Reward, multiplier);
                 powerUp.recieved = true;
             }
         }
-        Debug.Log("Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
-        GM.LogToServerRpc(0, "Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        //Debug.Log("Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
+        //GM.LogToServerRpc(0, "Done ApplyPowerUp: " + powerUp.Reward.RewardStat);
     }
 
     /// <summary>
@@ -820,21 +907,21 @@ public class InitializedCreature
     /// </summary>
     public void ApplyPowerups()
     {
-        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        Debug.Log("In ApplyPowerups");
-        GM.LogToServerRpc(0, "In ApplyPowerups");
+        //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //Debug.Log("In ApplyPowerups");
+        //GM.LogToServerRpc(0, "In ApplyPowerups");
 
         foreach (PowerUpGroup powerUpGroup in PowerUpGroups)
         {
-            Debug.Log("PowerUpGroup: " + powerUpGroup.description);
-            GM.LogToServerRpc(0, "PowerUpGroup: " + powerUpGroup.description);
+            //Debug.Log("PowerUpGroup: " + powerUpGroup.description);
+            //GM.LogToServerRpc(0, "PowerUpGroup: " + powerUpGroup.description);
             foreach (PowerUp powerUp in powerUpGroup.powerups)
             {
                 ApplyPowerUp(powerUp);
             }
         }
-        Debug.Log("Done ApplyPowerups");
-        GM.LogToServerRpc(0, "Done ApplyPowerups");
+        //Debug.Log("Done ApplyPowerups");
+        //GM.LogToServerRpc(0, "Done ApplyPowerups");
 
         //BaseCreature baseCreature = InitializeCreatures.AllCreatureList[Name];
 

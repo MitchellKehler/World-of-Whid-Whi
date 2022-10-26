@@ -15,12 +15,13 @@ public class InitializedCreatureData : INetworkSerializable
     List<Condition> Conditions; // I think I will need this here.
     public int CurrentHP;
     public ulong Owner;
-    public int ID; // I think this is just used to identify a creature in game. Maybe should be set to the same as the ID in the database? gotta check where it is set.
+    private int ID;
     public CreatureSize Size;
     public int Strength;
     public int Agility;
     public int Mind;
     public int Will;
+    public int battleCreatureID; // just used in battles and set at the start of each battle.
 
     public void NetworkSerialize(NetworkSerializer serializer)
     {
@@ -77,20 +78,26 @@ public class InitializedCreatureData : INetworkSerializable
         //}
 
     }
+
     public InitializedCreatureData() : base()
     {
         //TrackedStat = new TrackedStat();
     }
 
-    //public InitializedCreatureData(string name)
-    //{
-    //    Name = name;
-    //    NickName = name; // Need to add this
-    //    CurrentLvl = 1;
-    //    StatsToTrack = new TrackedStat[0];
-    //    CurrentHP = -1;
-    //    ID = -1;
-    //}
+    //ID, character, name, nick_name, current_hp, size, strength, agility, mind, will, xp
+    public InitializedCreatureData(int ID, string name, string nick_name, int current_hp, string size, int strength, int agility, int mind, int will, int xp)
+    {
+        this.ID = ID;
+        Name = name;
+        NickName = nick_name; // Need to add this
+        CurrentHP = current_hp;
+        Enum.TryParse(size, out Size);
+        Strength = strength;
+        Agility = agility;
+        Mind = mind;
+        Will = will;
+        CurrentXP = xp;
+    }
 
     public InitializedCreatureData(BaseCreature creature)
     {
@@ -171,7 +178,13 @@ public class InitializedCreatureData : INetworkSerializable
         //Debug.Log("Strength = " + Strength);
         //Debug.Log("Total Strength = " + creature.GetTotalStrength());
     }
+
+    public int GetID()
+    {
+        return ID;
+    }
 }
+
 
 public class TrackedStat : INetworkSerializable
 {

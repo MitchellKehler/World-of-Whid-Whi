@@ -59,6 +59,7 @@ public class EncounterTerrain : NetworkBehaviour
         //Debug.Log("In Battle " + NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle);
         if (!NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle && p < encounterTerrain.EncounterChance)
         {
+            NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
             //Debug.Log("NetworkManager.Singleton.ConnectedClientsList.Count = " + NetworkManager.Singleton.ConnectedClientsList.Count);
             //NetworkManager.Singleton.ConnectedClientsList[(Convert.ToInt32(clientId)) - 2].PlayerObject.gameObject.GetComponent<Player_Movement_Android>().IsAllowedToMove = false;
 

@@ -91,6 +91,7 @@ public class Battle
             Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
             Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
             BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player1ID, creature);
+            creatureData.battleCreatureID = BattleCreature.ID;
             BattleCreatures.Add(BattleCreature);
         }
         foreach (InitializedCreatureData creatureData in teamTwoCreatures)
@@ -100,6 +101,7 @@ public class Battle
             Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
             Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
             BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player2ID, creature);
+            creatureData.battleCreatureID = BattleCreature.ID;
             BattleCreatures.Add(BattleCreature);
         }
         Player1 = Player1ID;
