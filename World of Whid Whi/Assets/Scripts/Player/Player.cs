@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
-    public List<InitializedCreatureData> OwnedCreatures;
-    public List<InitializedCreatureData> CurrentCreatureTeam;
+    /// Eventually we may want to change this to store the actual initilized creatures and not just their data to avoid having to initialize them for things like replenishing HP.
     public Camera PlayerCamera; // Prefab
     public Camera playerCam;
     public bool inBattle = false;
     public string currentLocation;
     public float PlayerZOffset;
+    public ulong characterId;
 
     public bool Battle_Go;
 
@@ -53,6 +53,9 @@ public class Player : NetworkBehaviour
         GM.position_manager = new PositionManager(width, height);
         GM.SetInitialMapLocation(location, posX, posY); // Later this will be which ever location the player signed out in. May need a version of change scene that also sets position.
         //SetUpPlayerServerRpc();
+
+        // Later we will store the player's spawn point in the database and find first the scene and then the game object in the scene using the spawn point ID.
+        // In the future the spawnPoint of a player may not exist int the current scene and it's ID will be used to identify which scene it is in and then to locate it.
 
 
     }

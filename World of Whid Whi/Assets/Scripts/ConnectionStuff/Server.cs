@@ -14,6 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using UnityEngine.TextCore.Text;
+using Unity.Mathematics;
 
 public class Server : MonoBehaviour
 {
@@ -274,7 +275,7 @@ public class Server : MonoBehaviour
                                 Debug.Log((string)reader["location"]);
                                 double x = (double)reader["Position_X"];
                                 double y = (double)reader["Position_Y"];
-                                characters.Add(new CharacterData((int)reader["ID"], AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y));
+                                characters.Add(new CharacterData(Convert.ToUInt64(reader["ID"]), AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y));
                             }
                         }
                     }
@@ -334,7 +335,12 @@ public class Server : MonoBehaviour
     }
 
     /// <summary>
-    /// Called by server when client disconnects. Later we will need to handle doing something like this also when they just sign out.
+    /// Called by server when client disconnects. 
+    /// 
+    /// Later we will need to have some way of giving the client a chance to reconnect for 30 seconds and keeping their character on the map during that time. This would be in part to avoid people dropping out of a dual or other situations like that where the
+    /// game state can't be saved and partially for PVP (not duals but involentary combat) so people can't just blink out of existance to get away.
+    /// 
+    /// Later we will need to handle doing something like this also when they just sign out.
     /// </summary>
     /// <param name="clientId"></param>
     public void Handle_Disconnect(ulong clientId)
@@ -343,6 +349,12 @@ public class Server : MonoBehaviour
         Debug.Log("ID = " + activeCharacters[clientId].ID);
         Debug.Log("x = " + activeCharacters[clientId].Position_X);
 
+        DB_UpdateCharacter(clientId);
+        GM.charactersInGame.Remove(activeCharacters[clientId].ID);
+    }
+
+    public void DB_UpdateCharacter(ulong clientId)
+    {
         try
         {
             // connect to the databases
@@ -353,8 +365,8 @@ public class Server : MonoBehaviour
                 Debug.Log("connection established");
 
                 // sql command
-                string sql = "UPDATE Character " 
-                    + "SET lvl = " + activeCharacters[clientId].Lvl + ", xp = " + activeCharacters[clientId].XP + ", location = '" + activeCharacters[clientId].Location + "', position_X = " 
+                string sql = "UPDATE Character "
+                    + "SET lvl = " + activeCharacters[clientId].Lvl + ", xp = " + activeCharacters[clientId].XP + ", location = '" + activeCharacters[clientId].Location + "', position_X = "
                     + activeCharacters[clientId].Position_X + ", position_Y = " + activeCharacters[clientId].Position_Y
                     + " WHERE ID = " + activeCharacters[clientId].ID;
                 // execute sql command
@@ -371,16 +383,11 @@ public class Server : MonoBehaviour
             Debug.Log(e.ToString());
         }
 
-        //ClientRpcParams clientRpcParams = new ClientRpcParams
-        //{
-        //    Send = new ClientRpcSendParams
-        //    {
-        //        TargetClientIds = new ulong[] { clientId }
-        //    }
-        //};
-        //GM.SignIn_Response_ClientRpc(AccountID, characters.ToArray(), clientRpcParams);
-
-        //Debug.Log("AccountID is " + AccountID);
+        // may only need to worry about current creature team but for now this is fine
+        foreach (InitializedCreatureData creature in GM.charactersInGame[activeCharacters[clientId].ID].OwnedCreatures)
+        {
+            DB_UpdateCreature(creature.GetID(), creature.Name, creature.NickName, creature.CurrentHP, creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, creature.CurrentXP);
+        }
     }
 
     public void CreateAccount()
@@ -471,7 +478,7 @@ public class Server : MonoBehaviour
     /// <summary>
     /// Called on the Server to delete a character
     /// </summary>
-    public void Handle_DeleteCharacter_Request(ulong clientId, int id)
+    public void Handle_DeleteCharacter_Request(ulong clientId, ulong id)
     {
         Debug.Log("Got delete character request: " + clientId + ", " + id);
         bool success = false;
@@ -486,7 +493,7 @@ public class Server : MonoBehaviour
                 Debug.Log("connection established");
 
                 // sql command
-                string sql = "DELETE Character WHERE account = " + activeCharacters[clientId].Account + " AND ID = " + id;
+                string sql = "DELETE Creature WHERE character = " + id;
                 Debug.Log(sql);
                 // execute sql command
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -501,6 +508,24 @@ public class Server : MonoBehaviour
                         //}
                     }
                 }
+
+                // sql command
+                sql = "DELETE Character WHERE account = " + activeCharacters[clientId].Account + " AND ID = " + id;
+                Debug.Log(sql);
+                // execute sql command
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    // read
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        //// each line in the output
+                        //while (reader.Read())
+                        //{
+                        //    AccountID = (int)reader["ID"];
+                        //}
+                    }
+                }
+
                 connection.Close();
             }
             success = true;
@@ -584,7 +609,7 @@ public class Server : MonoBehaviour
                             double x = (double)reader["Position_X"];
                             double y = (double)reader["Position_Y"];
                             Debug.Log(x + ", " + y);
-                            newCharacterData = new CharacterData((int)reader["ID"], AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y);
+                            newCharacterData = new CharacterData(Convert.ToUInt64(reader["ID"]), AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y);
                         }
                     }
                 }
@@ -597,6 +622,30 @@ public class Server : MonoBehaviour
             Debug.Log(e.ToString());
         }
 
+        InitializedCreature creature;
+        for (int i = 0; i < 2; i++)
+        {
+            float randomChance = UnityEngine.Random.Range(0, 100);
+            if (randomChance < 33)
+            {
+                creature = new InitializedCreature(GM.AllCreatures["GiantRat"]); // make it a random chance at rat, wolf or two wasps!!!
+                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+            }
+            else if (randomChance < 66)
+            {
+                creature = new InitializedCreature(GM.AllCreatures["GreyWolf"]); // make it a random chance at rat, wolf or two wasps!!!
+                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+            }
+            else
+            {
+                creature = new InitializedCreature(GM.AllCreatures["Wasp"]); // make it a random chance at rat, wolf or two wasps!!!
+                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                creature = new InitializedCreature(GM.AllCreatures["Wasp"]); // make it a random chance at rat, wolf or two wasps!!!
+                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+            }
+        }
+
+
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -608,6 +657,119 @@ public class Server : MonoBehaviour
 
         Debug.Log("Created " + newCharacterData.Name);
         return newCharacterData;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="characterId"></param>
+    /// <param name="name"></param>
+    /// <param name="nick_name"></param>
+    /// <param name="strength"></param>
+    /// <param name="agility"></param>
+    /// <param name="mind"></param>
+    /// <param name="will"></param>
+    /// <param name="xp"></param>
+    /// <returns></returns>
+    public int DB_CreateCreature(ulong characterId, string name, string nick_name, int current_hp, string size, int strength, int agility, int mind, int will, int xp)
+    {
+        /// need to set all already recieved level ups to recieved when loading a creature from the database!!!!!!!!!!!!!!!!!!!!!!
+        int creatureID = -1;
+        Debug.Log("In DB_GetPlayerCreatures");
+        try
+        {
+            // connect to the databases
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                // if open then the connection is established
+                connection.Open();
+                Debug.Log("connection established");
+
+                // sql command
+                string sql = "INSERT INTO Creature (character, name, nick_name, current_hp, size, strength, agility, mind, will, xp) OUTPUT INSERTED.ID VALUES(" + characterId + ", '" + name + "', '" + nick_name 
+                    + "', " + current_hp + ", '" + size + "', " + strength + ", " + agility + ", " + mind + ", " + will + ", " + xp + ")";
+                Debug.Log(sql);
+                // execute sql command
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    // read
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // each line in the output
+                        while (reader.Read())
+                        {
+                            Debug.Log((int)reader["ID"]);
+                            creatureID = (int)reader["ID"];
+                        }
+                    }
+                }
+                connection.Close();
+            }
+        }
+        catch (SqlException e)
+        {
+            creatureID = -99;
+            Debug.Log(e.ToString());
+        }
+        return creatureID;
+    }
+
+    /// <summary>
+    /// Updates a creature in the database
+    /// 
+    /// Currently I am allowing name to be updated to account for evolutions but it may be better to just create a new creature if a creature evolves. 
+    /// 
+    /// Returns a status
+    /// 0 = Success
+    /// -99 = SQL error
+    /// </summary>
+    /// <param name="creature"></param>
+    /// <param name="name"></param>
+    /// <param name="nick_name"></param>
+    /// <param name="strength"></param>
+    /// <param name="agility"></param>
+    /// <param name="mind"></param>
+    /// <param name="will"></param>
+    /// <param name="xp"></param>
+    /// <returns></returns>
+    public int DB_UpdateCreature(int creatureID, string name, string nick_name, int current_hp, string size, int strength, int agility, int mind, int will, int xp)
+    {
+        /// need to set all already recieved level ups to recieved when loading a creature from the database!!!!!!!!!!!!!!!!!!!!!!
+        Debug.Log("In DB_GetPlayerCreatures");
+        try
+        {
+            // connect to the databases
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                // if open then the connection is established
+                connection.Open();
+                Debug.Log("connection established");
+
+                // sql command
+                string sql = "UPDATE Creature SET name = '" + name + "', nick_name = '" + nick_name + "', current_hp = " + current_hp + ", size = '" + size + "', strength = " + strength + ", agility = " + agility + ", mind = " + mind + ", will = " + will 
+                    + ", xp = " + xp + " WHERE ID = " + creatureID;
+                Debug.Log(sql);
+                // execute sql command
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    // read
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        //// each line in the output
+                        //while (reader.Read())
+                        //{
+                        //}
+                    }
+                }
+                connection.Close();
+            }
+        }
+        catch (SqlException e)
+        {
+            Debug.Log(e.ToString());
+            return -99;
+        }
+        return 0;
     }
 
     /// <summary>
@@ -771,7 +933,7 @@ public class Server : MonoBehaviour
     /// Called by server to get the character data requested by the user when they click the Play button.
     /// </summary>
     /// <returns></returns>
-    public CharacterData DB_GetCharacterData(ulong clientId, int characterId)
+    public CharacterData DB_GetCharacterData(ulong clientId, ulong characterId)
     {
         Debug.Log("In DB_GetCharacterData: " + clientId + ", " + characterId);
         int accountId = activeCharacters[clientId].Account;
@@ -810,7 +972,7 @@ public class Server : MonoBehaviour
                             Debug.Log((string)reader["location"]);
                             double x = (double)reader["Position_X"];
                             double y = (double)reader["Position_Y"];
-                            character = new CharacterData((int)reader["ID"], AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y);
+                            character = new CharacterData(Convert.ToUInt64(reader["ID"]), AccountID, (string)reader["name"], (int)reader["lvl"], (int)reader["xp"], (string)reader["location"], (float)x, (float)y);
                             Debug.Log("New Character = " + character);
                         }
                     }
@@ -836,7 +998,7 @@ public class Server : MonoBehaviour
     /// </summary>
     /// <param name="characterId"></param>
     /// <returns></returns>
-    public List<InitializedCreatureData> DB_GetPlayerCreatures(int characterId)
+    public List<InitializedCreatureData> DB_GetPlayerCreatures(ulong characterId)
     {
         Debug.Log("In DB_GetPlayerCreatures");
         List<InitializedCreatureData> creatures = new List<InitializedCreatureData>();

@@ -63,6 +63,8 @@ public class Battle
     public BattleCreature CurrentCreature;
     public ulong Player1;
     public ulong Player2;
+    public ulong Player1CharacterID;
+    public ulong Player2CharacterID;
     public bool End_Battle = false;
     public int BattleTime = 60;
     int PreviousInitiative;
@@ -78,7 +80,7 @@ public class Battle
     bool Collected_Reactions = false;
     int[] previousTargets; // I don't like this much but don't want to think about it any more.
 
-    public Battle(ulong Player1ID, InitializedCreatureData[] teamOneCreatures, ulong Player2ID, InitializedCreatureData[] teamTwoCreatures)
+    public Battle(ulong Player1ID, ulong Player1Character, InitializedCreatureData[] teamOneCreatures, ulong Player2ID, ulong Player2Character, InitializedCreatureData[] teamTwoCreatures)
     {
         GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         ActionsToPerform = new List<Action>();
@@ -106,6 +108,8 @@ public class Battle
         }
         Player1 = Player1ID;
         Player2 = Player2ID;
+        Player1CharacterID = Player1Character;
+        Player2CharacterID = Player2Character;
 
         NetworkManager.Singleton.ConnectedClients[Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
         if (Player2 != GameManager.SERVERID)

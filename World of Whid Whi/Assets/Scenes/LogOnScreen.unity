@@ -3406,6 +3406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed40e00ffc56a5c4a91d5cdfc340d758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 0}
   logtext: 
   Player_Side_Toggle: 0
   Player: {fileID: 0}
@@ -17273,7 +17274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 1
+  isServer: 0
   AccountMenuTitle: {fileID: 1096277259}
   Email: {fileID: 1798644854}
   Password: {fileID: 1516666562}

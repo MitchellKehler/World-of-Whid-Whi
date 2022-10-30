@@ -8,6 +8,7 @@ TagManager:
   - Server
   - BattleCamera
   - BattlePanel
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

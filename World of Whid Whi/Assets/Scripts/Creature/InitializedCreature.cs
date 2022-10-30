@@ -45,7 +45,7 @@ public class InitializedCreature
 
     }
 
-    public InitializedCreature(BaseCreature NewBaseCreature)
+    public InitializedCreature(BaseCreature baseCreature)
     {
         //GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         //GM.LogToServerRpc(0, "In InitializedCreature Constructor");
@@ -54,23 +54,23 @@ public class InitializedCreature
 
         KnownAbilities = new List<AbilityData>();
         PowerUpGroups = new List<PowerUpGroup>();
-        foreach (PowerUpGroup powerUpGroup in NewBaseCreature.PowerUpGroups)
+        foreach (PowerUpGroup powerUpGroup in baseCreature.PowerUpGroups)
         {
             PowerUpGroups.Add(powerUpGroup.Clone());
         }
 
         HPMultiplier = 1;
 
-        Name = NewBaseCreature.Name;
-        Path = NewBaseCreature.Path;
-        ShortName = NewBaseCreature.ShortName;
-        Description = NewBaseCreature.Description;
+        Name = baseCreature.Name;
+        Path = baseCreature.Path;
+        ShortName = baseCreature.ShortName;
+        Description = baseCreature.Description;
 //        Types = MyTypes;
-        Size = NewBaseCreature.Size;
+        Size = baseCreature.Size;
 
         // these will increase with powerups
         CurrentXP = 0;
-        Rating = NewBaseCreature.Rating;
+        Rating = baseCreature.Rating;
         Armor = 0;
         General_Resistance = 0;
         Fire_Resistance = 0;
@@ -83,7 +83,7 @@ public class InitializedCreature
         Will = 0;
         Strength = 0;
 
-        AddBaseStats(NewBaseCreature.Rating, NewBaseCreature.CreatureTypePercents, 10);
+        AddBaseStats(baseCreature.Rating, baseCreature.CreatureTypePercents, 10);
 
         // I don't like this. I think Agiliy should be effected little if at all by size. Size should effect dodge chance more. Maybe need a new category along with size and intelegence of athletecisim? also need to add mind to things that impact initiative. 
 
@@ -164,7 +164,18 @@ public class InitializedCreature
         PowerUpGroups = new List<PowerUpGroup>();
         foreach (PowerUpGroup powerUpGroup in NewBaseCreature.PowerUpGroups)
         {
-            PowerUpGroups.Add(powerUpGroup.Clone());
+            PowerUpGroup groupToAdd = powerUpGroup.Clone();
+            
+            // Set already achieved levels to recieved since the stats have already been added.
+            if (groupToAdd.type == PowerUpGroupType.Creature)
+            {
+                foreach(PowerUp powerUp in groupToAdd.powerups)
+                {
+                    if (powerUp.Reward.Type == RewardType.Lvl && powerUp.conditions[0].StatGoal <= CurrentXP)
+                        powerUp.recieved = true;
+                }
+            }
+            PowerUpGroups.Add(groupToAdd);
         }
         ApplyPowerups();
         GM.LogToServerRpc(0, "In InitializedCreature after applying powerups");

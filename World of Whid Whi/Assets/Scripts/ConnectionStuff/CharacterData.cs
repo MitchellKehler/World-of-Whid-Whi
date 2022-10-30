@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterData : INetworkSerializable
 {
-    public int ID;
+    public ulong ID;
     public int Account;
     public string Name;
     public int Lvl;
@@ -13,6 +13,10 @@ public class CharacterData : INetworkSerializable
     public string Location;
     public float Position_X;
     public float Position_Y;
+
+    public List<InitializedCreatureData> OwnedCreatures;
+    public List<InitializedCreatureData> CurrentCreatureTeam;
+    public SpawnPoint spawnPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +53,7 @@ public class CharacterData : INetworkSerializable
         Account = account;
     }
 
-    public CharacterData(int id, int account, string name, int lvl, int xp, string location, float x, float y)
+    public CharacterData(ulong id, int account, string name, int lvl, int xp, string location, float x, float y)
     {
         ID = id;
         Account = account;
