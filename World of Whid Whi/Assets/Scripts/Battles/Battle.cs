@@ -88,23 +88,31 @@ public class Battle
 
         foreach (InitializedCreatureData creatureData in teamOneCreatures)
         {
-            InitializedCreature creature = new InitializedCreature(creatureData);
-            Debug.Log("New Creature " + creature.Name);
-            Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
-            Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
-            BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player1ID, creature);
-            creatureData.battleCreatureID = BattleCreature.ID;
-            BattleCreatures.Add(BattleCreature);
+            if (creatureData.CurrentHP > 0)
+            {
+                InitializedCreature creature = new InitializedCreature(creatureData);
+                Debug.Log("New Creature " + creature.Name);
+                Debug.Log("Creature ID " + creature.GetID());
+                Debug.Log("creatureData ID " + creatureData.GetID());
+                creatureData.battleCreatureID = BattleCreatures.Count;
+                Debug.Log("Creature battleCreatureID " + creatureData.battleCreatureID);
+                BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player1ID, creature);
+                BattleCreatures.Add(BattleCreature);
+            }
         }
         foreach (InitializedCreatureData creatureData in teamTwoCreatures)
         {
-            InitializedCreature creature = new InitializedCreature(creatureData);
-            Debug.Log("New Creature " + creature.Name);
-            Debug.Log("Creature has " + creature.KnownAbilities.Count + " Known Abilities.");
-            Debug.Log("Creature has " + creature.CurrentXP + " CurrentXP.");
-            BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player2ID, creature);
-            creatureData.battleCreatureID = BattleCreature.ID;
-            BattleCreatures.Add(BattleCreature);
+            if (creatureData.CurrentHP > 0)
+            {
+                InitializedCreature creature = new InitializedCreature(creatureData);
+                Debug.Log("New Creature " + creature.Name);
+                Debug.Log("Creature ID " + creature.GetID());
+                Debug.Log("creatureData ID " + creatureData.GetID());
+                creatureData.battleCreatureID = BattleCreatures.Count;
+                Debug.Log("Creature battleCreatureID " + creatureData.battleCreatureID);
+                BattleCreature BattleCreature = new BattleCreature(BattleCreatures.Count, GetCreatureInitiative(creature), Player2ID, creature);
+                BattleCreatures.Add(BattleCreature);
+            }
         }
         Player1 = Player1ID;
         Player2 = Player2ID;
@@ -473,6 +481,7 @@ public class Battle
                     GM.MoveBattleCreature(CurrentCreature.ID, Vector3.zero, clientRpcParams);
                 } else {
                     // go to the specific target
+                    Debug.Log("Got single target. target = " + ActionsToPerform[0].Targets[0]);
                     GM.MoveBattleCreature(CurrentCreature.ID, ActionsToPerform[0].Targets[0], clientRpcParams);
                 }
                 // May want different lengths of time based on how far the creature has to move later.
@@ -544,29 +553,31 @@ public class Battle
             foreach (int target in ActionsToPerform[0].Targets)
             {
                 BattleCreature targetCreature = BattleCreatures.Find(creature => creature.ID == target);
-                int amount = 0;
-                Debug.Log("Amount Type: " + effect.AmountType);
-                if (effect.AmountType == AmountType.Constant)
-                    amount = (int)effect.Amount;
-                else if (effect.AmountType == AmountType.STR_Multiplier)
-                    amount = (int)(CurrentCreature.Creature.GetTotalStrength() * effect.Amount);
-                else if (effect.AmountType == AmountType.WILL_Multiplier)
-                    amount = (int)(CurrentCreature.Creature.GetTotalWill() * effect.Amount);
-                else if (effect.AmountType == AmountType.SizeDiff_Multiplier)
-                {
-                    int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
-                    sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
-                    amount = (int)(effect.Amount * sizeDiff);
-                }
-                else if (effect.AmountType == AmountType.SizeDiff_Multiplier_Plus)
-                {
-                    int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
-                    sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
-                    amount = (int)effect.Amount2 + (int)(effect.Amount * sizeDiff);
-                }
-                Debug.Log("Amount : " + amount);
+                Debug.Log("target / creature.ID: " + target);
+
                 if (targetCreature != null)
                 {
+                    int amount = 0;
+                    Debug.Log("Amount Type: " + effect.AmountType);
+                    if (effect.AmountType == AmountType.Constant)
+                        amount = (int)effect.Amount;
+                    else if (effect.AmountType == AmountType.STR_Multiplier)
+                        amount = (int)(CurrentCreature.Creature.GetTotalStrength() * effect.Amount);
+                    else if (effect.AmountType == AmountType.WILL_Multiplier)
+                        amount = (int)(CurrentCreature.Creature.GetTotalWill() * effect.Amount);
+                    else if (effect.AmountType == AmountType.SizeDiff_Multiplier)
+                    {
+                        int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
+                        sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
+                        amount = (int)(effect.Amount * sizeDiff);
+                    }
+                    else if (effect.AmountType == AmountType.SizeDiff_Multiplier_Plus)
+                    {
+                        int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
+                        sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
+                        amount = (int)effect.Amount2 + (int)(effect.Amount * sizeDiff);
+                    }
+                    Debug.Log("Amount : " + amount);
                     if (effect.EffectType == EffectType.Penetration)
                     {
                         penetration += amount;
@@ -630,7 +641,8 @@ public class Battle
         for (int CreatureCount = 0; CreatureCount < BattleCreatures.Count; CreatureCount++)
         {
             //Debug.Log(BattleCreatures[CreatureCount].Creature.Name + ", creature number " + CreatureCount + ", has " + BattleCreatures[CreatureCount].Creature.CurrentHP + " HP.");
-            initializedCreatures[CreatureCount] = new InitializedCreatureData(BattleCreatures[CreatureCount].Creature, BattleCreatures[CreatureCount].ID);
+            initializedCreatures[CreatureCount] = new InitializedCreatureData(BattleCreatures[CreatureCount].Creature, BattleCreatures[CreatureCount].Creature.GetID());
+            initializedCreatures[CreatureCount].battleCreatureID = BattleCreatures[CreatureCount].ID;
         }
 
         //Debug.Log("ActionsToPerform[0].Targets");

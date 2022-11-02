@@ -16,12 +16,12 @@ public class InitializedCreatureData : INetworkSerializable
     public int CurrentHP;
     public ulong Owner;
     private int ID;
+    public int battleCreatureID; // just used in battles and set at the start of each battle.
     public CreatureSize Size;
     public int Strength;
     public int Agility;
     public int Mind;
     public int Will;
-    public int battleCreatureID; // just used in battles and set at the start of each battle.
 
     public void NetworkSerialize(NetworkSerializer serializer)
     {
@@ -31,6 +31,7 @@ public class InitializedCreatureData : INetworkSerializable
         serializer.Serialize(ref CurrentHP);
         serializer.Serialize(ref Owner);
         serializer.Serialize(ref ID);
+        serializer.Serialize(ref battleCreatureID);
         serializer.Serialize(ref Size);
         serializer.Serialize(ref Strength);
         serializer.Serialize(ref Agility);
@@ -115,7 +116,7 @@ public class InitializedCreatureData : INetworkSerializable
         Debug.Log("In InitializedCreatureData constructor 2");
         SetVeriables(creature);
         Debug.Log("finished SetVeriables");
-        ID = -1;
+        ID = creature.GetID();
     }
 
     public InitializedCreatureData(InitializedCreature creature, int iD)

@@ -170,6 +170,10 @@ public class HealthBarScript : MonoBehaviour
         if (health >= 0 && health <= 1)
         {
             CurrentHP = health;
+        } else if (health <= 0)
+        {
+            Debug.Log("Health is less then 0.");
+            CurrentHP = 0;
         }
         else
         {

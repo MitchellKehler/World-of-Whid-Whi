@@ -34,20 +34,23 @@ using MLAPI.Spawning;
  * Look for !FIX for areas where I know work needs to happen.
  * 
  * //////////////////     Playability (Make it easier for the user to play)     //////////////////
+ * 
  * Check in Code!!!
  * 
- * Add Icons for first 6 creatures in sign in menu
  * Fix creature details menu
  * 
  * Rework battles to use events to track turns instead of updates (apply any other events in place of updates code that is found during this process)
  * Add Reactions
+ * Fix Run
+     * Stop server breaking if client disconnects in battle by having them run first then handle the rest of the disconnect
+     * Add consiquences of running, Maybe just set amount of damage recieved based on enemy power for now? later you should have a chance to fail the run away attempt and the enemy keeps getting turns while you try to run
  * 
  * Clean up general battle feel and visuals to make it easy to understand what is going on
      * Add message to indicate enemy is taking their turn.
      * Clear Creatures After Death
      * Fix attack timing
      * Small creatures health bar and name closer to sprite (not a big deal)
-    * Fix Backgrounds to cover whole battle field
+     * Fix Backgrounds to cover whole battle field
  * 
  * add leveling of creatures
  * add capturing creatures
@@ -57,6 +60,7 @@ using MLAPI.Spawning;
  * 
  * Clean up comments!!!!!
  * 
+ * Add Icons for first 6 creatures in sign in menu
  * Add Player Details
     * Known Creatures List
     * Reputations (worry about later)
@@ -231,7 +235,7 @@ public class GameManager : NetworkBehaviour
     public static readonly Vector3 BATTLE_OFFSET = new Vector3(0,30,0);
 
     // this is here as a temporary fix until the correct code is added. this should be removed when spawn points are handled correctly.
-    public SpawnPoint spawnPoint;
+    //public SpawnPoint spawnPoint;
 
     public Dictionary<ulong, CharacterData> charactersInGame;
 
@@ -541,7 +545,10 @@ public class GameManager : NetworkBehaviour
             // for now just update hps here by setting initialized creatures in battle creatures HP to player's creature data hp
             foreach(InitializedCreatureData creature in charactersInGame[battle.Player1CharacterID].CurrentCreatureTeam)
             {
-                creature.CurrentHP = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID).Creature.CurrentHP;
+                BattleCreature battleCreature = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID);
+                if (battleCreature != null)
+                    creature.CurrentHP = battleCreature.Creature.CurrentHP;
+                else creature.CurrentHP = 0;
                 creature.battleCreatureID = -1;
             }
             ExitBattle(battle, battle.Player1, battle.Winner);
@@ -549,7 +556,10 @@ public class GameManager : NetworkBehaviour
             {
                 foreach (InitializedCreatureData creature in charactersInGame[battle.Player2CharacterID].CurrentCreatureTeam)
                 {
-                    creature.CurrentHP = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID).Creature.CurrentHP;
+                    BattleCreature battleCreature = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID);
+                    if (battleCreature != null)
+                        creature.CurrentHP = battleCreature.Creature.CurrentHP;
+                    else creature.CurrentHP = 0;
                     creature.battleCreatureID = -1;
                 }
                 ExitBattle(battle, battle.Player2, battle.Winner);
@@ -664,7 +674,7 @@ public class GameManager : NetworkBehaviour
         CharacterData characterData = Server.DB_GetCharacterData(clientId, characterId);
 
         // later this will be set based on data from the database
-        characterData.spawnPoint = spawnPoint;
+        //characterData.spawnPoint = spawnPoint;
 
         if (characterData != null)
         {
@@ -869,19 +879,19 @@ public class GameManager : NetworkBehaviour
     {
         LogToServerRpc(NetworkManager.LocalClientId, "In MoveBattleCreatureClientRpc 1");
         BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == creatureID).GetComponentInChildren<BattleCreatureClient>().ReturnToAncher();
+        LogToServerRpc(NetworkManager.LocalClientId, "Done MoveBattleCreatureClientRpc 1");
     }
 
     public void MoveBattleCreature(int creatureID, int targetId, ClientRpcParams rpcParams = default)
     {
         Debug.Log("Calling MoveBattleCreatureClientRpc 2");
         MoveBattleCreatureClientRpc(creatureID, targetId, rpcParams);
+        Debug.Log("Done MoveBattleCreatureClientRpc 2");
     }
 
     [ClientRpc]
     public void MoveBattleCreatureClientRpc(int creatureID, int targetId, ClientRpcParams rpcParams = default)
     {
-        LogToServerRpc(NetworkManager.LocalClientId, "In MoveBattleCreatureClientRpc 2");
-
         BattleCreatureClient creatureToMove = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == creatureID).GetComponentInChildren<BattleCreatureClient>();
         LogToServerRpc(NetworkManager.LocalClientId, "creatureToMove = " + creatureToMove);
         Vector3 NextPosition;
@@ -906,6 +916,7 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Calling MoveBattleCreatureClientRpc 3");
         MoveBattleCreatureClientRpc(creatureID, NextPosition, rpcParams);
+        Debug.Log("Done MoveBattleCreatureClientRpc 3");
     }
 
     [ClientRpc]
@@ -945,9 +956,10 @@ public class GameManager : NetworkBehaviour
          * if it is the last action then return to your starting spot.
          */
 
+        LogToServerRpc(NetworkManager.LocalClientId, "In PerformActionClientRpc");
 
         // should handle health, death, and other changes here as well. Need to only pass impacted creature information for that.
-        LogToServerRpc(NetworkManager.LocalClientId, "Getting Current Creature");
+        LogToServerRpc(NetworkManager.LocalClientId, "Getting Current Creature. CurrentCreatureID: " + CurrentCreatureID);
         GameObject currentCreature = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == CurrentCreatureID);
         LogToServerRpc(NetworkManager.LocalClientId, "Playing Attack Animation");
 
@@ -982,32 +994,32 @@ public class GameManager : NetworkBehaviour
             if (CreatureToUpdate != null)
             {
                 LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate not null, name is " + CreatureToUpdate.name);
-                LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate Current HP is " + CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP);
+                LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate battleCreatureID is " + newEncounterCreatures[i].battleCreatureID);
+                LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate ID is " + newEncounterCreatures[i].GetID());
+                LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate HP was " + CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP);
+                LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate HP now is " + newEncounterCreatures[i].CurrentHP);
                 if (newEncounterCreatures[i].CurrentHP <= 0) // Died this turn
                 {
                     LogToServerRpc(NetworkManager.LocalClientId, "Removing " + CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.Name);
                     LogToServerRpc(NetworkManager.LocalClientId, "CreatureToUpdate.GetComponent<Monster>() " + CreatureToUpdate.GetComponent<Monster>());
-                    CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP = 0;
-                    Destroy(CreatureToUpdate.GetComponentInChildren<SelectedCreature>().gameObject);
+                    //Destroy(CreatureToUpdate.GetComponentInChildren<SelectedCreature>().gameObject);
                     BattleCreatures.Remove(CreatureToUpdate);
                     LogToServerRpc(NetworkManager.LocalClientId, "Done Removing " + CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.Name);
                     // Needs to move this creature to a "to be destroyed" list
 
+                    CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().Die();
                     //Destroy(CreatureToUpdate);
                     //Destroy(BattleCreatureDetailsButtons[i]);
                     //BattleCreatureDetailsButtons.RemoveAt(i);
 
                 }
-                else
-                {
-                    CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP = newEncounterCreatures[i].CurrentHP;
-                    //BattleCreatureDetailsButtons[BattleCreatureCount].GetComponent<SelectedCreature>().SetCreatureNumber(BattleCreatureCount);
-                }
+                CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP = newEncounterCreatures[i].CurrentHP;
                 CreatureToUpdate.GetComponentInChildren<HealthBarScript>().SetHealthPercent((float)CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.CurrentHP
                     / (float)CreatureToUpdate.GetComponentInChildren<BattleCreatureClient>().InitilizedCreature.GetMaxHp());
             }
         }
         //Debug.Log("BattleCreatures.Count: " + BattleCreatures.Count);
+        LogToServerRpc(NetworkManager.LocalClientId, "Finished PerformActionClientRpc");
     }
 
     [ClientRpc]
@@ -1165,10 +1177,13 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < PlayerCreatures.Length; i++)
         {
             //Vector3 creatureLocation = position_manager.FRIENDLY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            bool success = SetUpBattleCreature(PlayerCreatures[i], NetworkManager.LocalClientId);
-            if (!success)
+            if (PlayerCreatures[i].CurrentHP > 0)
             {
-                break;
+                bool success = SetUpBattleCreature(PlayerCreatures[i], NetworkManager.LocalClientId);
+                if (!success)
+                {
+                    break;
+                }
             }
         }
         LogToServerRpc(NetworkManager.LocalClientId, "Finished adding player creatures.");
@@ -1176,10 +1191,13 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < EnemyCreatures.Length; i++)
         {
             //Vector3 creatureLocation = position_manager.ENEMY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
-            if (!success)
+            if (PlayerCreatures[i].CurrentHP > 0)
             {
-                break;
+                bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
+                if (!success)
+                {
+                    break;
+                }
             }
         }
 
@@ -1302,6 +1320,13 @@ public class GameManager : NetworkBehaviour
             //Friendly_Creature_1_ShortName.SetActive(true);
             battleCreatureClient.SetAncher(creaturePosition);
             battleCreatureClient.SetId(BattleCreatures.Count);
+            
+            Debug.Log("New Creature " + creatureData.Name);
+            Debug.Log("creatureData ID " + creatureData.GetID());
+            Debug.Log("creatureData battleCreatureID " + creatureData.battleCreatureID);
+            Debug.Log("new_InitilizedCreature ID " + new_InitilizedCreature.GetID());
+            Debug.Log("battleCreatureClient ID " + battleCreatureClient.ID);
+
             battleCreatureClient.SetOwner(Owner);
 
             Vector2 healthBarSize = new Vector2();
@@ -1461,7 +1486,7 @@ public class GameManager : NetworkBehaviour
 
     public void ExitBattle(Battle battle, ulong clientID, ulong Winner)
     {
-        Debug.Log("Client " + clientID + " exiting Battle.");
+        Debug.Log("in ExitBattle, Client " + clientID + " exiting Battle.");
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -1477,12 +1502,25 @@ public class GameManager : NetworkBehaviour
         CharacterData character = charactersInGame[player.characterId];
         bool needHealing = false;
 
+        Debug.Log("before if");
+
         if (character.CurrentCreatureTeam.Find(creature => creature.CurrentHP > 0) == null)
         {
             // all creatures in current team are dead
-            player.gameObject.transform.position = character.spawnPoint.SpawnPosition;
+            // Later it needs to get the spawn point from the character data (and the database) and load a new scene if the spawn point is not in the currently loaded scene.
+            // healed creatures and didn't crash server but didn't move player. Also server crashed when player disconnected while in battle but that might be a thing to resolve after the refactor to move code out of update
+            Debug.Log("player.gameObject.transform.position = " + player.gameObject.transform.position);
+            ChangeMapLocation_ClientRpc("Starting_Area", 100, -87, clientRpcParams);
+            Debug.Log("player.gameObject.transform.position = " + player.gameObject.transform.position);
+            Server.activeCharacters[clientID].Position_X = 100;
+            Server.activeCharacters[clientID].Position_Y = -87;
+            Debug.Log("Done changing activeCharacter position");
+            //player.gameObject.transform.position = new Vector3(100, -87, 0); //GameObject.FindGameObjectWithTag("SpawnPoint").GetComponent<SpawnPoint>().SpawnPosition;
             HealAllCreatures(clientID);
-        } foreach (InitializedCreatureData creatureData in character.CurrentCreatureTeam)
+        }
+
+        Debug.Log("Before Foreach");
+        foreach (InitializedCreatureData creatureData in character.CurrentCreatureTeam)
         {
             InitializedCreature creature = new InitializedCreature(creatureData);
             if (creatureData.CurrentHP < creature.GetMaxHp())
@@ -1491,7 +1529,10 @@ public class GameManager : NetworkBehaviour
                 break;
             }
         }
+
+        Debug.Log("before ExitBattleClientRpc");
         ExitBattleClientRpc(Winner, needHealing, clientRpcParams);
+        Debug.Log("Finished ExitBattle");
     }
 
     [ClientRpc]
@@ -2456,12 +2497,19 @@ public class GameManager : NetworkBehaviour
         NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation = Scene_Name;
     }
 
+    [ClientRpc]
+    public void ChangeMapLocation_ClientRpc(string Scene_Name, float x, float y, ClientRpcParams rpcParams = default)
+    {
+        ChangeMapLocation(Scene_Name, x, y);
+    }
+
     public void ChangeMapLocation(string Scene_Name, float x, float y)
     {
         LogToServerRpc(NetworkManager.LocalClientId, "In ChangeScene");
         string previousLocation = NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation;
         LogToServerRpc(NetworkManager.LocalClientId, "previousLocation was " + previousLocation);
         LogToServerRpc(NetworkManager.LocalClientId, "new Scene is: " + Scene_Name);
+        SceneManager.UnloadSceneAsync(previousLocation);
         SceneManager.LoadScene(Scene_Name, LoadSceneMode.Additive);
         LogToServerRpc(NetworkManager.LocalClientId, "Loaded sceneToLoad");
         //ChangeSceneServerRpc(NetworkManager.LocalClientId, Scene_Name, x, y);

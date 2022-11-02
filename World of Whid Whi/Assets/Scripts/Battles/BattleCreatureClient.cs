@@ -86,6 +86,16 @@ public class BattleCreatureClient : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        Invoke("DestroySelf", 2);
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
+
     public void ReturnToAncher()
     {
         if (transform.position != Ancher)
