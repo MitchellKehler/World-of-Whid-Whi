@@ -14,8 +14,8 @@ public class CharacterData : INetworkSerializable
     public float Position_X;
     public float Position_Y;
 
-    public List<InitializedCreatureData> OwnedCreatures;
-    public List<InitializedCreatureData> CurrentCreatureTeam;
+    public InitializedCreatureData[] OwnedCreatures;
+    public InitializedCreatureData[] CurrentCreatureTeam;
     public SpawnPoint spawnPoint;
 
     // Start is called before the first frame update
@@ -41,6 +41,54 @@ public class CharacterData : INetworkSerializable
         serializer.Serialize(ref Location);
         serializer.Serialize(ref Position_X);
         serializer.Serialize(ref Position_Y);
+
+        // Length
+        int length_OwnedCreatures = 0;
+        if (!serializer.IsReading)
+        {
+            length_OwnedCreatures = OwnedCreatures.Length;
+        }
+
+        serializer.Serialize(ref length_OwnedCreatures);
+
+        // Array
+        if (serializer.IsReading)
+        {
+            OwnedCreatures = new InitializedCreatureData[length_OwnedCreatures];
+            for (int n = 0; n < length_OwnedCreatures; ++n)
+            {
+                OwnedCreatures[n] = new InitializedCreatureData();
+            }
+        }
+
+        for (int n = 0; n < length_OwnedCreatures; ++n)
+        {
+            OwnedCreatures[n].NetworkSerialize(serializer);
+        }
+
+        // Length
+        int length_CurrentCreatureTeam = 0;
+        if (!serializer.IsReading)
+        {
+            length_CurrentCreatureTeam = CurrentCreatureTeam.Length;
+        }
+
+        serializer.Serialize(ref length_CurrentCreatureTeam);
+
+        // Array
+        if (serializer.IsReading)
+        {
+            CurrentCreatureTeam = new InitializedCreatureData[length_CurrentCreatureTeam];
+            for (int n = 0; n < length_CurrentCreatureTeam; ++n)
+            {
+                CurrentCreatureTeam[n] = new InitializedCreatureData();
+            }
+        }
+
+        for (int n = 0; n < length_CurrentCreatureTeam; ++n)
+        {
+            CurrentCreatureTeam[n].NetworkSerialize(serializer);
+        }
     }
 
     public CharacterData() : base()

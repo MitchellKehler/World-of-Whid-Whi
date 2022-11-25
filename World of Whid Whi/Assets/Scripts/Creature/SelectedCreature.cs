@@ -29,7 +29,8 @@ public class SelectedCreature : MonoBehaviour
                 battleCreatureClient = transform.parent.transform.parent.GetComponent<BattleCreatureClient>();
             }
         }
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "ID: " + battleCreatureClient.ID);
+        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "ID: " + battleCreatureClient.ID);
+        // Should not use Find if possible
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().EncounterCreatureClicked(battleCreatureClient.ID);
         //if (!GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().Ability_Pick_Panel.activeSelf)
         //{

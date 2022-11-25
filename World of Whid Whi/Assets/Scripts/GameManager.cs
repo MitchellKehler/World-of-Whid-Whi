@@ -9,27 +9,56 @@ using System;
 using Assets.FantasyMonsters.Scripts;
 using UnityEngine.SceneManagement;
 using MLAPI.Spawning;
+using TMPro;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
  * High Level To Do List
  * 
- * Fix minor bugs with displays so that creature details displays correctly, settings has the option to sign out, and all other displays at least don't look broken (coming soon or something)
+ * Fix heal button
+ * Fix minor bugs with displays so that 
+ *  creature details displays correctly, 
+ *  settings has the option to sign out, and 
+ *  all other menu displays at least don't look broken (coming soon or something)
+ *  proper player challenge prompt when fighting another player
+ *  player names show up correctly in battles
+ *  battle zones fixed
+ *  rework combat visuals to make it more clear what is happening and what you need to do
  * Move combat stuff out of updates where possible in favor of events and fix minor issues with combat like animation timings and clearing dead creatures
  * Add reactions
- * Add better player models and model choices (requires purchase)
  * Add creature leveling and evelutions
- * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
+ * Add basic NPCs and dialog to show patch notes and coming next info ect when talking to main healer NPC
+ * 
+ * Make server into a git container or windows service
+ * Make sure that the server crashing is not a common occurence (fix known bugs that cuase this)
+ * Make sure I have some way of being notifyed when the server crashes and restarting it remotely
+ ***************************** Add alpha version to the play store !!!!!!!!!! *************************************
  * Add mini map
- * Add Chat
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
  * Add basic jurnal with achievements
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Add Chat
+ ***************************** New version in the play store !!!!!!!!!! *************************************
  * Add Items
+ * player model customization options
  * Add player as a creature on the battle field
- * Add basic NPCs and dialog
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Add more advanded NPC and NPC dialog set up and additional NPCs
  * Add Quests
+ * Add caves and area over the bridge (maybe improve / revamp map)
+ * Add map for looking at larger regions / areas
+ ***************************** New version in the play store !!!!!!!!!! *************************************
  * Make brush move when you walk through it
  * Switch out creature spawning to add creatures to map areas instead of coliding while walking through brush
- * Add caves and area over the bridge (maybe improve / revamp map)
+ * switch to 4D (creatures if available) and characters
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * More content
+ * Currency and shops
+ * Start actually adding story line
+ * Optomizing if neccessary
+ * Website
+ * Start acutally looking for users / Beta?
  * 
  * Look for !FIX for areas where I know work needs to happen.
  * 
@@ -325,14 +354,16 @@ public class GameManager : NetworkBehaviour
     public GameObject DiaryPanel;
 
     // Creatures Panel
-    public Button Squad_Starting_1_Button;
-    public Button Squad_Starting_2_Button;
-    public Button Squad_Starting_3_Button;
-    public Button Squad_Starting_4_Button;
-    public Button Squad_Subs_1_Button;
-    public Button Squad_Subs_2_Button;
-    public Button Squad_Subs_3_Button;
-    public Button Squad_Subs_4_Button;
+    public Button SelectCreatureButton;
+    public GameObject Creatures_Panel_ScrollViewContent;
+    //public Button Squad_Starting_1_Button;
+    //public Button Squad_Starting_2_Button;
+    //public Button Squad_Starting_3_Button;
+    //public Button Squad_Starting_4_Button;
+    //public Button Squad_Subs_1_Button;
+    //public Button Squad_Subs_2_Button;
+    //public Button Squad_Subs_3_Button;
+    //public Button Squad_Subs_4_Button;
 
     public Server Server;
 
@@ -664,7 +695,7 @@ public class GameManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SpawnPlayerServerRpc(ulong clientId, ulong characterId) // later this should just be passed clientId / accountId and character ID
+    public void SpawnPlayer_ServerRpc(ulong clientId, ulong characterId) // later this should just be passed clientId / accountId and character ID
     {
         // Get Spawn.  Stop if there are no spawn points in the seen
         //Transform spawn = GetSpawnPoint();
@@ -685,13 +716,12 @@ public class GameManager : NetworkBehaviour
             SetInstructionText("You cannot access this character. Please contact ??? for assistance.", clientId);
         }
         
-
         // Spawn on Client
-        GameObject go = Instantiate(PlayerPrefab, new Vector3(100.5f, -88, 0), Quaternion.identity);
+        GameObject playerObject = Instantiate(PlayerPrefab, new Vector3(100.5f, -88, 0), Quaternion.identity);
 
         Debug.Log("clientId = " + clientId);
-        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-        ulong objectId = go.GetComponent<NetworkObject>().NetworkObjectId;
+        playerObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        //ulong objectId = go.GetComponent<NetworkObject>().NetworkObjectId;
 
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
@@ -700,31 +730,32 @@ public class GameManager : NetworkBehaviour
                 TargetClientIds = new ulong[] { clientId }
             }
         };
-        SpawnClientRpc(objectId, Server.activeCharacters[clientId].ID, clientRpcParams);
-        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().GetComponent<Player_Movement_Android>().MyClientId = clientId;
+        SpawnPlayer_ClientRpc(clientRpcParams);
+        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().GetComponent<Player_Movement>().MyClientId = clientId;
         NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().characterId = characterId;
 
         Debug.Log("Getting creatures");
         // Get creatures from the database
         List<InitializedCreatureData> creatures = Server.DB_GetPlayerCreatures(characterId);
         Debug.Log("Got Creatures: " + creatures);
-        characterData.OwnedCreatures = creatures;
+        characterData.OwnedCreatures = creatures.ToArray();
         // should not necessarily get all creatures once players start having more then can fit in a starting line up
-        characterData.CurrentCreatureTeam = new List<InitializedCreatureData> (creatures); //new List<InitializedCreatureData>(NetworkManager.Singleton.ConnectedClients[OwnerClientId].PlayerObject.gameObject.GetComponent<Player>().OwnedCreatures);
+        characterData.CurrentCreatureTeam = creatures.ToArray(); // was creating a new list before. I think this will create a new array to but if not this may cause issues because it hasn't created a clone!!!
         Debug.Log("Finished SpawnPlayerServerRpc");
 
         charactersInGame.Add(characterId, characterData);
+        Debug.Log("Finished Adding Character");
     }
 
     // A ClientRpc can be invoked by the server to be executed on a client
     [ClientRpc]
-    private void SpawnClientRpc(ulong objectId, ulong characterId, ClientRpcParams rpcParams = default)
+    private void SpawnPlayer_ClientRpc(ClientRpcParams rpcParams = default)
     {
         Player = NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId].PlayerObject.gameObject;
         //SceneManager.LoadScene("Starting_Area", LoadSceneMode.Additive);
-        CharacterData characterData = Server.Characters[Server.CurrentCharacterIndex];
+        CharacterData characterData = Server.ClientOwnedCharacters[Server.CurrentCharacterIndex];
         LogToServerRpc(NetworkManager.Singleton.LocalClientId, characterData.Location + ", " + characterData.Position_X + ", " + characterData.Position_Y);
-        NetworkObject player = NetworkSpawnManager.SpawnedObjects[objectId];
+        //NetworkObject player = NetworkSpawnManager.SpawnedObjects[objectId];
         //SceneManager.LoadScene(characterData.Location, LoadSceneMode.Additive);
         Player.GetComponent<Player>().SetUpPlayer(characterData.Location, characterData.Position_X, characterData.Position_Y); // should get dynamically
         
@@ -747,7 +778,7 @@ public class GameManager : NetworkBehaviour
     public void HealAllCreatures(ulong clientId)
     {
         Debug.Log("In HealAllCreatures");
-        List<InitializedCreatureData> creatures = charactersInGame[NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().characterId].OwnedCreatures;
+        InitializedCreatureData[] creatures = charactersInGame[NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().characterId].OwnedCreatures;
         foreach (InitializedCreatureData creatureData in creatures)
         {
             InitializedCreature creature = new InitializedCreature(creatureData);
@@ -771,7 +802,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void StopMovingClientRpc(ulong clientId, ClientRpcParams rpcParams = default)
     {
-        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player_Movement_Android>().IsAllowedToMove = false;
+        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player_Movement>().IsAllowedToMove = false;
     }
 
     public void UpdateEncounterCreatures(InitializedCreatureData[] newEncounterCreatures, ClientDisplayActionData action, ClientRpcParams rpcParams = default)
@@ -1258,7 +1289,7 @@ public class GameManager : NetworkBehaviour
         {
             LogToServerRpc(NetworkManager.LocalClientId, "Valid position");
 
-            string BaseImagePath = ("BattleCreatureImages/" + new_InitilizedCreature.Path);
+            string BaseImagePath = ("BattleCreature/" + new_InitilizedCreature.Path);
 
             //Sprite creature_sprite;
             //if (Owner == NetworkManager.LocalClientId)
@@ -1501,10 +1532,35 @@ public class GameManager : NetworkBehaviour
         Player player = NetworkManager.Singleton.ConnectedClients[clientID].PlayerObject.gameObject.GetComponent<Player>();
         CharacterData character = charactersInGame[player.characterId];
         bool needHealing = false;
+        bool respawnNotNeeded = false;
 
-        Debug.Log("before if");
+        foreach (InitializedCreatureData creatureData in character.CurrentCreatureTeam)
+        {
+            if (creatureData.CurrentHP == 0)
+            {
+                // at least one creature is hurt so healing buttons should become active
+                needHealing = true;
+            } else
+            {
+                // at least one creature is not dead so there is no need to respawn the character
+                respawnNotNeeded = true;
+                
+                InitializedCreature creature = new InitializedCreature(creatureData);
+                if (creatureData.CurrentHP < creature.GetMaxHp())
+                {
+                    // at least one creature is hurt so healing buttons should become active
+                    needHealing = true;
+                }
 
-        if (character.CurrentCreatureTeam.Find(creature => creature.CurrentHP > 0) == null)
+                // No need to keep looping through creatures if we have already found the info we need.
+                if (needHealing && respawnNotNeeded)
+                    break;
+            }
+
+        }
+
+        // respawn is needed
+        if (!respawnNotNeeded)
         {
             // all creatures in current team are dead
             // Later it needs to get the spawn point from the character data (and the database) and load a new scene if the spawn point is not in the currently loaded scene.
@@ -1519,17 +1575,6 @@ public class GameManager : NetworkBehaviour
             HealAllCreatures(clientID);
         }
 
-        Debug.Log("Before Foreach");
-        foreach (InitializedCreatureData creatureData in character.CurrentCreatureTeam)
-        {
-            InitializedCreature creature = new InitializedCreature(creatureData);
-            if (creatureData.CurrentHP < creature.GetMaxHp())
-            {
-                needHealing = true;
-                break;
-            }
-        }
-
         Debug.Log("before ExitBattleClientRpc");
         ExitBattleClientRpc(Winner, needHealing, clientRpcParams);
         Debug.Log("Finished ExitBattle");
@@ -1541,7 +1586,7 @@ public class GameManager : NetworkBehaviour
         // TODO should destroy prviously created creatures
         Hide_Battle_Details();
 
-        Player.GetComponent<Player_Movement_Android>().IsAllowedToMove = true;
+        Player.GetComponent<Player_Movement>().IsAllowedToMove = true;
         // for using Host not Server only
         if (Player.GetComponent<PlayerMovement_Fluid>() != null)
         {
@@ -1634,12 +1679,12 @@ public class GameManager : NetworkBehaviour
         LogToServerRpc(NetworkManager.LocalClientId, "OpenInfoPanel");
         if (Player != null)
         {
-            Player.GetComponent<Player_Movement_Android>().IsAllowedToMove = false;
+            Player.GetComponent<Player_Movement>().IsAllowedToMove = false;
         }
 
         if (SelectedPanel.Equals(CreaturesPanel))
         {
-            //SetUpSelectionPanel();
+            SetUpSelectionPanel();
         }
 
         SelectedPanel.GetComponent<RectTransform>().SetAsLastSibling();
@@ -1649,86 +1694,139 @@ public class GameManager : NetworkBehaviour
         // TODO set text and other details
     }
 
-    //public void SetUpSelectionPanel()
-    //{
-    //    // !!!!!!!!!!!!!!!!!!!!!!!!! BROKEN: This needs to get the starting squad from the server or we need to create it on both. !!!!!!!!!!!!!!!!!!!!!!!!
-    //    LogToServerRpc(NetworkManager.LocalClientId, "SetUpSelectionPanel");
-    //    LogToServerRpc(NetworkManager.LocalClientId, "Player.gameObject.GetComponent<Player>().Squad_Starting[0].Name: " + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name);
-    //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 0)
-    //    {
-    //        Squad_Starting_1_Button.gameObject.SetActive(true);
-    //        Squad_Starting_1_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name + "_Enemy");
-    //    } else
-    //    {
-    //        Squad_Starting_1_Button.gameObject.SetActive(false);
-    //    }
-    //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 1)
-    //    {
-    //        Squad_Starting_2_Button.gameObject.SetActive(true);
-    //        Squad_Starting_2_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[1].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[1].Name + "_Enemy");
-    //    }
-    //    else
-    //    {
-    //        Squad_Starting_2_Button.gameObject.SetActive(false);
-    //    }
-    //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 2)
-    //    {
-    //        Squad_Starting_3_Button.gameObject.SetActive(true);
-    //        Squad_Starting_3_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[2].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[2].Name + "_Enemy");
-    //    }
-    //    else
-    //    {
-    //        Squad_Starting_3_Button.gameObject.SetActive(false);
-    //    }
-    //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 3)
-    //    {
-    //        Squad_Starting_4_Button.gameObject.SetActive(true);
-    //        Squad_Starting_4_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[3].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[3].Name + "_Enemy");
-    //    }
-    //    else
-    //    {
-    //        Squad_Starting_4_Button.gameObject.SetActive(false);
-    //    }
+    public void SetUpSelectionPanel()
+    {
+        Debug.Log("Opening SetUpSelectionPanel");
+        foreach (InitializedCreatureData creatureData in Server.ClientOwnedCharacters[Server.CurrentCharacterIndex].CurrentCreatureTeam)
+        {
+            Debug.Log("Found Creature " + creatureData.Name);
+            Button selectCreatureButton = Instantiate(SelectCreatureButton);
+
+            selectCreatureButton.transform.parent = Creatures_Panel_ScrollViewContent.transform;
+            selectCreatureButton.transform.localScale = Vector3.one;
+            InitializedCreature creature = new InitializedCreature(creatureData);
+            selectCreatureButton.onClick.AddListener(delegate {
+                OpenCreatureDetails(creature);
+            });
+
+            Image[] images = selectCreatureButton.GetComponentsInChildren<Image>();
+            foreach(Image image in images)
+            {
+                if (image.gameObject.name.Equals("HealthBarImage"))
+                {
+                    // do healthbar stuff
+                } else if (image.gameObject.name.Equals("CreatureImage"))
+                {
+                    // set creature image
+                    Debug.Log("Setting Creature Image to " + "BattleCreature\\" + creature.Path);
+                    image.sprite = Resources.Load<Sprite>("BattleCreature\\" + creature.Path);
+                }
+            }
+            TMP_Text[] texts = selectCreatureButton.GetComponentsInChildren<TMP_Text>();
+            foreach (TMP_Text text in texts)
+            {
+                if (text.gameObject.name.Equals("NickNameText"))
+                {
+                    string nickName = creatureData.NickName.Equals("") ? creature.ShortName : creatureData.NickName;
+                    Debug.Log("Setting Nickname to " + nickName);
+                    text.text = nickName;
+                }
+                else if (text.gameObject.name.Equals("NameText"))
+                {
+                    Debug.Log("Setting Name to " + creatureData.Name);
+                    text.text = creatureData.Name;
+                }
+                else if (text.gameObject.name.Equals("PowerText"))
+                {
+                    // need to decide how to calculate this first
+                    Debug.Log("Setting PowerText to " + "???");
+                    text.text = "???";
+                }
+                else if (text.gameObject.name.Equals("LevelText"))
+                {
+                    Debug.Log("Setting LevelText to " + InitializeCreatures.XpToLevel(creatureData.CurrentXP).ToString());
+                    text.text = InitializeCreatures.XpToLevel(creatureData.CurrentXP).ToString();
+                }
+            }
+        }
+        //    // !!!!!!!!!!!!!!!!!!!!!!!!! BROKEN: This needs to get the starting squad from the server or we need to create it on both. !!!!!!!!!!!!!!!!!!!!!!!!
+        //    LogToServerRpc(NetworkManager.LocalClientId, "SetUpSelectionPanel");
+        //    LogToServerRpc(NetworkManager.LocalClientId, "Player.gameObject.GetComponent<Player>().Squad_Starting[0].Name: " + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name);
+        //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 0)
+        //    {
+        //        Squad_Starting_1_Button.gameObject.SetActive(true);
+        //        Squad_Starting_1_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[0].Name + "_Enemy");
+        //    } else
+        //    {
+        //        Squad_Starting_1_Button.gameObject.SetActive(false);
+        //    }
+        //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 1)
+        //    {
+        //        Squad_Starting_2_Button.gameObject.SetActive(true);
+        //        Squad_Starting_2_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[1].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[1].Name + "_Enemy");
+        //    }
+        //    else
+        //    {
+        //        Squad_Starting_2_Button.gameObject.SetActive(false);
+        //    }
+        //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 2)
+        //    {
+        //        Squad_Starting_3_Button.gameObject.SetActive(true);
+        //        Squad_Starting_3_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[2].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[2].Name + "_Enemy");
+        //    }
+        //    else
+        //    {
+        //        Squad_Starting_3_Button.gameObject.SetActive(false);
+        //    }
+        //    if (Player.gameObject.GetComponent<Player>().CurrentCreatureTeam.Count > 3)
+        //    {
+        //        Squad_Starting_4_Button.gameObject.SetActive(true);
+        //        Squad_Starting_4_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[3].Name + "/" + Player.gameObject.GetComponent<Player>().CurrentCreatureTeam[3].Name + "_Enemy");
+        //    }
+        //    else
+        //    {
+        //        Squad_Starting_4_Button.gameObject.SetActive(false);
+        //    }
 
 
-    //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 0)
-    //    //{
-    //    //    Squad_Subs_1_Button.gameObject.SetActive(true);
-    //    //    Squad_Subs_1_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[0].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[0].Name + "_Enemy");
-    //    //}
-    //    //else
-    //    //{
-    //    //    Squad_Subs_1_Button.gameObject.SetActive(false);
-    //    //}
-    //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 1)
-    //    //{
-    //    //    Squad_Subs_2_Button.gameObject.SetActive(true);
-    //    //    Squad_Subs_2_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[1].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[1].Name + "_Enemy");
-    //    //}
-    //    //else
-    //    //{
-    //    //    Squad_Subs_2_Button.gameObject.SetActive(false);
-    //    //}
-    //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 2)
-    //    //{
-    //    //    Squad_Subs_3_Button.gameObject.SetActive(true);
-    //    //    Squad_Subs_3_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[2].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[2].Name + "_Enemy");
-    //    //}
-    //    //else
-    //    //{
-    //    //    Squad_Subs_3_Button.gameObject.SetActive(false);
-    //    //}
-    //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 3)
-    //    //{
-    //    //    Squad_Subs_4_Button.gameObject.SetActive(true);
-    //    //    Squad_Subs_4_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[3].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[3].Name + "_Enemy");
-    //    //}
-    //    //else
-    //    //{
-    //    //    Squad_Subs_4_Button.gameObject.SetActive(false);
-    //    //}
+        //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 0)
+        //    //{
+        //    //    Squad_Subs_1_Button.gameObject.SetActive(true);
+        //    //    Squad_Subs_1_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[0].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[0].Name + "_Enemy");
+        //    //}
+        //    //else
+        //    //{
+        //    //    Squad_Subs_1_Button.gameObject.SetActive(false);
+        //    //}
+        //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 1)
+        //    //{
+        //    //    Squad_Subs_2_Button.gameObject.SetActive(true);
+        //    //    Squad_Subs_2_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[1].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[1].Name + "_Enemy");
+        //    //}
+        //    //else
+        //    //{
+        //    //    Squad_Subs_2_Button.gameObject.SetActive(false);
+        //    //}
+        //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 2)
+        //    //{
+        //    //    Squad_Subs_3_Button.gameObject.SetActive(true);
+        //    //    Squad_Subs_3_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[2].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[2].Name + "_Enemy");
+        //    //}
+        //    //else
+        //    //{
+        //    //    Squad_Subs_3_Button.gameObject.SetActive(false);
+        //    //}
+        //    //if (Player.gameObject.GetComponent<Player>().Squad_Subs.Count > 3)
+        //    //{
+        //    //    Squad_Subs_4_Button.gameObject.SetActive(true);
+        //    //    Squad_Subs_4_Button.GetComponent<Image>().sprite = Resources.Load<Sprite>("BattleCreatureImages/" + Player.gameObject.GetComponent<Player>().Squad_Subs[3].Name + "/" + Player.gameObject.GetComponent<Player>().Squad_Subs[3].Name + "_Enemy");
+        //    //}
+        //    //else
+        //    //{
+        //    //    Squad_Subs_4_Button.gameObject.SetActive(false);
+        //    //}
 
-    //}
+    }
 
     public void ClosePanels()
     {
@@ -1744,7 +1842,7 @@ public class GameManager : NetworkBehaviour
             Detail_Panel_Close_Button.SetActive(false);
             if (Player != null)
             {
-                Player.GetComponent<Player_Movement_Android>().IsAllowedToMove = true;
+                Player.GetComponent<Player_Movement>().IsAllowedToMove = true;
             }
         } else
         {
@@ -2406,8 +2504,8 @@ public class GameManager : NetworkBehaviour
         Creature_Details_Attributes_Panel.SetActive(false);
         Creature_Details_Abilities_Panel.SetActive(false);
 
-        Debug.Log("BattleCreatureImages/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
-        Creature_Details_Image.sprite = Resources.Load<Sprite>("BattleCreatureImages/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
+        Debug.Log("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
+        Creature_Details_Image.sprite = Resources.Load<Sprite>("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
         Creature_Details_Description.text = SelectedCreature.Description;
     }
 

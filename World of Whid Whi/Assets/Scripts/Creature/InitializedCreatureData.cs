@@ -12,7 +12,7 @@ public class InitializedCreatureData : INetworkSerializable
     public int CurrentXP; // many not need it (just limited by it becoming too difficult to gan XP)
     //public PowerUpStat[] StatsToTrack;
     //public int[] CurrentAmounts;
-    List<Condition> Conditions; // I think I will need this here.
+    //List<Condition> Conditions; // I think I will need this here.
     public int CurrentHP;
     public ulong Owner;
     private int ID;

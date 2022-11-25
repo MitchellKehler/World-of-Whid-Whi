@@ -44,7 +44,7 @@ public class Server : MonoBehaviour
 
     public int AccountID;
     public Button CharacterSelectButton;
-    public List<CharacterData> Characters;
+    public List<CharacterData> ClientOwnedCharacters;
     public List<Button> CharacterSelectButtons;
     public int CurrentCharacterIndex;
     public Dictionary<ulong, CharacterData> activeCharacters;
@@ -281,7 +281,7 @@ public class Server : MonoBehaviour
                     }
 
                 }
-
+                
                 // next get their creature data info and add icons of their current squad so we can get a bit of info about the character before hitting play
                 // eventually we will probably want a button to show a more full set of character details before jumping into game but we can add that later.
                 connection.Close();
@@ -292,6 +292,21 @@ public class Server : MonoBehaviour
             AccountID = -99;
             Debug.Log(e.ToString());
         }
+
+        Debug.Log("Getting creature data for characters");
+        foreach (CharacterData character in characters)
+        {
+            Debug.Log("Getting creatures for character " + character.ID);
+            character.OwnedCreatures = DB_GetPlayerCreatures(character.ID).ToArray();
+            character.CurrentCreatureTeam = character.OwnedCreatures;
+
+            Debug.Log("Now CurrentCreatureTeam has ");
+            foreach (InitializedCreatureData creatureData in character.CurrentCreatureTeam)
+            {
+                Debug.Log(creatureData.Name + ", ");
+            }
+        }
+        Debug.Log("Getting creature data for characters");
 
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
@@ -327,7 +342,7 @@ public class Server : MonoBehaviour
             AccountMenuTitle.text = "Welcome " + Email.text;
 
             ErrorText.text = "";
-            Characters = characters.ToList();
+            ClientOwnedCharacters = characters.ToList();
             AccountID = AccountId;
             RecreateCharacterButtons();
             Debug.Log("AccountID is " + AccountID);
@@ -418,7 +433,7 @@ public class Server : MonoBehaviour
         // and destroys itself when yes is clicked or just destroys itself when no is clicked
         // Instantate YesNoPanel prefab and set text
         // Add yes button method and no button method
-        GM.DB_DeleteCharacter_ServerRpc(NetworkManager.Singleton.LocalClientId, Characters[CurrentCharacterIndex].ID);
+        GM.DB_DeleteCharacter_ServerRpc(NetworkManager.Singleton.LocalClientId, ClientOwnedCharacters[CurrentCharacterIndex].ID);
     }
 
     /// <summary>
@@ -428,7 +443,7 @@ public class Server : MonoBehaviour
     {
         if (success)
         {
-            Characters.RemoveAt(CurrentCharacterIndex);
+            ClientOwnedCharacters.RemoveAt(CurrentCharacterIndex);
             RecreateCharacterButtons();
         } else
         {
@@ -450,7 +465,7 @@ public class Server : MonoBehaviour
             CharacterSelectButtons = new List<Button>();
         }
 
-        for (int i = 0; i < Characters.Count; i++)
+        for (int i = 0; i < ClientOwnedCharacters.Count; i++)
         {
             CharacterSelectButtons.Add(Instantiate(CharacterSelectButton, AccountSelectPanel.transform));
             CharacterSelectButtons[i].transform.position = new Vector3(CharacterSelectButtons[i].transform.position.x, CharacterSelectButtons[i].transform.position.y - (i * 170), 0);
@@ -460,15 +475,15 @@ public class Server : MonoBehaviour
             {
                 if (text.transform.name.Equals("Name"))
                 {
-                    text.text = Characters[i].Name;
+                    text.text = ClientOwnedCharacters[i].Name;
                 }
                 else if (text.transform.name.Equals("Lvl"))
                 {
-                    text.text = Characters[i].Lvl.ToString();
+                    text.text = ClientOwnedCharacters[i].Lvl.ToString();
                 }
                 else if (text.transform.name.Equals("Details"))
                 {
-                    text.text = Characters[i].Location;
+                    text.text = ClientOwnedCharacters[i].Location;
                 }
             }
         }
@@ -562,7 +577,7 @@ public class Server : MonoBehaviour
     {
         if (character != null)
         {
-            Characters.Add(character);
+            ClientOwnedCharacters.Add(character);
             RecreateCharacterButtons();
         } else
         {
@@ -622,28 +637,36 @@ public class Server : MonoBehaviour
             Debug.Log(e.ToString());
         }
 
+        newCharacterData.OwnedCreatures = new InitializedCreatureData[2];
+
         InitializedCreature creature;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < newCharacterData.OwnedCreatures.Length; i++)
         {
             float randomChance = UnityEngine.Random.Range(0, 100);
             if (randomChance < 33)
             {
                 creature = new InitializedCreature(GM.AllCreatures["GiantRat"]); // make it a random chance at rat, wolf or two wasps!!!
-                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                DB_CreateCreature(newCharacterData.ID, creature.Name, creature.Name, creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                newCharacterData.OwnedCreatures[i] = new InitializedCreatureData(creature);
             }
             else if (randomChance < 66)
             {
                 creature = new InitializedCreature(GM.AllCreatures["GreyWolf"]); // make it a random chance at rat, wolf or two wasps!!!
-                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                DB_CreateCreature(newCharacterData.ID, creature.Name, creature.Name, creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                newCharacterData.OwnedCreatures[i] = new InitializedCreatureData(creature);
             }
             else
             {
                 creature = new InitializedCreature(GM.AllCreatures["Wasp"]); // make it a random chance at rat, wolf or two wasps!!!
-                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                DB_CreateCreature(newCharacterData.ID, creature.Name, creature.Name, creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                newCharacterData.OwnedCreatures[i] = new InitializedCreatureData(creature);
                 creature = new InitializedCreature(GM.AllCreatures["Wasp"]); // make it a random chance at rat, wolf or two wasps!!!
-                DB_CreateCreature(newCharacterData.ID, creature.Name, "", creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                DB_CreateCreature(newCharacterData.ID, creature.Name, creature.Name, creature.GetMaxHp(), creature.Size.ToString(), creature.Strength, creature.Agility, creature.Mind, creature.Will, 0);
+                newCharacterData.OwnedCreatures[i] = new InitializedCreatureData(creature);
             }
         }
+
+        newCharacterData.CurrentCreatureTeam = newCharacterData.OwnedCreatures;
 
 
         ClientRpcParams clientRpcParams = new ClientRpcParams
@@ -901,7 +924,7 @@ public class Server : MonoBehaviour
         // later we will also want a way to just switch characters rather then fully signing out.
         AccountSelectPanel.SetActive(false);
         CurrentCharacterIndex = -1;
-        Characters.Clear();
+        ClientOwnedCharacters.Clear();
         RecreateCharacterButtons();
     }
 
@@ -1057,7 +1080,7 @@ public class Server : MonoBehaviour
     // move the get account data from sql code to it's own method and we can reuse it for when the client needs it and the server needs it.
     public void EnterWorld()
     {
-        GM.SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, Characters[CurrentCharacterIndex].ID);
+        GM.SpawnPlayer_ServerRpc(NetworkManager.Singleton.LocalClientId, ClientOwnedCharacters[CurrentCharacterIndex].ID);
         LoginCanvas.SetActive(false);
         InGameCanvas.SetActive(true);
 
