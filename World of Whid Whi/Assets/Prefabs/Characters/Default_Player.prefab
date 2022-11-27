@@ -806,8 +806,8 @@ MonoBehaviour:
   Character: {fileID: 114665035978887628}
   IsAllowedToMove: 0
   MyClientId: 0
-  scale: {x: 0.5, y: 0.5, z: 0.5}
   runSpeed: 5
+  CharacterSize: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!50 &3790101278673550490
 Rigidbody2D:
   serializedVersion: 4

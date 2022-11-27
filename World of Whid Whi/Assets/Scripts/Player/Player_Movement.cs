@@ -1,5 +1,8 @@
 ﻿using Assets.HeroEditor.Common.CharacterScripts;
 using MLAPI;
+using MLAPI.Messaging;
+using MLAPI.NetworkVariable;
+using MLAPI.Prototyping;
 using UnityEngine;
 
 public class Player_Movement : NetworkBehaviour
@@ -10,26 +13,36 @@ public class Player_Movement : NetworkBehaviour
     public ulong MyClientId;
 
     private Vector3 _speed = Vector3.zero;
-    public Vector3 scale;
     Rigidbody2D body;
     public float runSpeed;
+    public Vector3 CharacterSize;
+
+    private NetworkVariable<Vector3> scale = new NetworkVariable<Vector3>();
+    private NetworkVariable<CharacterState> state = new NetworkVariable<CharacterState>();
+
+    private void OnEnable()
+    {
+        scale.OnValueChanged += OnScaleChanged;
+        state.OnValueChanged += OnStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        scale.OnValueChanged -= OnScaleChanged;
+        state.OnValueChanged -= OnStateChanged;
+    }
 
     public void Start()
     {
         body = GetComponent<Rigidbody2D>();
         GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         Character.Animator.SetBool("Ready", true);
+        TurnServerRpc(1);
+        ChangeStateServerRpc(CharacterState.Idle);
     }
 
     public void Update()
     {
-        //// Set Direction
-        //var direction = Vector2.zero;
-
-        //if (Input.GetKey(KeyCode.LeftArrow)) direction.x = -1;
-        //if (Input.GetKey(KeyCode.RightArrow)) direction.x = 1;
-        //if (Input.GetKey(KeyCode.UpArrow)) direction.y = 1;
-
         if (this.NetworkObject.IsOwner) //!NetworkManager.Singleton.IsServer
         {
             Move(GetDirection());
@@ -79,19 +92,37 @@ public class Player_Movement : NetworkBehaviour
         _speed = new Vector3(5 * direction.x, 5 * direction.y);
         if (direction != Vector2.zero)
         {
-            Turn(_speed.x);
-            Character.SetState(CharacterState.Run);
-        }else if (Character.GetState() < CharacterState.DeathB)
+            TurnServerRpc(_speed.x);
+            ChangeStateServerRpc(CharacterState.Run);
+        }
+        else if (Character.GetState() < CharacterState.DeathB)
         {
-            Character.SetState(CharacterState.Idle);
+            ChangeStateServerRpc(CharacterState.Idle);
         }
         body.velocity = new Vector2(direction.x * runSpeed, direction.y * runSpeed);
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y - .5f);
-        //Controller.Move(_speed * Time.deltaTime);
+        Vector2 NewPostion = new Vector2(transform.position.x, transform.position.y);
+        Character.transform.position = NewPostion;
     }
 
-    public void Turn(float direction)
+    [ServerRpc(RequireOwnership = false)]
+    public void TurnServerRpc(float direction)
     {
-        Character.transform.localScale = new Vector3((Mathf.Sign(direction) * scale.x), scale.y, scale.z);
+        scale.Value = new Vector3(Mathf.Sign(direction) * CharacterSize.x, CharacterSize.y, CharacterSize.z);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeStateServerRpc(CharacterState NewState)
+    {
+        state.Value = NewState;
+    }
+
+    public void OnScaleChanged(Vector3 OldScale, Vector3 NewScale)
+    {
+        Character.transform.localScale = NewScale;
+    }
+
+    public void OnStateChanged(CharacterState OldState, CharacterState NewState)
+    {
+        Character.SetState(NewState);
     }
 }

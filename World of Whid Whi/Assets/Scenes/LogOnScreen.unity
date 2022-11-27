@@ -3359,6 +3359,7 @@ GameObject:
   - component: {fileID: 394250940}
   - component: {fileID: 394250938}
   - component: {fileID: 394250939}
+  - component: {fileID: 394250941}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -3479,6 +3480,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &394250941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394250937}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f0ed23728a911c40ac8fd8325850d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableSave: 1
+  enableMailing: 0
+  yourEmail: fromemail@gmail.com
+  yourEmailPassword: password
+  toEmail: toemail@gmail.com
 --- !u!1 &398138890
 GameObject:
   m_ObjectHideFlags: 0
@@ -16586,7 +16604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 1
+  isServer: 0
   AccountMenuTitle: {fileID: 1096277259}
   Email: {fileID: 1798644854}
   Password: {fileID: 1516666562}

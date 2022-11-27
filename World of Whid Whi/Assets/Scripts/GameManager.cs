@@ -10,14 +10,19 @@ using Assets.FantasyMonsters.Scripts;
 using UnityEngine.SceneManagement;
 using MLAPI.Spawning;
 using TMPro;
+using MLAPI.Prototyping;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
  * High Level To Do List
  * 
+ * Fix player infront of other player's feet issue
+ * Fix player going behind trees issue
  * Fix heal button
  * Fix minor bugs with displays so that 
  *  creature details displays correctly, 
+ *      Make Health bar work correctly when viewing your monsters out of combat
+ *      Update creature details menu and add an option to change a creatures nick name
  *  settings has the option to sign out, and 
  *  all other menu displays at least don't look broken (coming soon or something)
  *  proper player challenge prompt when fighting another player
@@ -1697,6 +1702,11 @@ public class GameManager : NetworkBehaviour
     public void SetUpSelectionPanel()
     {
         Debug.Log("Opening SetUpSelectionPanel");
+        foreach (Button button in Creatures_Panel_ScrollViewContent.GetComponentsInChildren<Button>())
+        {
+            Destroy(button.gameObject);
+        }
+
         foreach (InitializedCreatureData creatureData in Server.ClientOwnedCharacters[Server.CurrentCharacterIndex].CurrentCreatureTeam)
         {
             Debug.Log("Found Creature " + creatureData.Name);

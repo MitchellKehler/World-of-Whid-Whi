@@ -780,6 +780,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 358dc80b9b4709648a39bab6794be621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  northSprite: {fileID: 0}
+  eastSprite: {fileID: 0}
+  southSprite: {fileID: 0}
+  westSprite: {fileID: 0}
   runSpeed: 0
   IsAllowedToMove: 0
   MyClientId: 0
