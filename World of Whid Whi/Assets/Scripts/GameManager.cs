@@ -14,19 +14,22 @@ using MLAPI.Prototyping;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
- * High Level To Do List
+ * To Do List
  * 
- * Fix player infront of other player's feet issue
- * Fix player going behind trees issue
- * Fix heal button
+ * Basic play thourgh testing and Bug fixes
+ *  First time loading a newly created character the creature menu outside fo combat won't open
+ *  Need to open a menu before you can move on the phone?
+ *  Fix heal button
+ *  settings has the option to sign out, and 
+ *  Test multi player battles
+ *  proper player challenge prompt when fighting another player
+ *  player names show up correctly in battles
+ *  
  * Fix minor bugs with displays so that 
  *  creature details displays correctly, 
  *      Make Health bar work correctly when viewing your monsters out of combat
  *      Update creature details menu and add an option to change a creatures nick name
- *  settings has the option to sign out, and 
  *  all other menu displays at least don't look broken (coming soon or something)
- *  proper player challenge prompt when fighting another player
- *  player names show up correctly in battles
  *  battle zones fixed
  *  rework combat visuals to make it more clear what is happening and what you need to do
  * Move combat stuff out of updates where possible in favor of events and fix minor issues with combat like animation timings and clearing dead creatures
@@ -39,7 +42,7 @@ using MLAPI.Prototyping;
  * Make sure I have some way of being notifyed when the server crashes and restarting it remotely
  ***************************** Add alpha version to the play store !!!!!!!!!! *************************************
  * Add mini map
- ***************************** New version in the play store !!!!!!!!!! *************************************
+***************************** New version in the play store !!!!!!!!!! *************************************
  * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
  * Add basic jurnal with achievements
  ***************************** New version in the play store !!!!!!!!!! *************************************
@@ -49,9 +52,12 @@ using MLAPI.Prototyping;
  * player model customization options
  * Add player as a creature on the battle field
  ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Fix terrain (hide trees when behind and remove masking stuff)
+ * Figure out a easy and established way to quickly add to the map
+ * Add additional map areas like caves and area over the bridge
+ ***************************** New version in the play store !!!!!!!!!! *************************************
  * Add more advanded NPC and NPC dialog set up and additional NPCs
  * Add Quests
- * Add caves and area over the bridge (maybe improve / revamp map)
  * Add map for looking at larger regions / areas
  ***************************** New version in the play store !!!!!!!!!! *************************************
  * Make brush move when you walk through it
@@ -1227,7 +1233,7 @@ public class GameManager : NetworkBehaviour
         for (int i = 0; i < EnemyCreatures.Length; i++)
         {
             //Vector3 creatureLocation = position_manager.ENEMY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            if (PlayerCreatures[i].CurrentHP > 0)
+            if (EnemyCreatures[i].CurrentHP > 0)
             {
                 bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
                 if (!success)
@@ -1728,8 +1734,8 @@ public class GameManager : NetworkBehaviour
                 } else if (image.gameObject.name.Equals("CreatureImage"))
                 {
                     // set creature image
-                    Debug.Log("Setting Creature Image to " + "BattleCreature\\" + creature.Path);
-                    image.sprite = Resources.Load<Sprite>("BattleCreature\\" + creature.Path);
+                    Debug.Log("Setting Creature Image to " + "BattleCreature\\" + creature.Path + "Image");
+                    image.sprite = Resources.Load<Sprite>("BattleCreature\\" + creature.Path + "Image");
                 }
             }
             TMP_Text[] texts = selectCreatureButton.GetComponentsInChildren<TMP_Text>();
@@ -1737,6 +1743,8 @@ public class GameManager : NetworkBehaviour
             {
                 if (text.gameObject.name.Equals("NickNameText"))
                 {
+                    Debug.Log("creatureData.NickName " + creatureData.NickName);
+                    Debug.Log("creature.ShortName " + creature.ShortName);
                     string nickName = creatureData.NickName.Equals("") ? creature.ShortName : creatureData.NickName;
                     Debug.Log("Setting Nickname to " + nickName);
                     text.text = nickName;
@@ -2514,8 +2522,8 @@ public class GameManager : NetworkBehaviour
         Creature_Details_Attributes_Panel.SetActive(false);
         Creature_Details_Abilities_Panel.SetActive(false);
 
-        Debug.Log("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
-        Creature_Details_Image.sprite = Resources.Load<Sprite>("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "_Profile");
+        Debug.Log("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "Image");
+        Creature_Details_Image.sprite = Resources.Load<Sprite>("BattleCreature/" + SelectedCreature.Name.Replace(" ", "") + "/" + SelectedCreature.Name.Replace(" ", "") + "Image");
         Creature_Details_Description.text = SelectedCreature.Description;
     }
 

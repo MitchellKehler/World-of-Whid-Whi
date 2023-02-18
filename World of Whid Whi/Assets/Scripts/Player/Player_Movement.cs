@@ -99,8 +99,8 @@ public class Player_Movement : NetworkBehaviour
         {
             ChangeStateServerRpc(CharacterState.Idle);
         }
-        body.velocity = new Vector2(direction.x * runSpeed, direction.y * runSpeed);
-        Vector2 NewPostion = new Vector2(transform.position.x, transform.position.y);
+        body.velocity = new Vector3(direction.x * runSpeed, direction.y * runSpeed);
+        Vector3 NewPostion = new Vector3(transform.position.x, transform.position.y, transform.position.z - .5f);
         Character.transform.position = NewPostion;
     }
 
