@@ -56,7 +56,7 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-/World of Whid Whi/*.apk
+# /World of Whid Whi/*.apk
 /World of Whid Whi/*.aab
 /World of Whid Whi/*.unitypackage
 /World of Whid Whi/*.app
