@@ -2,6 +2,8 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+!NuGet.exe
+
 /World of Whid Whi/[Ll]ibrary/
 /World of Whid Whi/[Tt]emp/
 /World of Whid Whi/[Oo]bj/

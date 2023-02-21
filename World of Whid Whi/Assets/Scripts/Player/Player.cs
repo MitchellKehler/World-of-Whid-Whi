@@ -56,7 +56,7 @@ public class Player : NetworkBehaviour
 
         // Later we will store the player's spawn point in the database and find first the scene and then the game object in the scene using the spawn point ID.
         // In the future the spawnPoint of a player may not exist int the current scene and it's ID will be used to identify which scene it is in and then to locate it.
-
+        this.GetComponent<Player_Movement>().IsAllowedToMove = true;
 
     }
 

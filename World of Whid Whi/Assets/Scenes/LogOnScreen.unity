@@ -16604,7 +16604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 0
+  isServer: 1
   AccountMenuTitle: {fileID: 1096277259}
   Email: {fileID: 1798644854}
   Password: {fileID: 1516666562}

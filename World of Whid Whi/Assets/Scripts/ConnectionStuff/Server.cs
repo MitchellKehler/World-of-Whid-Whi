@@ -1083,7 +1083,6 @@ public class Server : MonoBehaviour
         GM.SpawnPlayer_ServerRpc(NetworkManager.Singleton.LocalClientId, ClientOwnedCharacters[CurrentCharacterIndex].ID);
         LoginCanvas.SetActive(false);
         InGameCanvas.SetActive(true);
-
     }
 
 }

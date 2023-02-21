@@ -18,12 +18,9 @@ using MLAPI.Prototyping;
  * 
  * Basic play thourgh testing and Bug fixes
  *  First time loading a newly created character the creature menu outside fo combat won't open
- *  Need to open a menu before you can move on the phone?
  *  Fix heal button
  *  settings has the option to sign out, and 
- *  Test multi player battles
  *  proper player challenge prompt when fighting another player
- *  player names show up correctly in battles
  *  
  * Fix minor bugs with displays so that 
  *  creature details displays correctly, 
@@ -33,6 +30,8 @@ using MLAPI.Prototyping;
  *  battle zones fixed
  *  rework combat visuals to make it more clear what is happening and what you need to do
  * Move combat stuff out of updates where possible in favor of events and fix minor issues with combat like animation timings and clearing dead creatures
+ *  bars that move accross the bottom of the screen notifying what to do
+ *  Initiative list of creature images accross the bottom of the screen?
  * Add reactions
  * Add creature leveling and evelutions
  * Add basic NPCs and dialog to show patch notes and coming next info ect when talking to main healer NPC
@@ -816,6 +815,12 @@ public class GameManager : NetworkBehaviour
         NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player_Movement>().IsAllowedToMove = false;
     }
 
+    [ClientRpc]
+    public void StartMovingClientRpc(ulong clientId, ClientRpcParams rpcParams = default)
+    {
+        NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player_Movement>().IsAllowedToMove = true;
+    }
+
     public void UpdateEncounterCreatures(InitializedCreatureData[] newEncounterCreatures, ClientDisplayActionData action, ClientRpcParams rpcParams = default)
     {
         UpdateEncounterCreaturesClientRpc(newEncounterCreatures, action, rpcParams);
@@ -1149,7 +1154,7 @@ public class GameManager : NetworkBehaviour
         StopMovingClientRpc(player1, clientRpcParams);
         CharacterData player1CharacterData = charactersInGame[NetworkManager.Singleton.ConnectedClients[player1].PlayerObject.gameObject.GetComponent<Player>().characterId];
         CharacterData player2CharacterData = charactersInGame[NetworkManager.Singleton.ConnectedClients[player2].PlayerObject.gameObject.GetComponent<Player>().characterId];
-        StartBattleClientRpc(player1CharacterData.CurrentCreatureTeam.ToArray(), player2CharacterData.CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
+        StartBattleClientRpc(player1CharacterData.CurrentCreatureTeam.ToArray(), player1CharacterData.Name, player2CharacterData.CurrentCreatureTeam.ToArray(), player2CharacterData.Name, clientRpcParams); // BattleStartingCreatures
 
         clientRpcParams = new ClientRpcParams
         {
@@ -1159,7 +1164,7 @@ public class GameManager : NetworkBehaviour
             }
         };
         StopMovingClientRpc(player2, clientRpcParams);
-        StartBattleClientRpc(player2CharacterData.CurrentCreatureTeam.ToArray(), player1CharacterData.CurrentCreatureTeam.ToArray(), "Other Player", clientRpcParams); // BattleStartingCreatures
+        StartBattleClientRpc(player1CharacterData.CurrentCreatureTeam.ToArray(), player1CharacterData.Name, player2CharacterData.CurrentCreatureTeam.ToArray(), player2CharacterData.Name, clientRpcParams); // BattleStartingCreatures
 
         Battles.Add(new Battle(player1, player1CharacterData.ID, player1CharacterData.CurrentCreatureTeam.ToArray(), player2, player2CharacterData.ID, player2CharacterData.CurrentCreatureTeam.ToArray()));
     }
@@ -1187,18 +1192,18 @@ public class GameManager : NetworkBehaviour
         Debug.Log("PassedEnemyCreatures.Length " + PassedEnemyCreatures.Length);
 
         // Probably should send this from in the battle and pass the IDs with it.
-        StartBattleClientRpc(playerCharacterData.CurrentCreatureTeam.ToArray(), PassedEnemyCreatures, EnemyName, clientRpcParams); // BattleStartingCreatures
+        StartBattleClientRpc(playerCharacterData.CurrentCreatureTeam.ToArray(), playerCharacterData.Name, PassedEnemyCreatures, EnemyName, clientRpcParams); // BattleStartingCreatures
         Battles.Add(new Battle(clientId, playerCharacterData.ID, playerCharacterData.CurrentCreatureTeam.ToArray(), SERVERID, SERVERID, PassedEnemyCreatures));
 
     }
 
 
     [ClientRpc]
-    public void StartBattleClientRpc(InitializedCreatureData[] PlayerCreatures, InitializedCreatureData[] EnemyCreatures, string enemyName, ClientRpcParams rpcParams = default) //InitializedCreatureData[] PassedEnemyCreatures
+    public void StartBattleClientRpc(InitializedCreatureData[] DefenderCreatures, string DefenderName, InitializedCreatureData[] AttackerCreatures, string attackerName, ClientRpcParams rpcParams = default) //InitializedCreatureData[] PassedEnemyCreatures
     {
         LogToServerRpc(NetworkManager.LocalClientId, "StartBattleClientRpc");
-        LogToServerRpc(NetworkManager.LocalClientId, "PlayerCreatures.Length = " + PlayerCreatures.Length);
-        LogToServerRpc(NetworkManager.LocalClientId, "EnemyCreatures.Length = " + EnemyCreatures.Length);
+        LogToServerRpc(NetworkManager.LocalClientId, "PlayerCreatures.Length = " + DefenderCreatures.Length);
+        LogToServerRpc(NetworkManager.LocalClientId, "EnemyCreatures.Length = " + AttackerCreatures.Length);
 
         Player.GetComponent<Player>().inBattle = true;
         //EncounterCreatures.Clear();
@@ -1207,8 +1212,8 @@ public class GameManager : NetworkBehaviour
         //Battle_Friendly_Icon_Panel.SetActive(true);
         //Battle_Enemy_Icon_Panel.SetActive(true);
 
-        Battle_Player_1_Name.text = "Player 1"; // Will be players actual name once we have the database set up.
-        Battle_Player_2_Name.text = enemyName;
+        Battle_Player_1_Name.text = DefenderName; // Will be players actual name once we have the database set up.
+        Battle_Player_2_Name.text = attackerName;
 
         //LogToServerRpc(NetworkManager.LocalClientId, "After setting initial veriables");
 
@@ -1216,12 +1221,12 @@ public class GameManager : NetworkBehaviour
 
         //LogToServerRpc(NetworkManager.LocalClientId, "After Show_Battle_Details()");
 
-        for (int i = 0; i < PlayerCreatures.Length; i++)
+        for (int i = 0; i < DefenderCreatures.Length; i++)
         {
             //Vector3 creatureLocation = position_manager.FRIENDLY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            if (PlayerCreatures[i].CurrentHP > 0)
+            if (DefenderCreatures[i].CurrentHP > 0)
             {
-                bool success = SetUpBattleCreature(PlayerCreatures[i], NetworkManager.LocalClientId);
+                bool success = SetUpBattleCreature(DefenderCreatures[i], NetworkManager.LocalClientId);
                 if (!success)
                 {
                     break;
@@ -1230,19 +1235,18 @@ public class GameManager : NetworkBehaviour
         }
         LogToServerRpc(NetworkManager.LocalClientId, "Finished adding player creatures.");
 
-        for (int i = 0; i < EnemyCreatures.Length; i++)
+        for (int i = 0; i < AttackerCreatures.Length; i++)
         {
             //Vector3 creatureLocation = position_manager.ENEMY_BATTLE_POSITION_MEDIUM[i] + position_manager.MEDIUM_SPRITE_OFFSET + GameManager.BATTLE_OFFSET;
-            if (EnemyCreatures[i].CurrentHP > 0)
+            if (AttackerCreatures[i].CurrentHP > 0)
             {
-                bool success = SetUpBattleCreature(EnemyCreatures[i], GameManager.SERVERID);
+                bool success = SetUpBattleCreature(AttackerCreatures[i], GameManager.SERVERID);
                 if (!success)
                 {
                     break;
                 }
             }
         }
-
         LogToServerRpc(NetworkManager.LocalClientId, "Finished adding enemy creatures.");
 
         Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
