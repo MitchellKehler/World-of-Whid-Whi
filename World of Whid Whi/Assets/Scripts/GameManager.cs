@@ -11,14 +11,27 @@ using UnityEngine.SceneManagement;
 using MLAPI.Spawning;
 using TMPro;
 using MLAPI.Prototyping;
+using Assets.HeroEditor.Common.ExampleScripts;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
  * To Do List
  * 
+ * Check in Changes!!!!!!!!!!!!!
+ * 
+ * Balance adjustments
+ *  increased Size gives fixed increase to STR and WILL and decrease to AGI (not multipliers)
+ *  (it may already be like this but) 75% of stats are determined by type (fire, water, earth, air, life, death, arcane?) 25% completely random (no need for setting specific stats for each creature other then amounts of each element and no blood element)
+ * Add reactions and will + balance
+ *  AGI - Dodge / block chance + accuracy
+ *  STR - HP, Physical Damage
+ *  WILL - Mind Resist, Majic Power
+ *  INT - Focus, New Abilities and Training (while there are often other stats and requirements to learning new moves almost all moves have an intelegence requirement as well as most training / knowlege sets)
+ *  Armor and Majic resist are not increased by base stats
+ * 
  * Basic play thourgh testing and Bug fixes
  *  First time loading a newly created character the creature menu outside fo combat won't open
- *  Fix heal button
+ *  heal button can only be clicked in specific parts of the button / spawn point character
  *  settings has the option to sign out, and 
  *  proper player challenge prompt when fighting another player
  *  
@@ -29,15 +42,18 @@ using MLAPI.Prototyping;
  *  all other menu displays at least don't look broken (coming soon or something)
  *  battle zones fixed
  *  rework combat visuals to make it more clear what is happening and what you need to do
- * Move combat stuff out of updates where possible in favor of events and fix minor issues with combat like animation timings and clearing dead creatures
- *  bars that move accross the bottom of the screen notifying what to do
- *  Initiative list of creature images accross the bottom of the screen?
- * Add reactions
+     *  enemy initiative bars don't update in PvP
+     *  fix animation timings
+     *  add think bubbles animations to indicate when enemies are choosing their next ability
+     *  add frustrated smily animations to indicate when a creature misses it's attack or fails to attack a target because the target is already dead.
+     *  bars that move accross the bottom of the screen notifying what to do
+     *  Initiative list of creature images accross the bottom of the screen?
  * Add creature leveling and evelutions
  * Add basic NPCs and dialog to show patch notes and coming next info ect when talking to main healer NPC
  * 
  * Make server into a git container or windows service
  * Make sure that the server crashing is not a common occurence (fix known bugs that cuase this)
+ *  Server seems to crash when players disconnect mid combat
  * Make sure I have some way of being notifyed when the server crashes and restarting it remotely
  ***************************** Add alpha version to the play store !!!!!!!!!! *************************************
  * Add mini map
@@ -237,6 +253,15 @@ using MLAPI.Prototyping;
  * Some attacks my have bonuses to how much they knock a character off balance. (kind of like a milder stun)
  * 
  * 
+ * ////////////////////// Future Server Set Up //////////////////////
+ * 
+ * Battle servers only handle battles, regardless of map area, and are passed player battles by other servers when players duel or are encountered. This allows battle resources to be handled completely seperately from other server resources.
+ * Servers handle sections of map with smaller sections for more heavily populated areas.
+ * Multiple servers can handle the same section of map to allow for further population control and to separate players by level gap in pvp areas (this also resolves the issue of high level players harassing low level players in low level areas without forcing them not to go there).
+ * Servers will be containerized to optimize resource use.
+ * 
+ * //////////////////////////////////////////////////////////////////
+ * 
  */
 
 public class GameManager : NetworkBehaviour
@@ -248,7 +273,6 @@ public class GameManager : NetworkBehaviour
     public const float BATTLE_ANIMATION_TIME_LONG = 1f;
     public const float TEXT_FADE_TIME = 2f;
     public const float TIME_TO_REACT = 2.5f;
-    public const float TIME_BETWEEN_BATTLE_UPDATES = .1f;
     public const float SERVER_ABILITY_PICK_TIME = 2f;
     public const float PLAYER_ABILITY_PICK_TIME = 30f;
     public const int CREATURE_ID_NOT_SET = -1;
@@ -281,7 +305,6 @@ public class GameManager : NetworkBehaviour
     public string logtext;
     public int Player_Side_Toggle;
     private float SecondsTimer = 0;
-    private float BattleSecondsTimer = 0;
     ClientDisplayActionData clientDisplayActionData;
     InitializedCreatureData[] NewEncounterCreatures;
     Vector3 CenterOfBattleMap;
@@ -291,6 +314,9 @@ public class GameManager : NetworkBehaviour
     // Game Objects
     public GameObject Player;
     public GameObject PlayerPrefab;
+
+    // Map
+    List<SpawnPoint> spawnPoints;
 
     // UI Elements
     public GameObject Detail_Panel_Close_Button;
@@ -382,10 +408,8 @@ public class GameManager : NetworkBehaviour
     public List<GameObject> BattleCreatures;
     //public List<GameObject> BattleCreatureDetailsButtons;
 
-    public List<Battle> Battles;
-    public List<int> Battles_To_Remove;
+    public List<BattleManager> Battles; // this should be turned into a dictionary eventually for faster searching
 
-    float Timer = 0.0f;
     public PositionManager position_manager;
 
     // Start is called before the first frame update
@@ -406,9 +430,9 @@ public class GameManager : NetworkBehaviour
             SceneManager.LoadScene("Starting_Area", LoadSceneMode.Additive);
         }
 
-        Battles = new List<Battle>();
+        //Battles = new List<Battle>();
         BattleCreatures = new List<GameObject>();
-        Battles_To_Remove = new List<int>();
+        //Battles_To_Remove = new List<int>();
         AbilityButtons = new List<GameObject>();
         Ability_Pick_WaitButton.GetComponent<Button>().onClick.AddListener(delegate
         {
@@ -433,219 +457,9 @@ public class GameManager : NetworkBehaviour
     // This will also make it easy to transition things that should only happen each second out into being called by a timer or something.
     void Update()
     {
-        if (NetworkManager.Singleton.IsServer) ///// NetworkManager.Singleton.IsServer!!!!!!!!!!!
-        {
-            Timer += Time.deltaTime;
-            if (Timer >= TIME_BETWEEN_BATTLE_UPDATES) // a second has elapsed
-            {
-                // Server and Client
-                Timer -= TIME_BETWEEN_BATTLE_UPDATES;
-                BattleSecondsTimer += TIME_BETWEEN_BATTLE_UPDATES;
 
-                //// Client
-                //if (SecondsTimer > 0f)
-                //{
-                //    SecondsTimer-=.1f;
-                //    if (SecondsTimer <= 0)
-                //    {
-                //        SecondsTimer = 0;
-                //        NextAction();
-                //    }
-                //}
-            }
-
-            if (BattleSecondsTimer >= TIME_BETWEEN_BATTLE_UPDATES)
-            {
-                BattleSecondsTimer -= .1f;
-                foreach (Battle battle in Battles)
-                {
-                    //Needs to check if player has disconnected. Should probably just end the battle in that case for now.
-                    if (!NetworkManager.Singleton.ConnectedClients.Keys.Contains(battle.Player1))
-                    {
-                        battle.Winner = battle.Player2;
-                        battle.End_Battle = true;
-                    }
-                    else if (battle.Player2 != SERVERID && !NetworkManager.Singleton.ConnectedClients.Keys.Contains(battle.Player2))
-                    {
-                        battle.Winner = battle.Player1;
-                        battle.End_Battle = true;
-                    }
-                    else if (battle.Stage == BattleStage.BattleStarting)
-                    {
-                        if (NetworkManager.Singleton.ConnectedClients[battle.Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go
-                            && (battle.Player2 == SERVERID || NetworkManager.Singleton.ConnectedClients[battle.Player2].PlayerObject.gameObject.GetComponent<Player>().Battle_Go))
-                        {
-                            NetworkManager.Singleton.ConnectedClients[battle.Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
-                            if (battle.Player2 != SERVERID)
-                            {
-                                NetworkManager.Singleton.ConnectedClients[battle.Player2].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
-                            }
-                            battle.TimeTillNextAction = .1f;
-                        }
-                    }
-                    else
-                    {
-                        if (battle.CurrentCreature.Owner == battle.Player1 && NetworkManager.Singleton.ConnectedClients[battle.Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go)
-                        {
-                            battle.TimeTillNextAction = .1f;
-                        }
-                        else if (battle.Player2 != SERVERID && battle.CurrentCreature.Owner == battle.Player2 && NetworkManager.Singleton.ConnectedClients[battle.Player2].PlayerObject.gameObject.GetComponent<Player>().Battle_Go)
-                        {
-                            battle.TimeTillNextAction = .1f;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < Battles.Count; i++)
-                {
-                    UpdateBattle(Battles[i]);
-                }
-            }
-            foreach (int BattleNumber in Battles_To_Remove)
-            {
-                if (BattleNumber >= 0 && BattleNumber < Battles.Count)
-                {
-                    NetworkManager.Singleton.ConnectedClients[Battles[BattleNumber].Player1].PlayerObject.gameObject.GetComponent<Player>().inBattle = false;
-                    if (Battles[BattleNumber].Player2 != GameManager.SERVERID)
-                        NetworkManager.Singleton.ConnectedClients[Battles[BattleNumber].Player2].PlayerObject.gameObject.GetComponent<Player>().inBattle = false;
-                    Battles.RemoveAt(BattleNumber);
-                }
-            }
-            Battles_To_Remove.Clear();
-        }
-
-
-        // Deal with target colors
-
-        //foreach (GameObject targetHighlight in Target_Creature_Highlights)
-        //{
-        //    ParticleSystem.MainModule ps_main = targetHighlight.GetComponentInChildren<ParticleSystem>().main;
-        //    ps_main.startColor = targetHighlight.GetComponentInChildren<Target_Script>().Color;
-        //}
     }
 
-    //private void OnGUI()
-    //{
-    //    GUI.Label(new Rect(25, 40, 100, 30), "Red");
-    //    GUI.Label(new Rect(25, 70, 100, 30), "Green");
-    //    GUI.Label(new Rect(25, 100, 100, 30), "Blue");
-    //    GUI.Label(new Rect(25, 130, 100, 30), "Alpha");
-
-    //    hSliderValueR = GUI.HorizontalSlider(new Rect(95, 45, 100, 30), hSliderValueR, 0.0F, 1.0F);
-    //    hSliderValueG = GUI.HorizontalSlider(new Rect(95, 75, 100, 30), hSliderValueG, 0.0F, 1.0F);
-    //    hSliderValueB = GUI.HorizontalSlider(new Rect(95, 105, 100, 30), hSliderValueB, 0.0F, 1.0F);
-    //    hSliderValueA = GUI.HorizontalSlider(new Rect(95, 135, 100, 30), hSliderValueA, 0.0F, 1.0F);
-    //}
-
-
-    public void UpdateBattleTimer(Battle battle)
-    {
-        bool IsAI;
-        if (battle.CurrentCreature == null || battle.CurrentCreature.Owner == GameManager.SERVERID)
-        { // if CurrentCreature is null then we are still in the BattleStarting Stage of the battle and it doesn't matter if it is an AI or a Player's turn.
-            IsAI = true;
-        }
-        else
-        {
-            IsAI = false;
-        }
-        if ((!IsAI && battle.Stage == BattleStage.ChooseAbility) || battle.Stage == BattleStage.BattleStarting)
-        {
-            // Also not super efficient way of doing this
-            ClientRpcParams clientRpcParams;
-            if (battle.Player2 == SERVERID)
-            {
-                clientRpcParams = new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new ulong[] { battle.Player1 }
-                    }
-                };
-            } else
-            {
-                clientRpcParams = new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new ulong[] { battle.Player1, battle.Player2 }
-                    }
-                };
-            }
-            UpdateBattleTimerClientRpc("Done? (" + ((int)battle.TimeTillNextAction).ToString() + ")", clientRpcParams);
-        }
-    }
-
-    public void UpdateBattle(Battle battle)
-    {
-        if (battle.End_Battle) // Check if the battle should end
-        {
-            // soon I need to revamp all of this and to use events instead of updates and at that point I should have a more official end to
-            // battles where XP can be added and so on
-
-            // for now just update hps here by setting initialized creatures in battle creatures HP to player's creature data hp
-            foreach(InitializedCreatureData creature in charactersInGame[battle.Player1CharacterID].CurrentCreatureTeam)
-            {
-                BattleCreature battleCreature = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID);
-                if (battleCreature != null)
-                    creature.CurrentHP = battleCreature.Creature.CurrentHP;
-                else creature.CurrentHP = 0;
-                creature.battleCreatureID = -1;
-            }
-            ExitBattle(battle, battle.Player1, battle.Winner);
-            if (battle.Player2 != GameManager.SERVERID)
-            {
-                foreach (InitializedCreatureData creature in charactersInGame[battle.Player2CharacterID].CurrentCreatureTeam)
-                {
-                    BattleCreature battleCreature = battle.BattleCreatures.Find(battleCreature => battleCreature.ID == creature.battleCreatureID);
-                    if (battleCreature != null)
-                        creature.CurrentHP = battleCreature.Creature.CurrentHP;
-                    else creature.CurrentHP = 0;
-                    creature.battleCreatureID = -1;
-                }
-                ExitBattle(battle, battle.Player2, battle.Winner);
-            }
-            Battles_To_Remove.Add(Battles.IndexOf(battle));
-        }
-        else if (battle.TimeTillNextAction > 0)
-        {
-            battle.TimeTillNextAction -= TIME_BETWEEN_BATTLE_UPDATES;
-            if (battle.TimeTillNextAction <= 0)
-            {
-                battle.TimeTillNextAction = 0;
-                ClientRpcParams clientRpcParams;
-                if (battle.Player2 == SERVERID)
-                {
-                    NetworkManager.Singleton.ConnectedClients[battle.Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
-                    clientRpcParams = new ClientRpcParams
-                    {
-                        Send = new ClientRpcSendParams
-                        {
-                            TargetClientIds = new ulong[] { battle.Player1 }
-                        }
-                    };
-                }
-                else
-                {
-                    NetworkManager.Singleton.ConnectedClients[battle.Player1].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
-                    NetworkManager.Singleton.ConnectedClients[battle.Player2].PlayerObject.gameObject.GetComponent<Player>().Battle_Go = false;
-                    clientRpcParams = new ClientRpcParams
-                    {
-                        Send = new ClientRpcSendParams
-                        {
-                            TargetClientIds = new ulong[] { battle.Player1, battle.Player2 }
-                        }
-                    };
-                }
-                SetGoButtonClientRpc(false, "", clientRpcParams);
-                battle.NextAction();
-            }
-            else
-            {
-                UpdateBattleTimer(battle);
-            }
-        }
-    }
 
 
     [ServerRpc(RequireOwnership = false)]
@@ -768,7 +582,21 @@ public class GameManager : NetworkBehaviour
         //NetworkObject player = NetworkSpawnManager.SpawnedObjects[objectId];
         //SceneManager.LoadScene(characterData.Location, LoadSceneMode.Additive);
         Player.GetComponent<Player>().SetUpPlayer(characterData.Location, characterData.Position_X, characterData.Position_Y); // should get dynamically
-        
+
+
+    }
+
+    public void UpdateCharacter(ulong clientId)
+    {
+        Server.DB_UpdateCharacter(clientId);
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        CharacterUpdated_ClientRpc(Server.activeCharacters[clientId], clientRpcParams);
     }
 
     ////////////////  SpawnPoint Methods  ////////////////
@@ -794,6 +622,13 @@ public class GameManager : NetworkBehaviour
             InitializedCreature creature = new InitializedCreature(creatureData);
             creatureData.CurrentHP = creature.GetMaxHp();
         }
+        UpdateCharacter(clientId);
+    }
+
+    [ClientRpc]
+    private void CharacterUpdated_ClientRpc(CharacterData characterData, ClientRpcParams rpcParams = default)
+    {
+        Server.ClientOwnedCharacters[Server.CurrentCharacterIndex] = characterData;
     }
 
 
@@ -1166,7 +1001,10 @@ public class GameManager : NetworkBehaviour
         StopMovingClientRpc(player2, clientRpcParams);
         StartBattleClientRpc(player1CharacterData.CurrentCreatureTeam.ToArray(), player1CharacterData.Name, player2CharacterData.CurrentCreatureTeam.ToArray(), player2CharacterData.Name, clientRpcParams); // BattleStartingCreatures
 
-        Battles.Add(new Battle(player1, player1CharacterData.ID, player1CharacterData.CurrentCreatureTeam.ToArray(), player2, player2CharacterData.ID, player2CharacterData.CurrentCreatureTeam.ToArray()));
+        BattleManager BM = this.gameObject.AddComponent<BattleManager>();
+        Battles.Add(BM);
+        BM.SetUpAndStart(this, player1, player1CharacterData.ID, player1CharacterData.CurrentCreatureTeam.ToArray(), player2, player2CharacterData.ID, player2CharacterData.CurrentCreatureTeam.ToArray());
+        //Battles.Add(new Battle(player1, player1CharacterData.ID, player1CharacterData.CurrentCreatureTeam.ToArray(), player2, player2CharacterData.ID, player2CharacterData.CurrentCreatureTeam.ToArray()));
     }
 
 
@@ -1193,7 +1031,11 @@ public class GameManager : NetworkBehaviour
 
         // Probably should send this from in the battle and pass the IDs with it.
         StartBattleClientRpc(playerCharacterData.CurrentCreatureTeam.ToArray(), playerCharacterData.Name, PassedEnemyCreatures, EnemyName, clientRpcParams); // BattleStartingCreatures
-        Battles.Add(new Battle(clientId, playerCharacterData.ID, playerCharacterData.CurrentCreatureTeam.ToArray(), SERVERID, SERVERID, PassedEnemyCreatures));
+
+        BattleManager BM = this.gameObject.AddComponent<BattleManager>();
+        Battles.Add(BM);
+        BM.SetUpAndStart(this, clientId, playerCharacterData.ID, playerCharacterData.CurrentCreatureTeam.ToArray(), SERVERID, SERVERID, PassedEnemyCreatures);
+        //Battles.Add(new Battle(clientId, playerCharacterData.ID, playerCharacterData.CurrentCreatureTeam.ToArray(), SERVERID, SERVERID, PassedEnemyCreatures));
 
     }
 
@@ -1475,23 +1317,23 @@ public class GameManager : NetworkBehaviour
         Battle_GO_Button.gameObject.SetActive(SetTo);
     }
 
-    public void Set_GO(bool SetTo)
+    public void Set_GO()
     {
-        Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
-        foreach (Text text in texts)
-        {
-            if (text.name.Equals("Go_Button_Info_Text"))
-            {
-                text.text = "Waiting on Opponent";
-            }
-            else if (text.name.Equals("Go_Button_Timer_Text"))
-            {
-                text.text = "";
-            }
-        }
+        //Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
+        //foreach (Text text in texts)
+        //{
+        //    if (text.name.Equals("Go_Button_Info_Text"))
+        //    {
+        //        text.text = "Waiting on Opponent";
+        //    }
+        //    else if (text.name.Equals("Go_Button_Timer_Text"))
+        //    {
+        //        text.text = "";
+        //    }
+        //}
         InstructionsText.GetComponent<FadingText>().FadeOutText();
-        Battle_GO_Button.gameObject.SetActive(!SetTo);
-        Set_GOServerRpc(NetworkManager.Singleton.LocalClientId, SetTo);
+        Battle_GO_Button.gameObject.SetActive(false);
+        Set_GOServerRpc(NetworkManager.Singleton.LocalClientId, true);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -1516,11 +1358,11 @@ public class GameManager : NetworkBehaviour
         //Debug.Log("Battles[0] Player1 " + Battles[0].Player1);
         //Debug.Log("Battles[0] Player2 " + Battles[0].Player2);
         //Debug.Log("Battle = " + Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId));
-        Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
-        if (battle != null)
+        BattleManager battleManager = Battles.Find(battleManager => battleManager.battle.Player1 == clientId || battleManager.battle.Player2 == clientId);
+        if (battleManager != null)
         {
             //Debug.Log("Found the battle");
-            battle.Run(clientId);
+            battleManager.battle.Run(clientId);
             //while (battle.Battle_Thread != null && battle.Battle_Thread.IsAlive)
             //{
             //    Debug.Log("End_Battle: " + Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId).End_Battle);
@@ -1530,21 +1372,23 @@ public class GameManager : NetworkBehaviour
 
     }
 
+    /// <summary>
+    /// Exit Battle
+    /// 
+    /// Should probably add logic to update database here so changes are imediately saved in case of server crash.
+    /// </summary>
+    /// <param name="battle"></param>
+    /// <param name="clientID"></param>
+    /// <param name="Winner"></param>
     public void ExitBattle(Battle battle, ulong clientID, ulong Winner)
     {
-        Debug.Log("in ExitBattle, Client " + clientID + " exiting Battle.");
-        ClientRpcParams clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { clientID }
-            }
-        };
 
+        Debug.Log("in ExitBattle, Client " + clientID + " exiting Battle.");
         // Still needs to add XP and other stat increases.
         Close_AbilityPick_Panel();
         // Add XP and other stats here
         Player player = NetworkManager.Singleton.ConnectedClients[clientID].PlayerObject.gameObject.GetComponent<Player>();
+        player.GetComponent<Player>().inBattle = false;
         CharacterData character = charactersInGame[player.characterId];
         bool needHealing = false;
         bool respawnNotNeeded = false;
@@ -1574,6 +1418,15 @@ public class GameManager : NetworkBehaviour
 
         }
 
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientID }
+            }
+        };
+
+
         // respawn is needed
         if (!respawnNotNeeded)
         {
@@ -1588,16 +1441,21 @@ public class GameManager : NetworkBehaviour
             Debug.Log("Done changing activeCharacter position");
             //player.gameObject.transform.position = new Vector3(100, -87, 0); //GameObject.FindGameObjectWithTag("SpawnPoint").GetComponent<SpawnPoint>().SpawnPosition;
             HealAllCreatures(clientID);
+        } else
+        {
+            UpdateCharacter(clientID); // HealAllCreatures calls this so no need to do it in the if
         }
 
-        Debug.Log("before ExitBattleClientRpc");
-        ExitBattleClientRpc(Winner, needHealing, clientRpcParams);
+        Debug.Log("needHealing = " + needHealing);
+        ExitBattleClientRpc(Winner, needHealing, character, clientRpcParams);
         Debug.Log("Finished ExitBattle");
     }
 
     [ClientRpc]
-    public void ExitBattleClientRpc(ulong Winner, bool needHealing, ClientRpcParams rpcParams = default)
+    public void ExitBattleClientRpc(ulong Winner, bool needHealing, CharacterData characterData, ClientRpcParams rpcParams = default)
     {
+        Player.GetComponent<Player>().inBattle = false;
+        Server.ClientOwnedCharacters[Server.CurrentCharacterIndex] = characterData;
         // TODO should destroy prviously created creatures
         Hide_Battle_Details();
 
@@ -1608,7 +1466,6 @@ public class GameManager : NetworkBehaviour
             Player.GetComponent<PlayerMovement_Fluid>().IsAllowedToMove = true;
         }
 
-        Player.GetComponent<Player>().inBattle = false;
         //BattleCamera.enabled = false;
         Battle_Action_Panel.SetActive(false);
         //Battle_Friendly_Icon_Panel.SetActive(false);
@@ -1644,9 +1501,11 @@ public class GameManager : NetworkBehaviour
             InstructionsText.GetComponent<FadingText>().FadeInText("You Lost the battle : (", true);
         }
 
-        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-        foreach (GameObject spawnPointObject in spawnPoints)
-            spawnPointObject.GetComponent<SpawnPoint>().HealButton.SetActive(needHealing);
+        foreach (SpawnPoint spawnPoint in spawnPoints)
+        {
+            LogToServerRpc(NetworkManager.Singleton.LocalClientId, "got spawn point");
+            spawnPoint.HealButton.SetActive(needHealing);
+        }
 
     }
 
@@ -1959,15 +1818,15 @@ public class GameManager : NetworkBehaviour
         //      For each we will need to know: the name of the ability, is the ability currently selected, is the ability not available and if so then why? (could be on cool down or need to much mana for example)
 
         // may want to put battles into a dictionary later if we have a lot of them. Use player names as keys?
-        Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
-        if (battle != null)
+        BattleManager battleManager = Battles.Find(battleManager => battleManager.battle.Player1 == clientId || battleManager.battle.Player2 == clientId);
+        if (battleManager != null)
         {
             Debug.Log("battle is not null");
-            BattleCreature battleCreature = battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber);
+            BattleCreature battleCreature = battleManager.battle.BattleCreatures.Find(creature => creature.ID == CreatureNumber);
             if (battleCreature != null)
             {
                 Debug.Log("battleCreature is not null");
-                battle.EncounterCreatureClickedServerRpc(clientId, CreatureNumber);
+                battleManager.battle.EncounterCreatureClickedServerRpc(clientId, CreatureNumber);
 
                 //Debug.Log("In EncounterCreatureClickedServerRpc");
                 //Debug.Log("CreatureNumber is " + CreatureNumber);
@@ -1975,7 +1834,7 @@ public class GameManager : NetworkBehaviour
 
                 // !!!!!!!!!!!!!!!!!!!!!! Keeps getting an Object reference not set to an instance of an object error here at random times !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // Don't need to pass this if we decide not to change back to sending the actual speed of abilities (after agility calculations and what not).
-                int WaitSpeed = battle.GetInitiative(battleCreature, AllAbilities.GetAbility(AbilityName.Wait));
+                int WaitSpeed = battleManager.battle.GetInitiative(battleCreature, AllAbilities.GetAbility(AbilityName.Wait));
                 Debug.Log("WaitSpeed Set");
 
                 ClientRpcParams clientRpcParams = new ClientRpcParams
@@ -1986,11 +1845,11 @@ public class GameManager : NetworkBehaviour
                     }
                 };
                 bool AllowAbilityPick = false;
-                if (battle.CurrentCreature != null) // if it is null then the battle has not started yet.
+                if (battleManager.battle.CurrentCreature != null) // if it is null then the battle has not started yet.
                 {
-                    bool InChooseAbilityStage = battle.Stage == BattleStage.ChooseAbility;
-                    bool ClientIsCreatureOwner = battle.CurrentCreature.Owner == clientId;
-                    bool IsCreaturesTurn = battleCreature.Equals(battle.CurrentCreature);
+                    bool InChooseAbilityStage = battleManager.battle.Stage == BattleStage.ChooseAbility;
+                    bool ClientIsCreatureOwner = battleManager.battle.CurrentCreature.Owner == clientId;
+                    bool IsCreaturesTurn = battleCreature.Equals(battleManager.battle.CurrentCreature);
                     AllowAbilityPick = InChooseAbilityStage && ClientIsCreatureOwner && IsCreaturesTurn;
                 }
                 Debug.Log("bools set");
@@ -2104,11 +1963,11 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void PickNextAbilityServerRpc(ulong clientId, AbilityData NewNextAbility)
     {
-        Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
+        BattleManager battleManager = Battles.Find(battleManager => battleManager.battle.Player1 == clientId || battleManager.battle.Player2 == clientId);
 
         //Debug.Log("NewNextAbility.AbilityName " + NewNextAbility.AbilityName.ToString());
         //Debug.Log("battle.CurrentCreature.NextAbility " + battle.CurrentCreature.NextAbility.DisplayName);
-        battle.RequestTargets(NewNextAbility);
+        battleManager.battle.RequestTargets(NewNextAbility);
         //Debug.Log("battle.CurrentCreature.NextAbility " + battle.CurrentCreature.NextAbility.DisplayName);
     }
 
@@ -2182,10 +2041,10 @@ public class GameManager : NetworkBehaviour
     public void TargetCreatureClickedServerRpc(ulong clientId, int TargetNumber)
     {
         Debug.Log("Got Target Click!, Target Number is " + TargetNumber);
-        Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
-        if (battle != null)
+        BattleManager battleManager = Battles.Find(battleManager => battleManager.battle.Player1 == clientId || battleManager.battle.Player2 == clientId);
+        if (battleManager.battle != null)
         {
-            battle.TargetClicked(TargetNumber);
+            battleManager.battle.TargetClicked(TargetNumber);
         }
     }
 
@@ -2376,8 +2235,8 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void Close_AbilityPick_Panel_ServerRpc(ulong clientId)
     {
-        Battle battle = Battles.Find(battle => battle.Player1 == clientId || battle.Player2 == clientId);
-        battle.Close_AbilityPick_Panel(clientId);
+        BattleManager battleManager = Battles.Find(battleManager => battleManager.battle.Player1 == clientId || battleManager.battle.Player2 == clientId);
+        battleManager.battle.Close_AbilityPick_Panel(clientId);
     }
 
 
@@ -2605,16 +2464,74 @@ public class GameManager : NetworkBehaviour
         SceneManager.UnloadSceneAsync(Scene_Name);
     }
 
+    IEnumerator waitForSceneLoad(object[] parms)
+    {
+        Debug.Log("Waiting for scene to load");
+        while (!SceneManager.GetSceneByName(parms[0].ToString()).isLoaded)
+        {
+            yield return null;
+        }
+        Debug.Log("Scene finished loading!");
+        LogToServerRpc(NetworkManager.LocalClientId, "Loaded sceneToLoad");
+        //ChangeSceneServerRpc(NetworkManager.LocalClientId, Scene_Name, x, y);
+        Player.gameObject.transform.position = new Vector3((float)parms[1], (float)parms[2], (float)parms[2]);
+        LogToServerRpc(NetworkManager.LocalClientId, "Moved Player");
+        NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation = parms[0].ToString();
+
+        // needs to get spawn points of this location when there are more then one locations later
+
+        Debug.Log("Getting Spawn Points");
+        spawnPoints = new List<SpawnPoint>();
+        GameObject[] newSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        Debug.Log("newSpawnPoints.Length = " + newSpawnPoints.Length);
+        foreach (GameObject spawnPoint in newSpawnPoints)
+        {
+            Debug.Log("found spawn point");
+            spawnPoints.Add(spawnPoint.GetComponent<SpawnPoint>());
+            Debug.Log("added spawn point");
+        }
+
+
+        bool needHealing = false;
+        foreach (InitializedCreatureData creatureData in Server.ClientOwnedCharacters[Server.CurrentCharacterIndex].CurrentCreatureTeam)
+        {
+            LogToServerRpc(NetworkManager.Singleton.LocalClientId, "creatureData.CurrentHP = " + creatureData.CurrentHP);
+            if (creatureData.CurrentHP == 0)
+            {
+                // at least one creature is hurt so healing buttons should become active
+                needHealing = true;
+                break;
+            }
+            else
+            {
+                InitializedCreature creature = new InitializedCreature(creatureData);
+                if (creatureData.CurrentHP < creature.GetMaxHp())
+                {
+                    // at least one creature is hurt so healing buttons should become active
+                    needHealing = true;
+                    break;
+                }
+
+            }
+
+        }
+
+        LogToServerRpc(NetworkManager.Singleton.LocalClientId, "needHealing = " + needHealing);
+        foreach (SpawnPoint spawnPoint in spawnPoints)
+        {
+            LogToServerRpc(NetworkManager.Singleton.LocalClientId, "got spawn point");
+            spawnPoint.HealButton.SetActive(needHealing);
+        }
+
+    }
+
     public void SetInitialMapLocation(string Scene_Name, float x, float y)
     {
         LogToServerRpc(NetworkManager.LocalClientId, "In ChangeScene");
         LogToServerRpc(NetworkManager.LocalClientId, "Scene_Name: " + Scene_Name);
         SceneManager.LoadScene(Scene_Name, LoadSceneMode.Additive);
-        LogToServerRpc(NetworkManager.LocalClientId, "Loaded sceneToLoad");
-        //ChangeSceneServerRpc(NetworkManager.LocalClientId, Scene_Name, x, y);
-        Player.gameObject.transform.position = new Vector3(x, y, y);
-        LogToServerRpc(NetworkManager.LocalClientId, "Moved Player");
-        NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation = Scene_Name;
+        object[] parms = new object[3] { Scene_Name, x, y };
+        StartCoroutine("waitForSceneLoad", parms);
     }
 
     [ClientRpc]
@@ -2631,12 +2548,24 @@ public class GameManager : NetworkBehaviour
         LogToServerRpc(NetworkManager.LocalClientId, "new Scene is: " + Scene_Name);
         SceneManager.UnloadSceneAsync(previousLocation);
         SceneManager.LoadScene(Scene_Name, LoadSceneMode.Additive);
-        LogToServerRpc(NetworkManager.LocalClientId, "Loaded sceneToLoad");
-        //ChangeSceneServerRpc(NetworkManager.LocalClientId, Scene_Name, x, y);
-        Player.gameObject.transform.position = new Vector3(x, y, y);
-        LogToServerRpc(NetworkManager.LocalClientId, "Moved Player to " + x + ", " + y);
-        NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation = Scene_Name;
-        //SceneManager.UnloadSceneAsync(previousLocation);
+        object[] parms = new object[3] { Scene_Name, x, y };
+        StartCoroutine("waitForSceneLoad", parms);
+        //LogToServerRpc(NetworkManager.LocalClientId, "Loaded sceneToLoad");
+        ////ChangeSceneServerRpc(NetworkManager.LocalClientId, Scene_Name, x, y);
+        //Player.gameObject.transform.position = new Vector3(x, y, y);
+        //LogToServerRpc(NetworkManager.LocalClientId, "Moved Player to " + x + ", " + y);
+        //NetworkManager.Singleton.ConnectedClients[NetworkManager.LocalClientId].PlayerObject.gameObject.GetComponent<Player>().currentLocation = Scene_Name;
+        ////SceneManager.UnloadSceneAsync(previousLocation);
+
+        //// needs to get spawn points of this location when there are more then one locations later
+        //spawnPoints = new List<SpawnPoint>();
+        //GameObject[] newSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        //foreach (GameObject spawnPoint in newSpawnPoints)
+        //{
+        //    Debug.Log("found spawn point");
+        //    spawnPoints.Add(spawnPoint.GetComponentInChildren<SpawnPoint>());
+        //    Debug.Log("added spawn point");
+        //}
     }
 
     [ServerRpc(RequireOwnership = false)]

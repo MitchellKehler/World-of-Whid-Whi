@@ -3447,7 +3447,7 @@ MonoBehaviour:
   Creatures_Panel_ScrollViewContent: {fileID: 1629055113}
   Server: {fileID: 1690720507}
   BattleCreatures: []
-  Battles_To_Remove: 
+  Battles: []
 --- !u!114 &394250939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16604,7 +16604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 1
+  isServer: 0
   AccountMenuTitle: {fileID: 1096277259}
   Email: {fileID: 1798644854}
   Password: {fileID: 1516666562}
@@ -17100,7 +17100,7 @@ MonoBehaviour:
       - m_Target: {fileID: 394250938}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Set_GO
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

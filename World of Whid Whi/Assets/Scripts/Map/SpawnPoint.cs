@@ -35,12 +35,13 @@ public class SpawnPoint : MonoBehaviour
         if (NetworkManager.Singleton.IsClient)
         {
             // should check with server if healing is needed.
-            HealButton.SetActive(true);
+            HealButton.SetActive(false);
         }
     }
 
     void OnMouseDown()
     {
+        Debug.Log("Got Heal Request");
         GM.HealAllCreatures_ServerRpc(NetworkManager.Singleton.LocalClientId);
         // later we will probably be checking for this in some other way
         HealButton.SetActive(false);

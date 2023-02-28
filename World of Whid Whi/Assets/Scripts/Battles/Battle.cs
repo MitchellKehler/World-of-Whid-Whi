@@ -58,6 +58,7 @@ public class Battle
 
     // determine if it is a player controlled creature or a computer controlled creature
     GameManager GM;
+    BattleManager BM;
     public Thread Battle_Thread;
     public List<BattleCreature> BattleCreatures;
     public BattleCreature CurrentCreature;
@@ -65,24 +66,22 @@ public class Battle
     public ulong Player2;
     public ulong Player1CharacterID;
     public ulong Player2CharacterID;
-    public bool End_Battle = false;
     public int BattleTime = 60;
     int PreviousInitiative;
     public BattleStage Stage;
     GameObject Selected_Creature_Highlight;
     public int Player1SelectedCreature = GameManager.CREATURE_ID_NOT_SET;
     public int Player2SelectedCreature = GameManager.CREATURE_ID_NOT_SET;
-    public ulong Winner = 0;
-    public float TimeTillNextAction = 60f;
     public bool Counting = true;
     List<Action> ActionsToPerform;
     bool Creature_Has_Moved = false;
     bool Collected_Reactions = false;
     int[] previousTargets; // I don't like this much but don't want to think about it any more.
 
-    public Battle(ulong Player1ID, ulong Player1Character, InitializedCreatureData[] teamOneCreatures, ulong Player2ID, ulong Player2Character, InitializedCreatureData[] teamTwoCreatures)
+    public Battle(GameManager GM, BattleManager BM, ulong Player1ID, ulong Player1Character, InitializedCreatureData[] teamOneCreatures, ulong Player2ID, ulong Player2Character, InitializedCreatureData[] teamTwoCreatures)
     {
-        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        this.GM = GM;
+        this.BM = BM;
         ActionsToPerform = new List<Action>();
         BattleCreatures = new List<BattleCreature>();
 
@@ -371,7 +370,7 @@ public class Battle
             }
             Stage = BattleStage.PerformingActions;
             ActionsToPerform = new List<Action>();
-            TimeTillNextAction = GameManager.BATTLE_ANIMATION_TIME_NORMAL;
+            BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.BATTLE_ANIMATION_TIME_NORMAL));
             Counting = true;
         }
         else
@@ -486,8 +485,7 @@ public class Battle
                 }
                 // May want different lengths of time based on how far the creature has to move later.
                 Creature_Has_Moved = true;
-                TimeTillNextAction = GameManager.BATTLE_CREATURE_MOVE_TIME;
-                Debug.Log("TimeTillNextAction is " + TimeTillNextAction);
+                BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.BATTLE_CREATURE_MOVE_TIME));
             }
 
             Debug.Log("Counting");
@@ -502,17 +500,15 @@ public class Battle
             int winner = GetWinner();
             if (winner == 1)
             {
-                Winner = Player1;
-                End_Battle = true;
+                BM.EndBattle(Player1);
             } else if (winner == 2)
             {
-                Winner = Player2;
-                End_Battle = true;
+                BM.EndBattle(Player2);
             } else
             {
                 GM.MoveBattleCreature(CurrentCreature.ID, clientRpcParams);
                 Stage = BattleStage.DonePerformingActions;
-                TimeTillNextAction = GameManager.BATTLE_CREATURE_MOVE_TIME;
+                BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.BATTLE_CREATURE_MOVE_TIME));
                 Counting = true;
             }
         }
@@ -537,7 +533,7 @@ public class Battle
             //    SetInstructionText("Your " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player1);
             //}
         }
-        TimeTillNextAction = GameManager.TIME_TO_REACT;
+        BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.TIME_TO_REACT));
         Collected_Reactions = true;
     }
 
@@ -674,8 +670,7 @@ public class Battle
                 animationLength = GameManager.BATTLE_ANIMATION_TIME_LONG;
                 break;
         }
-        TimeTillNextAction = animationLength;
-        Debug.Log("TimeTillNextAction is " + TimeTillNextAction);
+        BM.StartCoroutine(BM.SetNextBattleUpdateTime(animationLength));
 
         ActionsToPerform.RemoveAt(0);
     }
@@ -820,13 +815,13 @@ public class Battle
 
         if (CurrentCreature.Owner == Player1)
         {
-            Debug.Log("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.");
+            Debug.Log("Player1 " + CurrentCreature.Creature.Name + " is picking it's next ability.");
             GM.SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player1);
             GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player2);
         }
         else if (Player2 != GameManager.SERVERID)
         {
-            Debug.Log("Pick " + CurrentCreature.Creature.Name + "'s next ability!");
+            Debug.Log("Player2 " + CurrentCreature.Creature.Name + " is picking it's next ability.");
             GM.SetInstructionText("Pick " + CurrentCreature.Creature.Name + "'s next ability!", Player2);
             GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player1);
         }
@@ -834,13 +829,13 @@ public class Battle
         // AI creature. Server decides it's move
         if (CurrentCreature.Owner == GameManager.SERVERID)
         {
-            TimeTillNextAction = GameManager.SERVER_ABILITY_PICK_TIME;
+            BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.SERVER_ABILITY_PICK_TIME));
             Counting = true;
             AIChooseAbility();
         }
         else // Human Creature. Prompt client for a move.
         {
-            TimeTillNextAction = GameManager.PLAYER_ABILITY_PICK_TIME;
+            BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.PLAYER_ABILITY_PICK_TIME));
             Counting = true;
             CurrentCreature.NextAbility = AllAbilities.CloneAbility(AbilityName.Wait); // later we will want to also check cool downs when applicable.
         }
@@ -1096,13 +1091,11 @@ public class Battle
 
         if (PlayerID == Player1)
         {
-            Winner = Player2;
+            BM.EndBattle(Player2);
         } else
         {
-            Winner = Player1;
+            BM.EndBattle(Player1);
         }
-
-        End_Battle = true;
     }
 
     public void SetInstructionText(string text)

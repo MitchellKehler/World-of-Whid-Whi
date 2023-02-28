@@ -42,10 +42,10 @@ public class EncounterTerrain : NetworkBehaviour
     // If player LVL and Skills don't automatically avoid the battle then start the battle
     public void GotCollission(Collider2D collision)
     {
-        Debug.Log("Got a collision1");
+        //Debug.Log("Got a collision1");
         if (NetworkManager.Singleton.IsServer)
         {
-            Debug.Log("Got a collision2");
+            //Debug.Log("Got a collision2");
             GotEncounter(collision.GetComponent<NetworkObject>().OwnerClientId, this);
         }
 
@@ -59,6 +59,7 @@ public class EncounterTerrain : NetworkBehaviour
         //Debug.Log("In Battle " + NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle);
         if (!NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle && p < encounterTerrain.EncounterChance)
         {
+            Debug.Log("Got Encounter");
             NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject.GetComponent<Player>().inBattle = true;
             //Debug.Log("NetworkManager.Singleton.ConnectedClientsList.Count = " + NetworkManager.Singleton.ConnectedClientsList.Count);
             //NetworkManager.Singleton.ConnectedClientsList[(Convert.ToInt32(clientId)) - 2].PlayerObject.gameObject.GetComponent<Player_Movement_Android>().IsAllowedToMove = false;
