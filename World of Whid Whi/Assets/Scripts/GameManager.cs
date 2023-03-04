@@ -12,17 +12,17 @@ using MLAPI.Spawning;
 using TMPro;
 using MLAPI.Prototyping;
 using Assets.HeroEditor.Common.ExampleScripts;
+using System.Drawing;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
  * To Do List
  * 
- * Check in Changes!!!!!!!!!!!!!
- * 
  * Balance adjustments
- *  increased Size gives fixed increase to STR and WILL and decrease to AGI (not multipliers)
+ *  When a creature is killed all other creatures that no longer have a target should imediately be told to choose a new ability?
+ *  increased Size gives fixed increase to STR and WILL and decrease to AGI (not multipliers) -------- maybe not, does not scale well with powerups ect. try just showing base stats allong with final totals for clarity now and see if balancing is needed later.
  *  (it may already be like this but) 75% of stats are determined by type (fire, water, earth, air, life, death, arcane?) 25% completely random (no need for setting specific stats for each creature other then amounts of each element and no blood element)
- * Add reactions and will + balance
+ * Add reactions and focus + balance
  *  AGI - Dodge / block chance + accuracy
  *  STR - HP, Physical Damage
  *  WILL - Mind Resist, Majic Power
@@ -334,7 +334,8 @@ public class GameManager : NetworkBehaviour
     public GameObject Ability_Button_Prefab;
     List<GameObject> AbilityButtons;
     public GameObject Ability_Pick_WaitButton;
-    public int Selected_Creature;
+    public int Selected_Creature; // only used for bringing up creature details out of combat (do not confuse with selected creature in battle)
+    public List<GameObject> SelectedBattleCreatures;
     public List<GameObject> Target_Creature_Highlights;
     public GameObject Creature_Details_Button;
 
@@ -1971,54 +1972,29 @@ public class GameManager : NetworkBehaviour
         //Debug.Log("battle.CurrentCreature.NextAbility " + battle.CurrentCreature.NextAbility.DisplayName);
     }
 
-    public void SetSelectedCrature(int creatureId, CreatureSize size, ClientRpcParams rpcParams = default)
+    public void SetSelectedCratures(List<BattleCreature> creatures, ClientRpcParams rpcParams = default)
     {
-        Debug.Log("creatureId: " + creatureId);
-        Debug.Log("size: " + size);
-        SetSelectedCratureClientRpc(creatureId, size, rpcParams);
+        foreach(BattleCreature creature in creatures)
+        {
+            Debug.Log("creatureId: " + creature.ID);
+            Debug.Log("size: " + creature.Creature.Size);
+        }
+        SetSelectedCraturesClientRpc(creatures, rpcParams);
     }
 
     [ClientRpc]
-    public void SetSelectedCratureClientRpc(int creatureId, CreatureSize size, ClientRpcParams rpcParams = default)
+    public void SetSelectedCraturesClientRpc(List<BattleCreature> creatures, ClientRpcParams rpcParams = default)
     {
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().Ability_Pick_Panel.gameObject.SetActive(false);
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().Close_AbilityPick_Panel();
-        //if (Selected_Creature_Highlight == null)
-        //{
-        //    Selected_Creature_Highlight = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().Selected_Creature_Highlight;
-        //}
+        foreach (BattleCreature battleCreature in creatures)
+        {
+            SelectedBattleCreatures.Add(BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == battleCreature.ID));
+        }
 
-        //Debug.Log("Selected_Creature_Highlight.GetCreatureNumber() " + Selected_Creature_Highlight.creatureId.GetComponent<SelectedCreature>().GetCreatureNumber());
-        GameObject BattleCreature = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == creatureId);
-        Vector2 capsuleOffset = BattleCreature.GetComponentInChildren<CapsuleCollider2D>().offset;
-        Vector3 creature_position = new Vector3(BattleCreature.transform.position.x + (capsuleOffset.x * BattleCreature.transform.localScale.x), BattleCreature.transform.position.y + (capsuleOffset.y * BattleCreature.transform.localScale.y), 1);
-
-        Selected_Creature_Highlights.Add(Instantiate(Creature_Highlight, new Vector3(creature_position.x, creature_position.y, 0), Quaternion.identity) as GameObject);
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1] " + Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1]);
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponent<SpriteRenderer>() " + Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponentInChildren<SpriteRenderer>());
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponent<SpriteRenderer>().sortingOrder " + Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponentInChildren<SpriteRenderer>().sortingOrder);
-        //Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponentInChildren<SpriteRenderer>().sortingOrder = -100;
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().LogToServerRpc(0, "Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponent<SpriteRenderer>().sortingOrder " + Selected_Creature_Highlights[Selected_Creature_Highlights.Count - 1].GetComponentInChildren<SpriteRenderer>().sortingOrder);
-
-        SelectedCreature newScript = Selected_Creature_Highlights[0].GetComponentInChildren<CapsuleCollider2D>().gameObject.AddComponent<SelectedCreature>() as SelectedCreature;
-        Selected_Creature_Highlights[0].transform.parent = BattleCreature.transform;
-        BattleCreature.GetComponentInChildren<BattleCreatureClient>().acting = true;
-        //newScript.SetCreatureNumber(creatureId);
-        //Selected_Creature_Highlight.gameObject.GetComponentInChildren<SelectedCreature>().SetCreatureNumber(creatureId);
-        //Debug.Log("Selected_Creature_Highlight.GetCreatureNumber() " + Selected_Creature_Highlight.gameObject.GetComponent<SelectedCreature>().GetCreatureNumber());
-
-
-        // Set highlight here
-        //GameObject Selected_Creature_Highlight = Instantiate(Resources.Load("Selected_Enemy_Highlight") as GameObject, EncounterCreature.transform.position, Quaternion.identity) as GameObject;
-
-        float Highlight_Scale = Battle.GetHighilghtSize(size);
-
-        ParticleSystem particleSystem = Selected_Creature_Highlights[0].GetComponentInChildren<ParticleSystem>();
-        particleSystem.transform.localScale = new Vector3(Highlight_Scale, Highlight_Scale, 1);
-        particleSystem.GetComponent<Renderer>().sortingOrder = -199;
-        //Selected_Creature_Highlights[0].gameObject.transform.localScale = new Vector3(Highlight_Scale, Highlight_Scale, 1f);
-        //Selected_Creature_Highlight_Small.gameObject.transform.position = new Vector3(Selected_Creature_Highlight_Small.gameObject.transform.position.x, Selected_Creature_Highlight_Small.gameObject.transform.position.y, Selected_Creature_Highlight_Small.gameObject.transform.position.z);
-
+        foreach (GameObject creature in SelectedBattleCreatures)
+        {
+            ///// Needs some way to also pass Highlight Size!!!!!!!!!!!
+            AddSelectedHighlight(creature);
+        }
 
         Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
         foreach (Text text in texts)
@@ -2029,7 +2005,25 @@ public class GameManager : NetworkBehaviour
             }
         }
         Battle_GO_Button.gameObject.SetActive(true);
-        // if creature is player owned then create ability pick dropdown.
+    }
+
+    public void AddSelectedHighlight(GameObject Creature)
+    {
+        Vector2 capsuleOffset = Creature.GetComponentInChildren<CapsuleCollider2D>().offset;
+        Vector3 creature_position = new Vector3(Creature.transform.position.x + (capsuleOffset.x * Creature.transform.localScale.x), Creature.transform.position.y + (capsuleOffset.y * Creature.transform.localScale.y), 1);
+
+        Selected_Creature_Highlights.Add(Instantiate(Creature_Highlight, new Vector3(creature_position.x, creature_position.y, 0), Quaternion.identity) as GameObject);
+
+        SelectedCreature newScript = Selected_Creature_Highlights[0].GetComponentInChildren<CapsuleCollider2D>().gameObject.AddComponent<SelectedCreature>() as SelectedCreature;
+        Selected_Creature_Highlights[0].transform.parent = Creature.transform;
+        Creature.GetComponentInChildren<BattleCreatureClient>().acting = true;
+
+        float Highlight_Scale = Battle.GetHighilghtSize(size);
+
+        ParticleSystem particleSystem = Selected_Creature_Highlights[0].GetComponentInChildren<ParticleSystem>();
+        particleSystem.transform.localScale = new Vector3(Highlight_Scale, Highlight_Scale, 1);
+        particleSystem.GetComponent<Renderer>().sortingOrder = -199;
+
     }
 
     public void TargetCreatureClicked(ulong clientId, int TargetNumber)
@@ -2290,10 +2284,10 @@ public class GameManager : NetworkBehaviour
 
         Creature_Details_Rating_Text.GetComponent<Text>().text = SelectedCreature.Rating.ToString();
         Creature_Details_Lvl_Text.GetComponent<Text>().text = InitializeCreatures.XpToLevel(SelectedCreature.CurrentXP).ToString();
-        Creature_Details_Str_Text.GetComponent<Text>().text = SelectedCreature.GetTotalStrength().ToString();
-        Creature_Details_Agi_Text.GetComponent<Text>().text = SelectedCreature.GetTotalAgility().ToString();
-        Creature_Details_Mnd_Text.GetComponent<Text>().text = SelectedCreature.Mind.ToString();
-        Creature_Details_Wil_Text.GetComponent<Text>().text = SelectedCreature.GetTotalWill().ToString();
+        Creature_Details_Str_Text.GetComponent<Text>().text = SelectedCreature.GetTotalStrength().ToString() + "(" + SelectedCreature.Strength +")";
+        Creature_Details_Agi_Text.GetComponent<Text>().text = SelectedCreature.GetTotalAgility().ToString() + "(" + SelectedCreature.Agility + ")";
+        Creature_Details_Mnd_Text.GetComponent<Text>().text = SelectedCreature.Mind.ToString() + "(" + SelectedCreature.Mind + ")";
+        Creature_Details_Wil_Text.GetComponent<Text>().text = SelectedCreature.GetTotalWill().ToString() + "(" + SelectedCreature.Will + ")";
         Creature_Details_Size_Text.GetComponent<Text>().text = SelectedCreature.Size.ToString();
         Creature_Details_Armour_Text.GetComponent<Text>().text = (SelectedCreature.Armor != 0 ? SelectedCreature.Armor.ToString() : "");
         Creature_Details_General_RES_Text.GetComponent<Text>().text = (SelectedCreature.General_Resistance != 0 ? SelectedCreature.General_Resistance.ToString() : "");

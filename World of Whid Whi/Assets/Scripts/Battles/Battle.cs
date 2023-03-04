@@ -61,7 +61,7 @@ public class Battle
     BattleManager BM;
     public Thread Battle_Thread;
     public List<BattleCreature> BattleCreatures;
-    public BattleCreature CurrentCreature;
+    public List<BattleCreature> CurrentCreatures;
     public ulong Player1;
     public ulong Player2;
     public ulong Player1CharacterID;
@@ -800,7 +800,7 @@ public class Battle
             }
         };
 
-        GM.SetSelectedCrature(CurrentCreature.ID, CurrentCreature.Creature.Size, clientRpcParams);
+        GM.SetSelectedCratures(CurrentCreatures, clientRpcParams);
         //Debug.Log("Client " + CurrentCreature.Owner + " selected creature set.");
 
         if (Player1SelectedCreature != GameManager.CREATURE_ID_NOT_SET)
