@@ -217,6 +217,56 @@ public static class InitializePowerUpGroups
 
         AllPowerUps.Add("Chitin", new PowerUpGroup("Chitin", powerups, PowerUpGroupType.NaturalArmor));
 
+        // Legs (should be more specific later)
+
+        powerups = new List<PowerUp>();
+        conditions = new List<PowerUpCondition>();
+        conditions.Add(new PowerUpCondition(PowerUpStat.XP, InitializeCreatures.LevelToXpRequired(0)));
+        reward = new Reward(AbilityName.Dodge_1);
+        powerups.Add(new PowerUp(conditions, reward));
+
+        AllPowerUps.Add("Legs", new PowerUpGroup("Legs", powerups, PowerUpGroupType.Anatomy));
+
+        // Bug Wings
+
+        powerups = new List<PowerUp>();
+        conditions = new List<PowerUpCondition>();
+        conditions.Add(new PowerUpCondition(PowerUpStat.XP, InitializeCreatures.LevelToXpRequired(0)));
+        reward = new Reward(AbilityName.Dash_1);
+        powerups.Add(new PowerUp(conditions, reward));
+
+        AllPowerUps.Add("Bug Wings", new PowerUpGroup("Bug Wings", powerups, PowerUpGroupType.Anatomy));
+
+
+
+        ////////////////// Training //////////////////
+
+        // Protector
+
+        powerups = new List<PowerUp>();
+
+        //conditions = new List<PowerUpCondition>();
+        //conditions.Add(new PowerUpCondition(PowerUpStat.XP, InitializeCreatures.LevelToXpRequired(0)));
+        //reward = new Reward(AbilityName.Dash_1);
+        //powerups.Add(new PowerUp(conditions, reward));
+
+        AllPowerUps.Add("Protector", new PowerUpGroup("Protector", powerups, PowerUpGroupType.Training));
+
+        // Pack Tackticks
+
+        powerups = new List<PowerUp>();
+
+        //conditions = new List<PowerUpCondition>();
+        //conditions.Add(new PowerUpCondition(PowerUpStat.XP, InitializeCreatures.LevelToXpRequired(0)));
+        //reward = new Reward(AbilityName.Dash_1);
+        //powerups.Add(new PowerUp(conditions, reward));
+
+        AllPowerUps.Add("Pack Tackticks", new PowerUpGroup("Pack Tackticks", powerups, PowerUpGroupType.Training));
+
+
+
+
+        ////////////////////// Done ///////////////////
 
         return AllPowerUps;
     }

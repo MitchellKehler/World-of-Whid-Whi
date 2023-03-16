@@ -11,6 +11,7 @@ public class AbilityData : INetworkSerializable
     public bool LockedTargets;
     public int Speed;
     public int Rank;
+    public AbilityType Type;
     //ActionData[] Actions;
 
     public void NetworkSerialize(NetworkSerializer serializer)
@@ -21,6 +22,7 @@ public class AbilityData : INetworkSerializable
         serializer.Serialize(ref LockedTargets);
         serializer.Serialize(ref Speed);
         serializer.Serialize(ref Rank);
+        serializer.Serialize(ref Type);
 
 
         //// Length
@@ -56,6 +58,7 @@ public class AbilityData : INetworkSerializable
         LockedTargets = ability.LockedTargets;
         Rank = ability.Rank;
         Speed = ability.Speed;
+        Type = ability.Type;
 
         //for (int i = 0; i < ability.Actions.Count; i++)
         //{
@@ -70,6 +73,7 @@ public class AbilityData : INetworkSerializable
         LockedTargets = ability.LockedTargets;
         Rank = ability.Rank;
         Speed = speed;
+        Type = ability.Type;
 
         //for (int i = 0; i < ability.Actions.Count; i++)
         //{

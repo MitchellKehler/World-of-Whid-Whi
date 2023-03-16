@@ -12,64 +12,96 @@ using MLAPI.Spawning;
 using TMPro;
 using MLAPI.Prototyping;
 using Assets.HeroEditor.Common.ExampleScripts;
-using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using Assets.HeroEditor.Common.CommonScripts;
 
 /* ///////////////////////////////////     TO DO     ///////////////////////////////////
  * 
- * To Do List
+ * ////////////////////// Currently Doing //////////////////////
  * 
- * Balance adjustments
- *  When a creature is killed all other creatures that no longer have a target should imediately be told to choose a new ability?
- *  increased Size gives fixed increase to STR and WILL and decrease to AGI (not multipliers) -------- maybe not, does not scale well with powerups ect. try just showing base stats allong with final totals for clarity now and see if balancing is needed later.
- *  (it may already be like this but) 75% of stats are determined by type (fire, water, earth, air, life, death, arcane?) 25% completely random (no need for setting specific stats for each creature other then amounts of each element and no blood element)
- * Add reactions and focus + balance
+ * Add reactions
+ * battle creature Templates
+ *  Add remaining battle creature size templates, 
+ *  set code to choose correct size based on creature size
+ *  Set up code to use template position for health bar and details button
+ *  make sure all sizes look good
+ * 
+ * ////////////////////// To Do List //////////////////////
+ * 
+ * Update message allert visuals in combat to show a bar that slides in and out at the bottom of the screen that remains until the next message is displayed.
+ * Update creature details menu (general update and improvement of visuals)
+ *      Make Health bar work correctly when viewing your monsters out of combat
+ *      Update creature details menu and add an option to change a creatures nick name
+ * When a creature is killed all other creatures that no longer have a target should imediately be told to choose a new ability?
+ * Add focus + energy and balance (also make sure that size bonuses are being added correctly)
  *  AGI - Dodge / block chance + accuracy
  *  STR - HP, Physical Damage
  *  WILL - Mind Resist, Majic Power
  *  INT - Focus, New Abilities and Training (while there are often other stats and requirements to learning new moves almost all moves have an intelegence requirement as well as most training / knowlege sets)
  *  Armor and Majic resist are not increased by base stats
+ * Fix Run
+ *   only useable on your turn
+ *   has a set speed like any other ability only it is not being used by any one creature so need to create a dummy creature to hold the run action or something
+ *   once started running you can only use reactions and maybe counter attacks (if you attempt to use an action it will prompt if you want to stop running)
+ *   while running all reactions and counter attacks have a reduced success chance?
+ *   the initiative of any abilities used gets added to the run in addition to being added to the creature that used the ability
+ *   run is ended successfully if the run action is executed or the enemy also chooses to run
+ *   creatures with abilities to make running more difficult would do things like increase the initiative of the run or have bonus accuracy against creatures that are running.
+ * rework combat visuals to make it more clear what is happening and what you need to do
+     *  enemy initiative bars don't update in PvP
+     *  fix animation timings
+     *  Initiative list of creature images accross the bottom of the screen?
  * 
  * Basic play thourgh testing and Bug fixes
+ *  proper player challenge prompt when fighting another player
  *  First time loading a newly created character the creature menu outside fo combat won't open
  *  heal button can only be clicked in specific parts of the button / spawn point character
  *  settings has the option to sign out, and 
- *  proper player challenge prompt when fighting another player
  *  
  * Fix minor bugs with displays so that 
- *  creature details displays correctly, 
- *      Make Health bar work correctly when viewing your monsters out of combat
- *      Update creature details menu and add an option to change a creatures nick name
  *  all other menu displays at least don't look broken (coming soon or something)
  *  battle zones fixed
- *  rework combat visuals to make it more clear what is happening and what you need to do
-     *  enemy initiative bars don't update in PvP
-     *  fix animation timings
-     *  add think bubbles animations to indicate when enemies are choosing their next ability
-     *  add frustrated smily animations to indicate when a creature misses it's attack or fails to attack a target because the target is already dead.
-     *  bars that move accross the bottom of the screen notifying what to do
-     *  Initiative list of creature images accross the bottom of the screen?
+ *  
  * Add creature leveling and evelutions
+ * Add capturing of creatures
+ *  Add player soul power (later influenced by player leveling)
+ *  Add current team restraints (later there will be a limit to total owned creatures based on soul power too but not necessary right now)
+ *  Add reenfocing creatures when not enough space on battle field
+ *  Add attempt capture of defeated creatures at the end of victorious combat
+ * Add Icons for current team in sign in menu
  * Add basic NPCs and dialog to show patch notes and coming next info ect when talking to main healer NPC
  * 
- * Make server into a git container or windows service
  * Make sure that the server crashing is not a common occurence (fix known bugs that cuase this)
  *  Server seems to crash when players disconnect mid combat
+ * Make server into a git container or windows service
  * Make sure I have some way of being notifyed when the server crashes and restarting it remotely
- ***************************** Add alpha version to the play store !!!!!!!!!! *************************************
- * Add mini map
-***************************** New version in the play store !!!!!!!!!! *************************************
- * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
- * Add basic jurnal with achievements
+ * Clean up comments!!!!!
  ***************************** New version in the play store !!!!!!!!!! *************************************
  * Add Chat
- ***************************** New version in the play store !!!!!!!!!! *************************************
- * Add Items
- * player model customization options
- * Add player as a creature on the battle field
+***************************** New version in the play store !!!!!!!!!! *************************************
+ * Do some combat balancing and maybe add a bit more content (e.g. more abilities and evolution groups)
+ * Add new combat stats / features
+     * Add creature type based bonus damage
+     * Add stuns and roots
+     * Vision
+     * Add low health debufs
+     * Add heavy damage of one kind bonuses
+ * Add passive abilities?
+ * Add ranged, reduced speed (this is a good thing) for first attack/attacks not moving.
+ * Add code to implement pradictability and properly show player the information they should see and not the information they shouldn't see with regards to which moves the enemy is performing.
+***************************** Add alpha version to the play store !!!!!!!!!! *************************************
+ * Add mini map
  ***************************** New version in the play store !!!!!!!!!! *************************************
  * Fix terrain (hide trees when behind and remove masking stuff)
  * Figure out a easy and established way to quickly add to the map
  * Add additional map areas like caves and area over the bridge
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Add basic jurnal with achievements
+ * Creature dictionary (All Creatures - what they have seen)
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * Add Items
+ * player model customization options
+ * Add player as a creature on the battle field
  ***************************** New version in the play store !!!!!!!!!! *************************************
  * Add more advanded NPC and NPC dialog set up and additional NPCs
  * Add Quests
@@ -79,88 +111,8 @@ using System.Drawing;
  * Switch out creature spawning to add creatures to map areas instead of coliding while walking through brush
  * switch to 4D (creatures if available) and characters
  ***************************** New version in the play store !!!!!!!!!! *************************************
- * More content
- * Currency and shops
- * Start actually adding story line
- * Optomizing if neccessary
- * Website
- * Start acutally looking for users / Beta?
- * 
- * Look for !FIX for areas where I know work needs to happen.
- * 
- * //////////////////     Playability (Make it easier for the user to play)     //////////////////
- * 
- * Check in Code!!!
- * 
- * Fix creature details menu
- * 
- * Rework battles to use events to track turns instead of updates (apply any other events in place of updates code that is found during this process)
- * Add Reactions
- * Fix Run
-     * Stop server breaking if client disconnects in battle by having them run first then handle the rest of the disconnect
-     * Add consiquences of running, Maybe just set amount of damage recieved based on enemy power for now? later you should have a chance to fail the run away attempt and the enemy keeps getting turns while you try to run
- * 
- * Clean up general battle feel and visuals to make it easy to understand what is going on
-     * Add message to indicate enemy is taking their turn.
-     * Clear Creatures After Death
-     * Fix attack timing
-     * Small creatures health bar and name closer to sprite (not a big deal)
-     * Fix Backgrounds to cover whole battle field
- * 
- * add leveling of creatures
- * add capturing creatures
- * 
- * Basic AI for picking attack to have a higher chance to pick higher ranked attacks.
- * 
- * 
- * Clean up comments!!!!!
- * 
- * Add Icons for first 6 creatures in sign in menu
- * Add Player Details
-    * Known Creatures List
-    * Reputations (worry about later)
-    * Achievements and completed quest list (worry about later)
-    * Map Expoloration record (worry about later)
-    * Initialized Creatures List (with some indicator of which are in current squad and starting lineup layout
-    * 
-    * Battle Display toggle setting
- *
- * Add creatures when space opens up
- * Add ranged, reduced speed (this is a good thing) for first attack/attacks not moving.
- * Add power up conditions
- * Add powerup stat tracking (leveling up) in battles
- * not notifying the client when an attack isn't performed because all targets are missing / dead.
- * Fix out of combat viewing creatures
- * Fix Ability Pick Panel Open And Close Timing
- * Add Creature Capture after win
- * Add Creature Damage / death remains after fight
- * Add code to implement pradictability and properly show player the information they should see and not the information they shouldn't see with regards to which moves the enemy is performing.
- * Add information about abilities in ability pick screen and make stats like speed and damage acurate.
- * Add health bar correctly in creature details
- * Add Evolutions
- * Add Substitute creatures, stashed creatures 
- * Creature dictionary (All Creatures - what they have seen)
- *
- * Set attacing creature to first or last so that it is always in front of the other creatures it might be moving over.
- * Improve information text (larger, color coded text so it is more readable)
- * Add Ability Type Passive, Active, OutOfCombat
- * Add new combat stats / features
-     * Add creature type based bonus damage
-     * Add stuns and roots
-     * Add Focus
-     * Vision
-     * Add Off Balance
-     * Add low health debufs
-     * Add heavy damage of one kind bonuses
- * Add talk to old man
-    * creature healing
-    * How to play
-    * User info like release notes, and Game Objectives (the stuff that will eventually be on a web site)
- * Add Map
- * Add Chat System
- * Add Quests
- * Seperate Client and Server Applications
- * Add Terrain
+ * Add out of combat abilities?
+ * Add Advanced Terrain Impacts
     * Could impact out of combat movement speed
     * Impacts Battle Field Background
     * Impacts Ability Use
@@ -174,84 +126,28 @@ using System.Drawing;
     * Battle Field Background
     * Ability Use
     * Flying
- * Add Lighting
+ * Add Lighting and day and night cycles
     * Impacts Vision Score
     * Some creatures use other things like sonar or telepathy for vision. Their vision score will not be impacted by lighting but could be impacted by sound or mind based attacks.
- *
- * * New terrain / encounter system
- * Encounter Terrain (Needs a Prefab and a script) - root object, contains lists of Creature Groups to be spawned and list of Spawning Areas.
- *  - Script needs to spawn new Creature Groups within the Spawning Areas at regular intervals based on the Creature Group's spawn frequency (assuming it isn't at it's max capacity)
- * Spawning Area (just needs a Prefab I think) - indicates where creatures from an Encounter Train Creature Group can be spawned.
- *  - litereally just a 2d rectangle (collored and visible for level creation but set to be culled when the game starts) that is used to specify where creature groups can spawn and the bounds they must remain in.
- *  - later aggressive creature groups will be able to leave the bounds up to a certain distance (based on aggressivenes level) if they are chasing someone.
- * Creature Group (Needs a Prefab and a Script) - Contains information about how creatures will be displayed in the world and in combat
- *  - Script 
- *      - Creates a new creature prefab in the world within the spawn area of it's encounter terrain.
- *      - Creature group moves randomly when no player is near (later possibley based on an energy level factor or instincts or other things), but may move towards or away from near by players based on aggressiveness if it detects the player that is.
- *      - If there is a collision between the player and a creature group then a battle is triggered
- *  - in the world - indicates sprite to use, aggressivness, movement speed and types (e.g. walking, swimming, flying), vision and other senses, spawn max and frequency (later one per time of day)
- *      - aggressivness, movement speed and types, vision and other senses can be calculated by the creatures making up the creature group on creation / at start
- *  - in combat - indicates the same information as is currently contained in a creature group (what creatures, their levels, and quantities can be encountered)
- * Encounter Creature (Just a script) - used by Creture Group for storing in combat details.
- * 
-
- * //////////////////     Functionality (Add new features to the game)     //////////////////
+ ***************************** New version in the play store !!!!!!!!!! *************************************
+ * More content
+ * How to play info on website / in game optional tutorial when creating new characters
+ * Currency and shops
+ * Start actually adding story line
+ * Optomizing if neccessary
+ * Website
+ * Start acutally looking for users / Beta?
  * 
  * 
+ * ////////////////////// Other Notes //////////////////////
  * 
- * //////////////////     Content (Add content within the exiting features)     //////////////////
- * 
- * 
- * 
- * //////////////////     Beautification (Make it look pretty)     //////////////////
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * ///////////////////////////////////     Ideas     ///////////////////////////////////
+ * Look for !FIX for areas where I know work needs to happen.
  * 
  * Add global powerups (like an increase to your focus ability once you hit certain intellegence thresh holds
  * 
- * Add Reactions
- * Dodges, guards, and other reactionary moves should be of a separate class called reactions that are used in response to an attack being executed on your creatures.
- * In general they will add some to your initiative (slowing your next attack) and have cool downs but will give you a chance to dodge or mitigate damage and negative effects coming your way.
- * There may still be active moves that give you a chance to dodge all incoming attacks or increase your likely hood to have successful reactions.
- * 
- * Need to add full dodge / block bool to determine if it acts on an entire ability or just one action.
- * Need to add Focus
  * it would be a uneaque ability like wait but to choose creatures that your creature is paying extra attention to.
  * higher levels would increase the number of creatures that can be focused on and reduce negative effects while amplifying possitive effects.
  * Some skills like combat training my specifically improve focus. Also higher intelegence improves focus.
- * 
- * Damage Type Bonuses
- * Each damage type should have a it's own bonus effects that are applied when a certain percentage of an opponents health removed by a single damage type in a single ability or maybe action.
- * Creatures should also get a debuf of wounded or something similar automatically when they get down to a low amount of health like 25%.
- * For Damage types I'm tentatively thinking
- *  Phisical / Blade - Bleed effect (constant damage over time)
- *  Poison - Weakened (reduce strength)
- *  Fire - ???
- *  Electric - Paralized? (chance to mess up any ability, could be active or reation)?
- *  Ice - Slow, reduced initiative, maybe reduced chance to react
- *  Impact - Chance to stun
- *  Death - ???
- *  Undead Damage through Life Healing - ???
- *  
- *  Map Changes
- *  I need to recreate the map with a solid layer of green at the bottom and then all the other pieces being transparent except for what they are actually adding. Even the bottom layer of grass should be prefabs to allow changing it's image easily, unless this would be hard on the phone but I doubt it.
- *  I would like to add in at least four times of day, dawn, day, dusk, and night. Time of day would change the creatures that can be found, the appearence of the map, give combat bonuses or weaknesses, and impact NPC behaviour.
- *  I would at the very least have the image the prefabs point at change based on the time of day but if possible it would be great if we could have the image slowly become lighter or darker based on time rather then just sudenly change.
- *  We would still need to keep track of the times of day for the aspects of the game other then appearence and certain appeaarence based changes may still happen based on an actual stage of the day like night to dawn.
- *  It would be even more amazing if we could have things like amount of moonlight or weather constanly changing and also impact appearence and maybe even other factors like combat stats and NPC behaviour.
- * 
- * Add Focus
- * 
- * Add Off Balance
- * Creatures get knocked off balance when they take hits which impacts their ability to dodge and their acuracy on their next ability.
- * Some attacks my have bonuses to how much they knock a character off balance. (kind of like a milder stun)
- * 
  * 
  * ////////////////////// Future Server Set Up //////////////////////
  * 
@@ -412,6 +308,13 @@ public class GameManager : NetworkBehaviour
     public List<BattleManager> Battles; // this should be turned into a dictionary eventually for faster searching
 
     public PositionManager position_manager;
+
+    // Battle Creature Prefabs
+    public GameObject BattleCreature_MediumPrefab;
+
+    // Emote Prefabs
+    public GameObject ThinkingEmotePrefab;
+    public GameObject AngryEmotePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -1125,6 +1028,15 @@ public class GameManager : NetworkBehaviour
 
     }
 
+    /// <summary>
+    /// Creates a battle creature prefab and all it's components for a battle and places it on the battle field.
+    /// 
+    /// Maybe I should create a different battle creature prefab (with all its sub components) for each size of creature in the gui and then not try to set all the positioning of sub components here?
+    /// Then the process could be first set up the creature then place it, which would be easier to understand. (this change would probably impact other parts of the code and can be tackled later).
+    /// </summary>
+    /// <param name="creatureData"></param>
+    /// <param name="Owner"></param>
+    /// <returns></returns>
     public bool SetUpBattleCreature(InitializedCreatureData creatureData, ulong Owner)
     {
         LogToServerRpc(NetworkManager.LocalClientId, "In SetUpBattleCreature");
@@ -1146,7 +1058,6 @@ public class GameManager : NetworkBehaviour
         if (position != Vector3.negativeInfinity)
         {
             LogToServerRpc(NetworkManager.LocalClientId, "Valid position");
-
             string BaseImagePath = ("BattleCreature/" + new_InitilizedCreature.Path);
 
             //Sprite creature_sprite;
@@ -1166,29 +1077,35 @@ public class GameManager : NetworkBehaviour
             //LogToServerRpc(NetworkManager.LocalClientId, "spritePosition (" + spritePosition.x + ", " + spritePosition.y + ")");
 
             LogToServerRpc(NetworkManager.LocalClientId, "Before Instantiate");
-            GameObject BattleCreature = Instantiate(Resources.Load(BaseImagePath)) as GameObject;
+            GameObject Creature = Instantiate(Resources.Load(BaseImagePath)) as GameObject;
+
+            GameObject BattleCreature = Instantiate(BattleCreature_MediumPrefab);
+            BattleCreature.transform.position = Creature.transform.position;
+            BattleCreature.transform.parent = Creature.transform;
+            BattleCreatureObject battleCreatureObjectScript = BattleCreature.GetComponent<BattleCreatureObject>();
+
             LogToServerRpc(NetworkManager.LocalClientId, "After Instantiate");
             if (Owner == NetworkManager.LocalClientId)
             {
-                Vector3 newScale = BattleCreature.transform.localScale;
+                Vector3 newScale = Creature.transform.localScale;
                 newScale.x *= -1;
-                BattleCreature.transform.localScale = newScale;
+                Creature.transform.localScale = newScale;
             }
 
-            BattleCreatureClient battleCreatureClient = BattleCreature.AddComponent<BattleCreatureClient>();
+            BattleCreatureClient battleCreatureClient = Creature.AddComponent<BattleCreatureClient>();
             battleCreatureClient.InitilizedCreature = new_InitilizedCreature;
             LogToServerRpc(NetworkManager.LocalClientId, "After add battle creature client");
             //InitializedCreature InitializedCreature = BattleCreature.GetComponent<InitializedCreature>();
             //InitializedCreature = new_InitilizedCreature;
 
             Vector3 offset = position_manager.GetSpriteOffset(new_InitilizedCreature.Size);
-            Vector2 capsuleOffset = BattleCreature.GetComponentInChildren<CapsuleCollider2D>().offset;
+            Vector2 capsuleOffset = Creature.GetComponentInChildren<CapsuleCollider2D>().offset;
             LogToServerRpc(NetworkManager.LocalClientId, "Position Set: " + position.x + ", " + position.y);
             LogToServerRpc(NetworkManager.LocalClientId, "offset: " + offset.x + ", " + offset.y);
             LogToServerRpc(NetworkManager.LocalClientId, "capsuleOffset: " + capsuleOffset.x + ", " + capsuleOffset.y);
-            LogToServerRpc(NetworkManager.LocalClientId, "BattleCreature.transform.localScale: " + BattleCreature.transform.localScale.x + ", " + BattleCreature.transform.localScale.y);
-            Vector3 creaturePosition = new Vector3(position.x - (capsuleOffset.x * BattleCreature.transform.localScale.x) - offset.x, position.y - (capsuleOffset.y * BattleCreature.transform.localScale.y) - offset.y, 0);
-            BattleCreature.transform.position = creaturePosition;
+            LogToServerRpc(NetworkManager.LocalClientId, "BattleCreature.transform.localScale: " + Creature.transform.localScale.x + ", " + Creature.transform.localScale.y);
+            Vector3 creaturePosition = new Vector3(position.x - (capsuleOffset.x * Creature.transform.localScale.x) - offset.x, position.y - (capsuleOffset.y * Creature.transform.localScale.y) - offset.y, 0);
+            Creature.transform.position = creaturePosition;
             LogToServerRpc(NetworkManager.LocalClientId, "After set position");
 
             //BattleCreature.GetComponent<SpriteRenderer>().sprite = creature_sprite;
@@ -1231,7 +1148,7 @@ public class GameManager : NetworkBehaviour
             //float detailsButtonSizeY = ((position.y - (detailsButtonSize.y / 2)) > (position.y - (capsuleOffset.y * BattleCreature.transform.localScale.y) - offset.y + detailsButtonSize.y * .2f) ? (position.y - (detailsButtonSize.y / 2)) : (position.y - (capsuleOffset.y * BattleCreature.transform.localScale.y) - offset.y + detailsButtonSize.y * .2f));
             float detailsButtonY_1 = position.y - (detailsButtonSize.y / 2);
             LogToServerRpc(NetworkManager.LocalClientId, "detailsButtonY_1 = " + detailsButtonY_1);
-            float detailsButtonY_2 = ((capsuleOffset.y + BattleCreature.GetComponentInChildren<CapsuleCollider2D>().size.y / 2) * BattleCreature.transform.localScale.y) + detailsButtonSize.y * 1.2f;
+            float detailsButtonY_2 = ((capsuleOffset.y + Creature.GetComponentInChildren<CapsuleCollider2D>().size.y / 2) * Creature.transform.localScale.y) + detailsButtonSize.y * 1.2f;
             LogToServerRpc(NetworkManager.LocalClientId, "detailsButtonY_2 = " + detailsButtonY_2);
             //float detailsButtonY = detailsButtonY_2 > detailsButtonY_1 ? detailsButtonY_1 : detailsButtonY_2;
             float detailsButtonY = detailsButtonY_1;
@@ -1239,15 +1156,15 @@ public class GameManager : NetworkBehaviour
             Vector3 detailsButtonPosition = new Vector3(position.x + (detailsButtonSize.x / 2), detailsButtonY, 0);
 
             float healthBarPositionY_1 = position.y - (offset.y * 2) + healthBarSize.y;
-            float healthBarPositionY_2 = position.y - (capsuleOffset.y * BattleCreature.transform.localScale.y) - (offset.y * 1.5f);
+            float healthBarPositionY_2 = position.y - (capsuleOffset.y * Creature.transform.localScale.y) - (offset.y * 1.5f);
             //float healthBarPositionY = healthBarPositionY_2 > healthBarPositionY_1 ? healthBarPositionY_1 : healthBarPositionY_2;
             float healthBarPositionY = healthBarPositionY_1;
             Vector3 healthBarPosition = new Vector3(position.x + healthBarSize.x, healthBarPositionY, 0);
             //Vector3 healthBarPosition = new Vector3(position.x + healthBarSize.x, position.y - (offset.y * 2) + healthBarSize.y, 0);
 
             GameObject CreatureName = Instantiate(Resources.Load("CreatureName")) as GameObject;
-            CreatureName.GetComponentInChildren<MeshRenderer>().sortingOrder = BattleCreature.layer;
-            CreatureName.transform.parent = BattleCreature.transform;
+            CreatureName.GetComponentInChildren<MeshRenderer>().sortingOrder = Creature.layer;
+            CreatureName.transform.parent = Creature.transform;
             string nameToUse = "";
             if (new_InitilizedCreature.NickName != null) // sould also check the battle detail level for this. Battle detail should also determine if the text is white or black.
             {
@@ -1264,10 +1181,10 @@ public class GameManager : NetworkBehaviour
                 CreatureName.transform.position = new Vector3(position.x + (detailsButtonSize.x * 1.2f), detailsButtonY + detailsButtonSize.y * .5f, 0);
                 CreatureName.GetComponent<TextMesh>().text = "Lvl: " + InitializeCreatures.XpToLevel(new_InitilizedCreature.CurrentXP);
                 GameObject CreatureName2 = Instantiate(Resources.Load("CreatureName")) as GameObject;
-                CreatureName2.GetComponentInChildren<MeshRenderer>().sortingOrder = BattleCreature.layer;
+                CreatureName2.GetComponentInChildren<MeshRenderer>().sortingOrder = Creature.layer;
                 CreatureName2.transform.position = new Vector3(position.x - offset.x * .5f, healthBarPosition.y + (CreatureName.GetComponent<MeshRenderer>().bounds.size.y * 1.1f), 0);
                 //CreatureName2.transform.position = new Vector3(position.x, position.y - (CreatureName.GetComponent<MeshRenderer>().bounds.size.y * 2.1f), 0);
-                CreatureName2.transform.parent = BattleCreature.transform;
+                CreatureName2.transform.parent = Creature.transform;
                 CreatureName2.GetComponent<TextMesh>().text = nameToUse;
             }
             else if (positionSize == BattlePositionSize.Smallest)
@@ -1287,20 +1204,75 @@ public class GameManager : NetworkBehaviour
             LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.CurrentHP: " + new_InitilizedCreature.CurrentHP);
             LogToServerRpc(NetworkManager.LocalClientId, "new_InitilizedCreature.GetMaxHp(): " + new_InitilizedCreature.GetMaxHp());
             EncounterCreature_HealthBar.GetComponent<HealthBarScript>().SetHealthPercent((float)new_InitilizedCreature.CurrentHP / (float)new_InitilizedCreature.GetMaxHp());
-            EncounterCreature_HealthBar.transform.SetParent(BattleCreature.transform);
+            EncounterCreature_HealthBar.transform.SetParent(Creature.transform);
             LogToServerRpc(NetworkManager.LocalClientId, "Getting Details Button");
             GameObject Details_Button = Instantiate(Creature_Details_Button, detailsButtonPosition, Quaternion.identity) as GameObject;
-            Details_Button.transform.SetParent(BattleCreature.transform);
-            BattleCreatures.Add(BattleCreature);
+            Details_Button.transform.SetParent(Creature.transform);
+
+            battleCreatureClient.EmoteCanvas = battleCreatureObjectScript.Canvas;
+            battleCreatureClient.EmoteCanvas.name = "Emote Ancher";
+            battleCreatureClient.EmoteCanvas.transform.parent = Creature.transform;
+            battleCreatureClient.EmoteAncher = battleCreatureObjectScript.EmoteAncher;
+            //battleCreatureClient.EmoteCanvas.transform.position = new Vector3(position.x + .5f, healthBarPositionY - .5f, 0);
+            //battleCreatureClient.EmoteCanvas.transform.parent = BattleCreature.transform;
+
+            //GameObject emoteObject = Instantiate(ThinkingEmotePrefab);
+            //emoteObject.transform.parent = battleCreatureClient.GetComponent<BattleCreatureClient>().EmoteAncher.transform;
+            //emoteObject.transform.localScale = new Vector3(.001f, .001f, .001f);
+
+
+            BattleCreatures.Add(Creature);
             //BattleCreatureDetailsButtons.Add(Details_Button);
             //Details_Button.GetComponent<SelectedCreature>().SetCreatureNumber(battleCreatureClient.ID);
             LogToServerRpc(NetworkManager.LocalClientId, "returning true");
             return true; // creature successfully added
         } else
         {
+            Debug.Log("Failed to place battlecreature: Not enough space!");
             return false;// couldn't find a spot to put the creature
         }
 
+    }
+
+    public void SetCreatureEmote(int creatureID, CreatureEmotes emote, ClientRpcParams rpcParams = default)
+    {
+        SetCreatureThinkingEmote_ClientRpc(creatureID, emote, rpcParams);
+    }
+
+    [ClientRpc]
+    public void SetCreatureThinkingEmote_ClientRpc(int creatureID, CreatureEmotes emote, ClientRpcParams rpcParams = default)
+    {
+        GameObject clientCreature = BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == creatureID);
+        GameObject emoteObject;
+
+        clientCreature.GetComponent<BattleCreatureClient>().EmoteCanvas.SetActive(true);
+
+        switch (emote)
+        {
+            case CreatureEmotes.Thinking:
+                emoteObject = Instantiate(ThinkingEmotePrefab);
+                break;
+            case CreatureEmotes.Angry:
+                emoteObject = Instantiate(AngryEmotePrefab);
+                break;
+            default:
+                emoteObject = Instantiate(ThinkingEmotePrefab);
+                break;
+        }
+        emoteObject.transform.position = clientCreature.GetComponent<BattleCreatureClient>().EmoteAncher.transform.position;
+        emoteObject.transform.parent = clientCreature.GetComponent<BattleCreatureClient>().EmoteAncher.transform;
+        emoteObject.transform.localScale = new Vector3(.0005f, .0005f, .0005f);
+        clientCreature.GetComponent<BattleCreatureClient>().creatureEmoteCoroutine = DestroyEmoteInCreature(clientCreature.GetComponent<BattleCreatureClient>().EmoteCanvas, emoteObject, 2);
+        StartCoroutine(clientCreature.GetComponent<BattleCreatureClient>().creatureEmoteCoroutine);
+    }
+
+    public IEnumerator DestroyEmoteInCreature(Canvas emoteCanvas, GameObject emote, int delay)
+    {
+        Debug.Log("Creating Emote!");
+        yield return new WaitForSeconds(delay);
+        Debug.Log("Destroying Emote!");
+        emoteCanvas.SetActive(false);
+        Destroy(emote);
     }
 
     [ClientRpc]
@@ -1877,6 +1849,17 @@ public class GameManager : NetworkBehaviour
         Display_AbilityPick_PanelClientRpc(CreatureNumber, AllowAbilityPick, abilites, WaitSpeed, clientRpcParams);
     }
 
+    /// <summary> Code Here Next!!!
+    /// This only works for action abilities not reaction or counter abilities
+    /// Need to either expand this to handle all or create similar calls for the others and determine how to know which to call
+    /// looking above at what calls this there is no reason we couldn't easily add arguments or call similar methods with additional arguments based on battle state / stage
+    /// if we pass ability type target and current creature info we should easily be able to do everything we need in this method.
+    /// </summary>
+    /// <param name="CreatureNumber"></param>
+    /// <param name="AllowAbilityPick"></param>
+    /// <param name="abilites"></param>
+    /// <param name="WaitSpeed"></param>
+    /// <param name="rpcParams"></param>
     [ClientRpc]
     public void Display_AbilityPick_PanelClientRpc(int CreatureNumber, bool AllowAbilityPick, AbilityData[] abilites, int WaitSpeed, ClientRpcParams rpcParams = default) // Should pass a list of ablitiy objects instead of strings so other infor can be passed for each ability
     {
@@ -1899,7 +1882,7 @@ public class GameManager : NetworkBehaviour
             AbilityButtons.Add(Instantiate(Ability_Button_Prefab, new Vector3(((i % 2) * (rt.rect.width + 25)) - 180, (-(int)((i / 2) * (rt.rect.height + 10))) + 95, 0), Quaternion.identity) as GameObject);
             AbilityButtons[i].GetComponentInChildren<Text>().text = abilites[i].DisplayName + " (" + abilites[i].Speed + ")";
             AbilityButtons[i].transform.SetParent(AbilityPick_ScrollView_Content.transform, false);
-            if (AllowAbilityPick)
+            if (AllowAbilityPick && abilites[i].Type == AbilityType.Action)
             {
                 AbilityData ability = abilites[i];
                 AbilityButtons[i].GetComponent<Button>().onClick.AddListener(delegate {
@@ -1974,27 +1957,26 @@ public class GameManager : NetworkBehaviour
 
     public void SetSelectedCratures(List<BattleCreature> creatures, ClientRpcParams rpcParams = default)
     {
-        foreach(BattleCreature creature in creatures)
+        int[] ids = new int[creatures.Count];
+        CreatureSize[] sizes = new CreatureSize[creatures.Count];
+        for(int i = 0; i < creatures.Count; i++)
         {
-            Debug.Log("creatureId: " + creature.ID);
-            Debug.Log("size: " + creature.Creature.Size);
+            ids[i] = creatures[i].ID;
+            sizes[i] = creatures[i].Creature.Size;
+            Debug.Log("creatureId: " + creatures[i].ID);
+            Debug.Log("size: " + creatures[i].Creature.Size);
         }
-        SetSelectedCraturesClientRpc(creatures, rpcParams);
+        SetSelectedCraturesClientRpc(ids, sizes, rpcParams);
     }
 
     [ClientRpc]
-    public void SetSelectedCraturesClientRpc(List<BattleCreature> creatures, ClientRpcParams rpcParams = default)
+    public void SetSelectedCraturesClientRpc(int[] creatureIds, CreatureSize[] creatureSizes, ClientRpcParams rpcParams = default)
     {
-        foreach (BattleCreature battleCreature in creatures)
+        for (int i = 0; i < creatureIds.Length; i++)
         {
-            SelectedBattleCreatures.Add(BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == battleCreature.ID));
+            AddSelectedHighlight(BattleCreatures.Find(creature => creature.GetComponentInChildren<BattleCreatureClient>().GetId() == creatureIds[i]), creatureSizes[i]);
         }
 
-        foreach (GameObject creature in SelectedBattleCreatures)
-        {
-            ///// Needs some way to also pass Highlight Size!!!!!!!!!!!
-            AddSelectedHighlight(creature);
-        }
 
         Text[] texts = Battle_GO_Button.GetComponentsInChildren<Text>();
         foreach (Text text in texts)
@@ -2007,7 +1989,7 @@ public class GameManager : NetworkBehaviour
         Battle_GO_Button.gameObject.SetActive(true);
     }
 
-    public void AddSelectedHighlight(GameObject Creature)
+    public void AddSelectedHighlight(GameObject Creature, CreatureSize size)
     {
         Vector2 capsuleOffset = Creature.GetComponentInChildren<CapsuleCollider2D>().offset;
         Vector3 creature_position = new Vector3(Creature.transform.position.x + (capsuleOffset.x * Creature.transform.localScale.x), Creature.transform.position.y + (capsuleOffset.y * Creature.transform.localScale.y), 1);
@@ -3357,4 +3339,10 @@ public class BattlePositionSide {
     public Position[] Small;
     public Position[] Smallest;
 
+}
+
+public enum CreatureEmotes
+{
+    Thinking,
+    Angry
 }

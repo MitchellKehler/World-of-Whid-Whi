@@ -45,8 +45,9 @@ public class Ability
     public bool LockedTargets; // Can targets be different from one action to the next.
     public bool Upgrades;
     public int Speed;
+    public AbilityType Type;
 
-    public Ability(AbilityName name, int rank, string displayName, string description, int speed, Pradictability pradictability, List<Action> actions, bool lockedTargets)
+    public Ability(AbilityName name, int rank, string displayName, AbilityType type, string description, int speed, Pradictability pradictability, List<Action> actions, bool lockedTargets)
     {
         Name = name;
         Rank = rank;
@@ -57,9 +58,10 @@ public class Ability
         LockedTargets = lockedTargets;
         Speed = speed;
         Upgrades = false;
+        this.Type = type;
     }
 
-    public Ability(AbilityName name, int rank, string displayName, string description, int speed, Pradictability pradictability, List<Action> actions, bool lockedTargets, AbilityName upgrade)
+    public Ability(AbilityName name, int rank, string displayName, AbilityType type, string description, int speed, Pradictability pradictability, List<Action> actions, bool lockedTargets, AbilityName upgrade)
     {
         Name = name;
         Rank = rank;
@@ -71,6 +73,7 @@ public class Ability
         Speed = speed;
         UpgradedAbility = upgrade;
         Upgrades = true;
+        this.Type = type;
     }
 
     public Ability Clone()
@@ -80,7 +83,7 @@ public class Ability
         {
             actions.Add(action.Clone());
         }
-        return new Ability(this.Name, this.Rank, this.DisplayName, this.Description, this.Speed, this.Pradictability, actions, this.LockedTargets);
+        return new Ability(this.Name, this.Rank, this.DisplayName, this.Type, this.Description, this.Speed, this.Pradictability, actions, this.LockedTargets);
     }
 
     // Start is called before the first frame update
@@ -186,16 +189,25 @@ public enum Pradictability
 
 public enum TargetGroup
 {
-    Self,
-    Friendly,
-    Friendly_Other,
-    Enemy,
-    All
+    Self, // Action and Reaction
+    Friendly, // Action
+    Friendly_Other, // Action
+    Enemy, // Action
+    Target, // Reaction
+    Targeting, // Reaction
+    All // Action (maybe also reaction?)
 }
 public enum TargetType
 {
     Positive,
     Negative
+}
+
+public enum AbilityType
+{
+    Action, // use on this creature's turn
+    Reaction, // use before a different creature's action is resolved
+    Counter // used on the creature performing an action after the action is performed
 }
 
 public class Effect
@@ -261,7 +273,12 @@ public enum EffectType
     ArcaneDamage,
     LifeHealing,
     Penetration,
-    Slow
+    Slow,
+    Dodge,
+    Disengage,
+    Block,
+    BlockChance,
+    Percision
 
 }
 

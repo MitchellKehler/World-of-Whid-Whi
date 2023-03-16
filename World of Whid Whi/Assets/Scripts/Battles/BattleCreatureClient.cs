@@ -20,6 +20,9 @@ public class BattleCreatureClient : MonoBehaviour
     public InitializedCreature InitilizedCreature;
     public bool acting;
     public bool target;
+    public Canvas EmoteCanvas;
+    public GameObject EmoteAncher;
+    public IEnumerator creatureEmoteCoroutine;
 
     // Start is called before the first frame update
     void Start()

@@ -1055,7 +1055,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1344.9343, y: -20}
+  m_AnchoredPosition: {x: 1338.4622, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &155112721
@@ -2063,7 +2063,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9552002, y: -19.146729}
+  m_AnchoredPosition: {x: -3.9552002, y: -19.146759}
   m_SizeDelta: {x: -242.79, y: -265.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &268152216
@@ -3400,6 +3400,7 @@ MonoBehaviour:
     type: 3}
   Ability_Pick_WaitButton: {fileID: 531190055}
   Selected_Creature: 0
+  SelectedBattleCreatures: []
   Target_Creature_Highlights: []
   Creature_Details_Button: {fileID: 8890489642039023278, guid: 0ad091cfc0ef6fc48b50693378d77a8b,
     type: 3}
@@ -3448,6 +3449,12 @@ MonoBehaviour:
   Server: {fileID: 1690720507}
   BattleCreatures: []
   Battles: []
+  BattleCreature_MediumPrefab: {fileID: 4174753969647413088, guid: dfe32c9d7ff822f4d82318dd118f5301,
+    type: 3}
+  ThinkingEmotePrefab: {fileID: 5289080583335611023, guid: 090f2053d657d47aa9816c5362e89815,
+    type: 3}
+  AngryEmotePrefab: {fileID: 274652019404669710, guid: d22a4400da7d341dba5fade18b4305fd,
+    type: 3}
 --- !u!114 &394250939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4260,7 +4267,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1144.9343, y: -20}
+  m_AnchoredPosition: {x: 1138.4622, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &510138388
@@ -5975,7 +5982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 944.9343, y: -20}
+  m_AnchoredPosition: {x: 938.46216, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &673782761
@@ -6845,7 +6852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1044.9343, y: -20}
+  m_AnchoredPosition: {x: 1038.4622, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737180487
@@ -7966,7 +7973,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1244.9343, y: -20}
+  m_AnchoredPosition: {x: 1238.4622, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &814544761
@@ -8323,7 +8330,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &835189290
 GameObject:
@@ -10343,7 +10350,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9554443, y: -20.405762}
+  m_AnchoredPosition: {x: -3.9554443, y: -20.405792}
   m_SizeDelta: {x: -242.79, y: -267.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1013891401
@@ -10580,7 +10587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9556885, y: -20.405762}
+  m_AnchoredPosition: {x: -3.9556885, y: -20.405792}
   m_SizeDelta: {x: -242.7891, y: -267.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1034784113
@@ -10889,7 +10896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: -28.264526}
+  m_AnchoredPosition: {x: 0.00012207031, y: -28.264557}
   m_SizeDelta: {x: -1060, y: -792.7879}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1064069652
@@ -11311,7 +11318,7 @@ RectTransform:
   - {fileID: 286440940}
   - {fileID: 614311444}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11948,7 +11955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1091.9337, y: -9.890747}
+  m_AnchoredPosition: {x: -1091.9338, y: -9.890778}
   m_SizeDelta: {x: 116.131836, y: 40}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1195124202
@@ -12330,7 +12337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9542236, y: -19.14685}
+  m_AnchoredPosition: {x: -3.9542236, y: -19.146881}
   m_SizeDelta: {x: -242.79, y: -265.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1226454347
@@ -14345,7 +14352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9542236, y: -19.14685}
+  m_AnchoredPosition: {x: -3.9542236, y: -19.146881}
   m_SizeDelta: {x: -242.79, y: -265.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1454104939
@@ -14742,7 +14749,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 844.9343, y: -20}
+  m_AnchoredPosition: {x: 838.46216, y: -20}
   m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1461557767
@@ -15879,7 +15886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.9556885, y: -19.145752}
+  m_AnchoredPosition: {x: -3.9556885, y: -19.145782}
   m_SizeDelta: {x: -242.79, y: -265.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1586427681
@@ -16604,7 +16611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f64f3f4b80e12499c29f3143d56420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isServer: 0
+  isServer: 1
   AccountMenuTitle: {fileID: 1096277259}
   Email: {fileID: 1798644854}
   Password: {fileID: 1516666562}

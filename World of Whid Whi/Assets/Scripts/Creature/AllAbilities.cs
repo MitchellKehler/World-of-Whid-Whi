@@ -15,9 +15,9 @@ public static class AllAbilities
         List<Action> Actions = new List<Action>();
         List<Effect> Effects = new List<Effect>();
 
-
+        // later this should improve focus
         Actions.Add(new Action(0, "waited", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "N/A"));
-        Abilities.Add(AbilityName.Wait, new Ability(AbilityName.Wait, 0, "Wait", "Delay choosing an action for a short time.", 30, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Wait, new Ability(AbilityName.Wait, 0, "Wait", AbilityType.Action, "Delay choosing an action for a short time.", 30, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
@@ -25,7 +25,7 @@ public static class AllAbilities
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
-        Abilities.Add(AbilityName.Scratch_1, new Ability(AbilityName.Scratch_1, 1, "Scratch (Rank 1)", "Scratch the enemy with three quick swipes.", 90, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Scratch_1, new Ability(AbilityName.Scratch_1, 1, "Scratch (Rank 1)", AbilityType.Action, "Scratch the enemy with three quick swipes.", 90, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
@@ -34,7 +34,7 @@ public static class AllAbilities
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
-        Abilities.Add(AbilityName.Scratch_2, new Ability(AbilityName.Scratch_2, 2, "Scratch (Rank 2)", "Scratch the enemy with four quick swipes.", 90, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Scratch_2, new Ability(AbilityName.Scratch_2, 2, "Scratch (Rank 2)", AbilityType.Action, "Scratch the enemy with four quick swipes.", 90, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
@@ -47,83 +47,83 @@ public static class AllAbilities
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
         Actions.Add(new Action(1, "scratched", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash01_red", true, true, AnimationLength.Short));
-        Abilities.Add(AbilityName.Shred_4, new Ability(AbilityName.Shred_4, 4, "Shred (Rank 4)", "Shred the enemy with eight very quick swipes.", 90, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Shred_4, new Ability(AbilityName.Shred_4, 4, "Shred (Rank 4)", AbilityType.Action, "Shred the enemy with eight very quick swipes.", 90, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 2.5f)); // probably needs adjustment, later it will apply a condition if this hits which is why it is here
         Actions.Add(new Action(1, "stung", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Slash02_red"));
-        Abilities.Add(AbilityName.Swipe_2, new Ability(AbilityName.Swipe_2, 2, "Swipe (Rank 2)", "Lunge forward and sting an enemy.", 70, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Swipe_2, new Ability(AbilityName.Swipe_2, 2, "Swipe (Rank 2)", AbilityType.Action, "Lunge forward and sting an enemy.", 70, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.Penetration, AmountType.STR_Multiplier, 1f));
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 1.5f));
         Actions.Add(new Action(1, "pecked", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit01_red"));
-        Abilities.Add(AbilityName.Peck_1, new Ability(AbilityName.Peck_1, 1, "Peck (Rank 1)", "Two hard pecks with a Sharp Beak.", 80, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Peck_1, new Ability(AbilityName.Peck_1, 1, "Peck (Rank 1)", AbilityType.Action, "Two hard pecks with a Sharp Beak.", 80, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.Slow, AmountType.Constant, 20));
         Effects.Add(new Effect(EffectType.WaterDamage, AmountType.WILL_Multiplier, 1f));
         Actions.Add(new Action(1, "smacked", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit01_blue"));
-        Abilities.Add(AbilityName.TongueSmack_1, new Ability(AbilityName.TongueSmack_1, 1, "Tongue Smack (Rank 1)", "Lash the enemy with a sticky toungue and draw them in.", 70, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.TongueSmack_1, new Ability(AbilityName.TongueSmack_1, 1, "Tongue Smack (Rank 1)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 70, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.Slow, AmountType.Constant, 50));
         Effects.Add(new Effect(EffectType.WaterDamage, AmountType.WILL_Multiplier, 1.5f));
         Actions.Add(new Action(1, "grabbed", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit01_blue"));
-        Abilities.Add(AbilityName.TongueHarpoon_2, new Ability(AbilityName.TongueHarpoon_2, 2, "Tongue Harpoon (Rank 2)", "Lash the enemy with a sticky toungue and draw them in.", 70, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.TongueHarpoon_2, new Ability(AbilityName.TongueHarpoon_2, 2, "Tongue Harpoon (Rank 2)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 70, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.Slow, AmountType.Constant, 25));
         Effects.Add(new Effect(EffectType.WaterDamage, AmountType.WILL_Multiplier, 1.2f));
         Actions.Add(new Action(3, "lashed", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit01_blue"));
-        Abilities.Add(AbilityName.TongueLash_2, new Ability(AbilityName.TongueLash_2, 2, "Tongue Lash (Rank 2)", "Lash the enemy with a sticky toungue and draw them in.", 90, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.TongueLash_2, new Ability(AbilityName.TongueLash_2, 2, "Tongue Lash (Rank 2)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 90, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.Slow, AmountType.Constant, 30));
         Effects.Add(new Effect(EffectType.WaterDamage, AmountType.WILL_Multiplier, 2f));
         Actions.Add(new Action(1, "bashed", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit01_blue"));
-        Abilities.Add(AbilityName.TongueBash_2, new Ability(AbilityName.TongueBash_2, 2, "Tongue Bash (Rank 2)", "Lash the enemy with a sticky toungue and draw them in.", 100, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.TongueBash_2, new Ability(AbilityName.TongueBash_2, 2, "Tongue Bash (Rank 2)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 100, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 3f));
         Actions.Add(new Action(1, "bitten", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
         Abilities.Add(AbilityName.Bite_1, new Ability(AbilityName.Bite_1,
-            -1, "Bite (Rank 1)", "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true));
+            -1, "Bite (Rank 1)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 3f));
         Effects.Add(new Effect(EffectType.PoisonDamage, AmountType.WILL_Multiplier, 1f));
         Actions.Add(new Action(1, "bitten", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
-        Abilities.Add(AbilityName.VileBite_2, new Ability(AbilityName.VileBite_2, 2, "Vile Bite (Rank 2)", "Lash the enemy with a sticky toungue and draw them in.", 130, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.VileBite_2, new Ability(AbilityName.VileBite_2, 2, "Vile Bite (Rank 2)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 130, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.STR_Multiplier, .75f));
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.SizeDiff_Multiplier, 15f));
         Actions.Add(new Action(1, "bitten", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
-        Abilities.Add(AbilityName.Crunch_1, new Ability(AbilityName.Crunch_1, 1, "Crunch (Rank 1)", "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Crunch_1, new Ability(AbilityName.Crunch_1, 1, "Crunch (Rank 1)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.STR_Multiplier, 1f));
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.SizeDiff_Multiplier, 20f));
         Actions.Add(new Action(1, "bitten", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
-        Abilities.Add(AbilityName.Crunch_2, new Ability(AbilityName.Crunch_2, 2, "Crunch (Rank 2)", "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true, AbilityName.Crunch_1));
+        Abilities.Add(AbilityName.Crunch_2, new Ability(AbilityName.Crunch_2, 2, "Crunch (Rank 2)", AbilityType.Action, "Lash the enemy with a sticky toungue and draw them in.", 120, Pradictability.Unreadable, Actions, true, AbilityName.Crunch_1));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.SizeDiff_Multiplier_Plus, 15f, 10));
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.STR_Multiplier, 1f));
         Actions.Add(new Action(1, "butted", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
-        Abilities.Add(AbilityName.HeadButt_1, new Ability(AbilityName.HeadButt_1, 1, "HeadButt (Rank 1)", "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.HeadButt_1, new Ability(AbilityName.HeadButt_1, 1, "HeadButt (Rank 1)", AbilityType.Action, "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
@@ -131,27 +131,41 @@ public static class AllAbilities
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.STR_Multiplier, 1f));
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, 1.5f));
         Actions.Add(new Action(1, "butted", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit03_red"));
-        Abilities.Add(AbilityName.HornedHeadButt_2, new Ability(AbilityName.HornedHeadButt_2, 2, "Horned HeadButt (Rank 2)", "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.HornedHeadButt_2, new Ability(AbilityName.HornedHeadButt_2, 2, "Horned HeadButt (Rank 2)", AbilityType.Action, "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.ImpactDamage, AmountType.SizeDiff_Multiplier_Plus, 15f, 10));
         Actions.Add(new Action(1, "kicked", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_red"));
-        Abilities.Add(AbilityName.Kick_1, new Ability(AbilityName.Kick_1, 1, "HeadButt (Rank 1)", "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Kick_1, new Ability(AbilityName.Kick_1, 1, "HeadButt (Rank 1)", AbilityType.Action, "Lunge forward and bash the enemy with your head.", 120, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, .1f)); // probably needs adjustment, later it will apply a condition if this hits which is why it is here
         Effects.Add(new Effect(EffectType.PoisonDamage, AmountType.Constant, 20f));
         Actions.Add(new Action(1, "stung", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_green"));
-        Abilities.Add(AbilityName.Sting_1, new Ability(AbilityName.Sting_1, 1, "Sting (Rank 1)", "Lunge forward and sting an enemy.", 80, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Sting_1, new Ability(AbilityName.Sting_1, 1, "Sting (Rank 1)", AbilityType.Action, "Lunge forward and sting an enemy.", 80, Pradictability.Unreadable, Actions, true));
 
         Actions = new List<Action>();
         Effects = new List<Effect>();
         Effects.Add(new Effect(EffectType.PhisicalDamage, AmountType.STR_Multiplier, .1f)); // probably needs adjustment, later it will apply a condition if this hits which is why it is here
         Effects.Add(new Effect(EffectType.PoisonDamage, AmountType.Constant, 30f));
         Actions.Add(new Action(1, "stung", TargetGroup.Enemy, TargetType.Negative, Effects, AttackType.Melee, "Hit02_green"));
-        Abilities.Add(AbilityName.Sting_2, new Ability(AbilityName.Sting_2, 2, "Sting (Rank 2)", "Lunge forward and sting an enemy.", 80, Pradictability.Unreadable, Actions, true));
+        Abilities.Add(AbilityName.Sting_2, new Ability(AbilityName.Sting_2, 2, "Sting (Rank 2)", AbilityType.Action, "Lunge forward and sting an enemy.", 80, Pradictability.Unreadable, Actions, true));
+
+        Actions = new List<Action>();
+        Effects = new List<Effect>();
+        Effects.Add(new Effect(EffectType.Dodge, AmountType.AGI_Multiplier, .1f)); // probably needs adjustment, later it will apply a condition if this hits which is why it is here
+        Effects.Add(new Effect(EffectType.Dodge, AmountType.Constant, 30f));
+        Actions.Add(new Action(1, "Dodge", TargetGroup.Self, TargetType.Negative, Effects, AttackType.Melee, "None"));
+        Abilities.Add(AbilityName.Dodge_1, new Ability(AbilityName.Dodge_1, 1, "Dodge (Rank 1)", AbilityType.Reaction, "Make a large movement to avoid an attack without fully disengaging.", 40, Pradictability.Impossible, Actions, true));
+
+        Actions = new List<Action>();
+        Effects = new List<Effect>();
+        Effects.Add(new Effect(EffectType.Disengage, AmountType.AGI_Multiplier, .1f)); // probably needs adjustment, later it will apply a condition if this hits which is why it is here
+        Effects.Add(new Effect(EffectType.Disengage, AmountType.Constant, 30f));
+        Actions.Add(new Action(1, "Dodge", TargetGroup.Self, TargetType.Negative, Effects, AttackType.Melee, "None"));
+        Abilities.Add(AbilityName.Dash_1, new Ability(AbilityName.Dash_1, 1, "Dash (Rank 1)", AbilityType.Reaction, "Dash away from an attack fully disengaging from your opponent.", 100, Pradictability.Unpradictable, Actions, true));
     }
 
     public static Ability CloneAbility(AbilityName Name)
@@ -190,5 +204,7 @@ public enum AbilityName
     Spiked_Bash_3,
     Kick_1,
     Sting_1,
-    Sting_2
+    Sting_2,
+    Dodge_1,
+    Dash_1
 }

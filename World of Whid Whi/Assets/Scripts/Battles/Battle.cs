@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Battle
 {
@@ -61,7 +62,7 @@ public class Battle
     BattleManager BM;
     public Thread Battle_Thread;
     public List<BattleCreature> BattleCreatures;
-    public List<BattleCreature> CurrentCreatures;
+    public BattleCreature CurrentCreature;
     public ulong Player1;
     public ulong Player2;
     public ulong Player1CharacterID;
@@ -74,6 +75,7 @@ public class Battle
     public int Player2SelectedCreature = GameManager.CREATURE_ID_NOT_SET;
     public bool Counting = true;
     List<Action> ActionsToPerform;
+    List<Action> ReActionsToPerform;
     bool Creature_Has_Moved = false;
     bool Collected_Reactions = false;
     int[] previousTargets; // I don't like this much but don't want to think about it any more.
@@ -83,6 +85,7 @@ public class Battle
         this.GM = GM;
         this.BM = BM;
         ActionsToPerform = new List<Action>();
+        ReActionsToPerform = new List<Action>();
         BattleCreatures = new List<BattleCreature>();
 
         foreach (InitializedCreatureData creatureData in teamOneCreatures)
@@ -254,13 +257,14 @@ public class Battle
         List<AbilityData> validAbilities = new List<AbilityData>();
         foreach(AbilityData abilityData in CurrentCreature.Creature.KnownAbilities)
         {
-            validAbilities.Add(abilityData);
+            if (abilityData.Type == AbilityType.Action)
+                validAbilities.Add(abilityData);
         }
 
         if (validAbilities.Count > 0)
         {
             Debug.Log("CurrentCreature.Creature.KnownAbilities.Count: " + CurrentCreature.Creature.KnownAbilities.Count);
-            int nextAbilityIndex = UnityEngine.Random.Range(0, CurrentCreature.Creature.KnownAbilities.Count);
+            int nextAbilityIndex = Random.Range(0, validAbilities.Count);
 
             CurrentCreature.NextAbility = AllAbilities.CloneAbility(validAbilities[nextAbilityIndex].AbilityName); // later we will want to also check cool downs when applicable.
         }
@@ -533,104 +537,198 @@ public class Battle
             //    SetInstructionText("Your " + CurrentCreature.Creature.Name + " is executing " + CurrentCreature.NextAbility.DisplayName + ". Choose your reactions now.", Player1);
             //}
         }
-        BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.TIME_TO_REACT));
+        ReActionsToPerform = new List<Action>();
         Collected_Reactions = true;
+        BM.StartCoroutine(BM.SetNextBattleUpdateTime(GameManager.TIME_TO_REACT));
     }
 
     public void PerformAction(ClientRpcParams clientRpcParams)
     {
-
         previousTargets = ActionsToPerform[0].Targets;
         Debug.Log("Performing the action, next Action is " + ActionsToPerform[0].UseDescription);
         int penetration = 0;
-        foreach (Effect effect in ActionsToPerform[0].Effects)
+        int percision = 100; // base percision
+        int dodge = 0;
+        int blockChance = 0;
+        int block = 0;
+        if (ActionsToPerform[0].Targets.Length < 0 || (ActionsToPerform[0].Targets.Length > 0 && !ActionsToPerform[0].Targets.All(a => a == -1)))
         {
-            //Debug.Log("Totat targets: " + ActionsToPerform[0].Targets.Length);
             foreach (int target in ActionsToPerform[0].Targets)
             {
                 BattleCreature targetCreature = BattleCreatures.Find(creature => creature.ID == target);
                 Debug.Log("target / creature.ID: " + target);
 
+                // Apply out Gard Reactions
+                foreach (Action reaction in ReActionsToPerform)
+                {
+                    if (reaction.TargetGroup == TargetGroup.Target)
+                    {
+                        // Apply guard effects
+                    }
+                }
+
+                // Apply defense Reactions
+                foreach (Action reaction in ReActionsToPerform)
+                {
+                    if (reaction.TargetGroup == TargetGroup.Self)
+                    {
+                        // Apply defense effects
+                        foreach (Effect effect in ActionsToPerform[0].Effects)
+                        {
+                            int amount = GetAmmount(effect, targetCreature);
+                            if (effect.EffectType == EffectType.Dodge)
+                            {
+                                dodge += amount;
+                            }
+                            else if (effect.EffectType == EffectType.BlockChance)
+                            {
+                                blockChance += amount;
+                            }
+                            else if (effect.EffectType == EffectType.Block)
+                            {
+                                block += amount;
+                            }
+                        }
+
+                    }
+                }
+
                 if (targetCreature != null)
                 {
-                    int amount = 0;
-                    Debug.Log("Amount Type: " + effect.AmountType);
-                    if (effect.AmountType == AmountType.Constant)
-                        amount = (int)effect.Amount;
-                    else if (effect.AmountType == AmountType.STR_Multiplier)
-                        amount = (int)(CurrentCreature.Creature.GetTotalStrength() * effect.Amount);
-                    else if (effect.AmountType == AmountType.WILL_Multiplier)
-                        amount = (int)(CurrentCreature.Creature.GetTotalWill() * effect.Amount);
-                    else if (effect.AmountType == AmountType.SizeDiff_Multiplier)
+                    // First need to check if there is a percision or penetration effect since these need to be applied first. if no percision then assume default persicion
+                    foreach (Effect effect in ActionsToPerform[0].Effects)
                     {
-                        int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
-                        sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
-                        amount = (int)(effect.Amount * sizeDiff);
+                        if (effect.EffectType == EffectType.Penetration)
+                        {
+                            Debug.Log("Amount Type: " + effect.AmountType);
+                            int amount = GetAmmount(effect, targetCreature);
+                            Debug.Log("Amount : " + amount);
+                            penetration += amount;
+                        }
+                        if (effect.EffectType == EffectType.Percision)
+                        {
+                            Debug.Log("Amount Type: " + effect.AmountType);
+                            int amount = GetAmmount(effect, targetCreature);
+                            Debug.Log("Amount : " + amount);
+                            percision += amount;
+                        }
                     }
-                    else if (effect.AmountType == AmountType.SizeDiff_Multiplier_Plus)
+
+                    // Check if action was dodged or garded before going forward
+                    int totalDodge = Random.Range(0, dodge);
+                    int totalPercision = Random.Range(0, percision);
+
+                    if (totalPercision > totalDodge)
                     {
-                        int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(targetCreature.Creature.Size);
-                        sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
-                        amount = (int)effect.Amount2 + (int)(effect.Amount * sizeDiff);
-                    }
-                    Debug.Log("Amount : " + amount);
-                    if (effect.EffectType == EffectType.Penetration)
+
+                        // Apply Action
+                        foreach (Effect effect in ActionsToPerform[0].Effects)
+                        {
+                            int totalBlockChance = Random.Range(0, blockChance);
+                            bool blocked = totalBlockChance > totalPercision; // need to apply block amount if blocked!!!!!!!!!!!!!!
+
+
+                            Debug.Log("Amount Type: " + effect.AmountType);
+                            int amount = GetAmmount(effect, targetCreature);
+                            Debug.Log("Amount : " + amount);
+
+                            if (effect.EffectType == EffectType.PhisicalDamage)
+                            {
+                                int armour = (targetCreature.Creature.Armor - penetration > 0 ? targetCreature.Creature.Armor - penetration : 0);
+                                targetCreature.Creature.CurrentHP -= amount - armour - block;
+                            }
+                            else if (effect.EffectType == EffectType.ImpactDamage)
+                            {
+                                targetCreature.Creature.CurrentHP -= amount;
+                            }
+                            else if (effect.EffectType == EffectType.FireDamage)
+                            {
+                                // Needs to handle creature types
+                                int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Fire_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Fire_Resistance) - penetration : 0);
+                                targetCreature.Creature.CurrentHP -= amount - resistance - block;
+                            }
+                            else if (effect.EffectType == EffectType.WaterDamage)
+                            {
+                                // Needs to handle creature types
+                                int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Water_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Water_Resistance) - penetration : 0);
+                                targetCreature.Creature.CurrentHP -= amount - resistance - block;
+                            }
+                            else if (effect.EffectType == EffectType.PoisonDamage)
+                            {
+                                // Needs to handle creature types
+                                int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Poison_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Poison_Resistance) - penetration : 0);
+                                targetCreature.Creature.CurrentHP -= amount - resistance - block;
+                            }
+                            else if (effect.EffectType == EffectType.ElectricDamage)
+                            {
+                                // Needs to handle creature types
+                                int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Electric_Resistance) - penetration > 0 ? (targetCreature.Creature.Electric_Resistance + targetCreature.Creature.Electric_Resistance) - penetration : 0);
+                                targetCreature.Creature.CurrentHP -= amount - resistance - block;
+                            }
+                            else if (effect.EffectType == EffectType.DeathDamage)
+                            {
+                                // Needs to handle creature types
+                                targetCreature.Creature.CurrentHP -= amount - targetCreature.Creature.Death_Resistance;
+                                CurrentCreature.Creature.CurrentHP += amount;
+                            }
+                            // Arcane Resistance Not Added Yet!
+                            //if (effect.EffectType == EffectType.ArcaneDamage)
+                            //{
+                            //    // Needs to handle creature types
+                            //    targetCreature.Creature.CurrentHP -= amount - targetCreature.Creature.Arcane_Resistance;
+                            //}
+                            else if (effect.EffectType == EffectType.Slow)
+                            {
+                                targetCreature.Initiative += amount;
+                            }
+                            Debug.Log("targetCreature.Creature.CurrentHP = " + targetCreature.Creature.CurrentHP);
+                        }
+                    } else
                     {
-                        penetration += amount;
+                        // Attack was Dodged
+                        Debug.Log("Attack Dodged");
+                        // need to at least tell cliant to animate in a different way for this
                     }
-                    if (effect.EffectType == EffectType.PhisicalDamage)
-                    {
-                        int armour = (targetCreature.Creature.Armor - penetration > 0 ? targetCreature.Creature.Armor - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - armour;
-                    }
-                    if (effect.EffectType == EffectType.ImpactDamage)
-                    {
-                        targetCreature.Creature.CurrentHP -= amount;
-                    }
-                    if (effect.EffectType == EffectType.FireDamage)
-                    {
-                        // Needs to handle creature types
-                        int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Fire_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Fire_Resistance) - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - resistance;
-                    }
-                    if (effect.EffectType == EffectType.WaterDamage)
-                    {
-                        // Needs to handle creature types
-                        int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Water_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Water_Resistance) - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - resistance;
-                    }
-                    if (effect.EffectType == EffectType.PoisonDamage)
-                    {
-                        // Needs to handle creature types
-                        int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Poison_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Poison_Resistance) - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - resistance;
-                    }
-                    if (effect.EffectType == EffectType.ElectricDamage)
-                    {
-                        // Needs to handle creature types
-                        int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Electric_Resistance) - penetration > 0 ? (targetCreature.Creature.Electric_Resistance + targetCreature.Creature.Electric_Resistance) - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - resistance;
-                    }
-                    if (effect.EffectType == EffectType.DeathDamage)
-                    {
-                        // Needs to handle creature types
-                        int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Death_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Death_Resistance) - penetration : 0);
-                        targetCreature.Creature.CurrentHP -= amount - resistance;
-                    }
-                    // Arcane Resistance Not Added Yet!
-                    //if (effect.EffectType == EffectType.ArcaneDamage)
-                    //{
-                    //    // Needs to handle creature types
-                    //    int resistance = ((targetCreature.Creature.General_Resistance + targetCreature.Creature.Arcane_Resistance) - penetration > 0 ? (targetCreature.Creature.General_Resistance + targetCreature.Creature.Arcane_Resistance) - penetration : 0);
-                    //    targetCreature.Creature.CurrentHP -= amount - resistance;
-                    //}
-                    if (effect.EffectType == EffectType.Slow)
-                    {
-                        targetCreature.Initiative += amount;
-                    }
-                    Debug.Log("targetCreature.Creature.CurrentHP = " + targetCreature.Creature.CurrentHP);
                 }
+            } 
+        } else
+        {
+            if (CurrentCreature.Owner == Player1)
+            {
+                Debug.Log("Player1 " + CurrentCreature.Creature.Name + " failed to find it's target!");
+                GM.SetInstructionText(CurrentCreature.Creature.Name + " failed to find it's target!", Player1);
+                GM.SetInstructionText(CurrentCreature.Creature.Name + " failed to find it's target!", Player2);
             }
+            else if (Player2 != GameManager.SERVERID)
+            {
+                Debug.Log("Player2 " + CurrentCreature.Creature.Name + " failed to find it's target!");
+                GM.SetInstructionText(CurrentCreature.Creature.Name + " failed to find it's target!", Player2);
+                GM.SetInstructionText(CurrentCreature.Creature.Name + " failed to find it's target!", Player1);
+            }
+
+            ClientRpcParams allClients_ClientRpcParams;
+            if (Player2 == GameManager.SERVERID)
+            {
+                allClients_ClientRpcParams = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new ulong[] { Player1 }
+                    }
+                };
+            }
+            else
+            {
+                allClients_ClientRpcParams = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new ulong[] { Player1, Player2 }
+                    }
+                };
+            }
+            GM.SetCreatureEmote(CurrentCreature.ID, CreatureEmotes.Angry, allClients_ClientRpcParams);
+
         }
         InitializedCreatureData[] initializedCreatures = new InitializedCreatureData[BattleCreatures.Count];
 
@@ -648,7 +746,7 @@ public class Battle
         ActionTargetsData targetData = new ActionTargetsData(ActionsToPerform[0].Targets, ActionsToPerform[0].AnimationName); // may be able to get rid of this later when only the impacted creatures information is being passed to the clients
 
 
-        Debug.Log("Calling GM.PerformAction in Batle.cs");
+        Debug.Log("Calling GM.PerformAction in Battle.cs");
         GM.PerformAction(initializedCreatures, CurrentCreature.ID, targetData, clientRpcParams);
         UpdateClientInitiatives(clientRpcParams);
 
@@ -673,6 +771,34 @@ public class Battle
         BM.StartCoroutine(BM.SetNextBattleUpdateTime(animationLength));
 
         ActionsToPerform.RemoveAt(0);
+    }
+
+    private int GetAmmount(Effect effect, BattleCreature target)
+    {
+        if (effect.AmountType == AmountType.Constant)
+            return (int)effect.Amount;
+        else if (effect.AmountType == AmountType.STR_Multiplier)
+            return (int)(CurrentCreature.Creature.GetTotalStrength() * effect.Amount);
+        else if (effect.AmountType == AmountType.WILL_Multiplier)
+            return (int)(CurrentCreature.Creature.GetTotalWill() * effect.Amount);
+        else if (effect.AmountType == AmountType.AGI_Multiplier)
+            return (int)(CurrentCreature.Creature.GetTotalAgility() * effect.Amount);
+        else if (effect.AmountType == AmountType.SizeDiff_Multiplier)
+        {
+            int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(target.Creature.Size);
+            sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
+            return (int)(effect.Amount * sizeDiff);
+        }
+        else if (effect.AmountType == AmountType.SizeDiff_Multiplier_Plus)
+        {
+            int sizeDiff = (int)InitializedCreature.SizeToNumber(CurrentCreature.Creature.Size) - (int)InitializedCreature.SizeToNumber(target.Creature.Size);
+            sizeDiff = (sizeDiff > 0 ? sizeDiff : 0);
+            return (int)effect.Amount2 + (int)(effect.Amount * sizeDiff);
+        } else
+        {
+            return 0; // shouldn't ever get here at the moment
+        }
+
     }
 
     public void UpdateTargets(int TargetToClear)
@@ -799,8 +925,9 @@ public class Battle
                 TargetClientIds = new ulong[] { CurrentCreature.Owner }
             }
         };
-
-        GM.SetSelectedCratures(CurrentCreatures, clientRpcParams);
+        List<BattleCreature> creatures = new List<BattleCreature>();
+        creatures.Add(CurrentCreature);
+        GM.SetSelectedCratures(creatures, clientRpcParams);
         //Debug.Log("Client " + CurrentCreature.Owner + " selected creature set.");
 
         if (Player1SelectedCreature != GameManager.CREATURE_ID_NOT_SET)
@@ -826,6 +953,28 @@ public class Battle
             GM.SetInstructionText("Their " + CurrentCreature.Creature.Name + " is picking it's next ability.", Player1);
         }
 
+        ClientRpcParams allClients_ClientRpcParams;
+        if (Player2 == GameManager.SERVERID)
+        {
+            allClients_ClientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { Player1 }
+                }
+            };
+        }
+        else
+        {
+            allClients_ClientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { Player1, Player2 }
+                }
+            };
+        }
+        GM.SetCreatureEmote(CurrentCreature.ID, CreatureEmotes.Thinking, allClients_ClientRpcParams);
         // AI creature. Server decides it's move
         if (CurrentCreature.Owner == GameManager.SERVERID)
         {
